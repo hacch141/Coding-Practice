@@ -11,7 +11,7 @@ public:
         bool ans = true;
         int i = 0;
         
-        while(s.length()!=0 && i<s.length()) {
+        while(i < s.length()) {
             
             // find any open parentheses then push it to the stack
             if(s[i]=='(' || s[i]=='[' || s[i]=='{') {

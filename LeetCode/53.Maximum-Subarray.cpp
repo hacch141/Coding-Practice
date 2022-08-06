@@ -14,4 +14,15 @@ public:
         }
         return maxSum;
     }
+    
+//     int maxSubArray(vector<int>& nums) { //2nd Method
+//         int ans = nums[0];
+//         int currMax = nums[0];
+        
+//         for(int i=1; i<nums.size(); i++) {
+//             currMax = max(currMax+nums[i],nums[i]);
+//             ans = max(ans,currMax);
+//         }
+//         return ans;
+//     }
 };

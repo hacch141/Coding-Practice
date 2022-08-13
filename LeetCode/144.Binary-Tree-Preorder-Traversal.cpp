@@ -1,5 +1,3 @@
-// 144. Binary Tree Preorder Traversal
-
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -12,19 +10,21 @@
  * };
  */
 class Solution {
-public:
-    void preorder(TreeNode* root, vector<int> &res) {
-        if(root == NULL) {
-            return;
+    vector<int> ans;
+    void preorder(TreeNode *root){
+        if(root){
+            ans.push_back(root->val);
+            preorder(root->left);
+            preorder(root->right);
         }
-        res.push_back(root->val);
-        preorder(root->left, res);
-        preorder(root->right, res);
     }
     
+public:
     vector<int> preorderTraversal(TreeNode* root) {
-        vector<int> ans;
-        preorder(root, ans);
+        if(root==NULL){
+            return {};
+        }
+        preorder(root);
         return ans;
     }
 };

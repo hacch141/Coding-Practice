@@ -34,26 +34,62 @@ struct Node {
 class Solution{
   public:
     //Function to check whether the list is palindrome.
-    bool isPalindrome(Node *head)
+  
+      bool isPalindrome(Node *head)
     {
         //Your code here
-        stack<int> st;
-        Node* curr = head;
-        while(curr != NULL) {
-            st.push(curr->data);
-            curr = curr->next;
+        if(head == NULL) {
+            return true;
+        }
+        Node* slow = head;
+        Node* fast = head;
+        while(fast->next != NULL && fast->next->next != NULL) {
+            slow = slow->next;
+            fast = fast->next->next;
         }
         
-        curr = head;
+        Node* curr = slow->next;
+        Node* prev = NULL;
         while(curr != NULL) {
-            if(curr->data != st.top()) {
+            Node* next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        
+        Node* curr1 = head;
+        Node* curr2 = prev;
+        
+        while(curr2 != NULL) {
+            if(curr1->data != curr2->data) {
                 return false;
             }
-            st.pop();
-            curr = curr->next;
+            curr1 = curr1->next;
+            curr2 = curr2->next;
         }
         return true;
     }
+  
+//     bool isPalindrome(Node *head)  //  2nd Method
+//     {
+//         //Your code here
+//         stack<int> st;
+//         Node* curr = head;
+//         while(curr != NULL) {
+//             st.push(curr->data);
+//             curr = curr->next;
+//         }
+        
+//         curr = head;
+//         while(curr != NULL) {
+//             if(curr->data != st.top()) {
+//                 return false;
+//             }
+//             st.pop();
+//             curr = curr->next;
+//         }
+//         return true;
+//     }
 };
 
 

@@ -114,5 +114,19 @@ Node* LCA(Node *root, int n1, int n2)
    
    return root;
 }
-
-
+ 
+//     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {  // 2nd Method without recursive call
+//         TreeNode* curr = root;
+//         while(curr) {
+//             if((curr->val > p->val) && (curr->val > q->val)) {
+//                 curr = curr->left;
+//             }
+//             else if((curr->val < p->val) && (curr->val < q->val)) {
+//                 curr = curr->right;
+//             }
+//             else {
+//                 return curr;
+//             }
+//         }
+//         return NULL;
+//     }

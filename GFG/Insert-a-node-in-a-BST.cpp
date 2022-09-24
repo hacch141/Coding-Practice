@@ -117,34 +117,64 @@ int main() {
 
 
 // Function to insert a node in a BST.
+
 Node* insert(Node* root, int Key) {
     // Your code here
-    if(root == NULL) {
-        return new Node(Key);
-    }
-    Node* temp = root;
-    while(true) {
-        if(Key == temp->data) {
-            return new Node(Key);
+    Node* temp = new Node(Key);
+    Node *parent = NULL, *curr = root;
+    while(curr != NULL) {
+        parent = curr;
+        if(Key > curr->data) {
+            curr = curr->right;
         }
-        else if(Key > temp->data) {
-            if(temp->right) {
-                temp = temp->right;
-            }
-            else {
-                temp->right = new Node(Key);
-                break;
-            }
+        else if(Key < curr->data) {
+            curr = curr->left;
         }
         else {
-            if(temp->left) {
-                temp = temp->left;
-            }
-            else {
-                temp->left = new Node(Key);
-                break;
-            }
+            return root;
         }
+    }
+    if(parent == NULL) {
+        return temp;
+    }
+    if(Key > parent->data) {
+        parent->right = temp;
+    }
+    else {
+        parent->left = temp;
     }
     return root;
 }
+
+
+// Node* insert(Node* root, int Key) {  // 2nd Method
+//     // Your code here
+//     if(root == NULL) {
+//         return new Node(Key);
+//     }
+//     Node* temp = root;
+//     while(true) {
+//         if(Key == temp->data) {
+//             return new Node(Key);
+//         }
+//         else if(Key > temp->data) {
+//             if(temp->right) {
+//                 temp = temp->right;
+//             }
+//             else {
+//                 temp->right = new Node(Key);
+//                 break;
+//             }
+//         }
+//         else {
+//             if(temp->left) {
+//                 temp = temp->left;
+//             }
+//             else {
+//                 temp->left = new Node(Key);
+//                 break;
+//             }
+//         }
+//     }
+//     return root;
+// }

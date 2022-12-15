@@ -1,5 +1,6 @@
 // Detect cycle in a directed graph
 
+// TOPOLOGICAL SORT
 class Solution {
   public:
     // Function to detect cycle in a directed graph.
@@ -35,3 +36,4 @@ class Solution {
         return cnt != V;
     }
 };
+

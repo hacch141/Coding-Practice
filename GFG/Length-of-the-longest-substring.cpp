@@ -1,11 +1,27 @@
 // Length of the longest substring
 
-//{ Driver Code Starts
-#include<bits/stdc++.h>
-using namespace std;
+class Solution{
+    public:
+    int longestUniqueSubsttr(string S){
+        //code
+        int n = S.length();
+        vector<int> mpp(256,-1);
+        int left = 0;
+        int right = 0;
+        int ans = 0;
+        while(right<n) {
+            if(mpp[S[right]] != -1) {
+                left = max(left,mpp[S[right]]+1);
+            }
+            mpp[S[right]] = right;
+            ans = max(ans, right-left+1);
+            right++;
+        }
+        return ans;
+    }
+};
 
 
-// } Driver Code Ends
 class Solution{
     public:
     int longestUniqueSubsttr(string S){
@@ -24,19 +40,3 @@ class Solution{
         return ans;
     }
 };
-
-//{ Driver Code Starts.
-int main()
-{
-	int t;
-	cin>>t;
-	while(t--)
-	{
-		string str;
-		cin>>str;
-		Solution ob;
-		cout<<ob.longestUniqueSubsttr(str)<<endl;
-	}
-	return 0;
-}
-// } Driver Code Ends

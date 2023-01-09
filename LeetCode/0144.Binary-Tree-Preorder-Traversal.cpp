@@ -10,21 +10,21 @@
  * };
  */
 class Solution {
-    vector<int> ans;
-    void preorder(TreeNode *root){
-        if(root){
-            ans.push_back(root->val);
-            preorder(root->left);
-            preorder(root->right);
+
+private:
+    void helper(TreeNode* root, vector<int> &ans) {
+        if(root==NULL){
+            return;
         }
+        ans.push_back(root->val);
+        helper(root->left, ans);
+        helper(root->right, ans);
     }
     
 public:
     vector<int> preorderTraversal(TreeNode* root) {
-        if(root==NULL){
-            return {};
-        }
-        preorder(root);
+        vector<int> ans;
+        helper(root, ans);
         return ans;
     }
 };

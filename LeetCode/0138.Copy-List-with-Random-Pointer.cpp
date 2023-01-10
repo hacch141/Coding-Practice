@@ -28,10 +28,15 @@ public:
         temp = dummy;
         Node* fast;
         while(itr) {
+            // fast points to next main node
             fast = itr->next->next;
+            // add copy node to temp 
             temp->next = itr->next;
-            itr->next = fast;
+            // and move ahead
             temp = temp->next;
+            // point to next main node
+            itr->next = fast;
+            // go to next main node
             itr = fast;
         }
         return dummy->next;

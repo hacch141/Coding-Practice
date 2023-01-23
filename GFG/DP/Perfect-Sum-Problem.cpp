@@ -1,3 +1,5 @@
+// Recursion
+
 class Solution{
     
     int mod = (int)1e9+7;
@@ -21,5 +23,35 @@ class Solution{
         // Your code goes here
         vector<vector<int>> dp(n,vector<int> (sum+1,-1));
         return solve(n-1,sum,arr,n,dp);
+	}
+};
+
+// Tabulation
+class Solution{
+    
+    int mod = (int)1e9+7;
+    private:
+    int solve(int sum, int arr[], int n) {
+        vector<int> dp(sum+1,0), curr(sum+1,0);
+        if(arr[0]==0) dp[0] = 2;
+        else dp[0] = 1;
+        if(arr[0] != 0 && arr[0]<=sum) dp[arr[0]] = 1;
+        for(int i=1; i<n; i++) {
+            for(int target=0; target<=sum; target++) {
+                int notpick = dp[target];
+                int pick = 0;
+                if(arr[i]<=target) pick = dp[target-arr[i]];
+                curr[target] = (pick+notpick)%mod;
+            }
+            dp = curr;
+        }
+        return dp[sum];
+    }
+
+	public:
+	int perfectSum(int arr[], int n, int sum)
+	{
+        // Your code goes here
+        return solve(sum,arr,n);
 	}
 };

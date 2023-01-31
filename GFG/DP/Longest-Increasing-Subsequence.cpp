@@ -100,6 +100,36 @@ class Solution{
 
 
 
+
+// ===============================================
+// Binary Search
+class Solution{
+
+    public:
+    //Function to find length of longest increasing subsequence.
+    int longestSubsequence(int n, int a[])
+    {
+       // your code here
+       vector<int> temp;
+       int cnt = 1;
+       temp.push_back(a[0]);
+       for(int i=1; i<n; i++) {
+           if(a[i] > temp.back()) {
+               temp.push_back(a[i]);
+               cnt++;
+           } else {
+               int idx = lower_bound(temp.begin(),temp.end(),a[i]) - temp.begin();
+               temp[idx] = a[i];
+           }
+       }
+       return cnt;
+    }
+};
+
+
+
+
+
 // space optimization
 class Solution{
 

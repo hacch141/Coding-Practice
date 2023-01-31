@@ -51,3 +51,75 @@ class Solution
 
 
 // Tabulation
+class Solution{
+
+    public:
+    //Function to find length of longest increasing subsequence.
+    int longestSubsequence(int n, int a[])
+    {
+       // your code here
+       vector<vector<int>> dp(n+1, vector<int> (n+1,0));
+       
+       for(int i=n-1; i>=0; i--) {
+           for(int prev=i-1; prev>=-1; prev--) {
+               int notpick = dp[i+1][prev+1];
+               int pick = INT_MIN;
+               if(prev==-1 || a[i] > a[prev]) {
+                   pick = 1+dp[i+1][i+1];
+               }
+               dp[i][prev+1] = max(pick,notpick);
+           }
+       }
+       return dp[0][0];
+    }
+};
+
+// ===================================================
+// another one tabulation
+class Solution{
+
+    public:
+    //Function to find length of longest increasing subsequence.
+    int longestSubsequence(int n, int a[])
+    {
+       // your code here
+       vector<int> dp(n,1);
+       int maxi = 1;
+       
+       for(int i=0; i<n; i++) {
+           for(int prev=0; prev<i; prev++) {
+               if(a[prev] < a[i]) {
+                   dp[i] = max(dp[i],1+dp[prev]);
+               }
+           }
+           maxi = max(maxi,dp[i]);
+       }
+       return maxi;
+    }
+};
+
+
+
+// space optimization
+class Solution{
+
+    public:
+    //Function to find length of longest increasing subsequence.
+    int longestSubsequence(int n, int a[])
+    {
+       // your code here
+       vector<int> dp(n+1,0);
+       
+       for(int i=n-1; i>=0; i--) {
+           for(int prev=i-1; prev>=-1; prev--) {
+               int notpick = dp[prev+1];
+               int pick = INT_MIN;
+               if(prev==-1 || a[i] > a[prev]) {
+                   pick = 1+dp[i+1];
+               }
+               dp[prev+1] = max(pick,notpick);
+           }
+       }
+       return dp[0];
+    }
+};

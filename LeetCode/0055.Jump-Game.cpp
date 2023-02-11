@@ -1,5 +1,24 @@
 // 55. Jump Game
 
+
+
+class Solution {
+
+public:
+    bool canJump(vector<int>& nums) {
+        int n = nums.size();
+        int maxi = nums[0];
+        int i;
+        for(i=1; i<n && i<=maxi; i++) {
+            maxi = max(maxi,i+nums[i]);
+        }
+        return i==n;
+    }
+};
+
+
+// =======================================================
+
 class Solution {
 
 private:

@@ -6,10 +6,10 @@
 class Solution {
 public:
     int firstBadVersion(int n) {
-        long long low = 1;
-        long long high = n;
-        while(low <= high) {
-            int mid = (low+high)/2;
+        int low = 1;
+        int high = n;
+        while(low<=high) {
+            int mid = (high-low)/2 + low;
             if(isBadVersion(mid)) {
                 high = mid-1;
             }

@@ -19,4 +19,49 @@ public:
         }
         return -1;
     }
+    
+    // =======================================================
+    
+    
+    int strStr(string haystack, string needle) {
+      return haystack.find(needle);
+    }
+
+    // =======================================================
+    
+    string st(string & haystack, int i, int j ){
+        string temp = "";
+        for (int k = i; k<=j; k++){
+            temp += haystack[k];
+        }
+        return temp;
+
+    }
+    int strStr(string haystack, string needle) {
+        int m = haystack.size();
+        int n = needle.size();
+        if ((n>m) || (n==m && haystack != needle ))
+        return -1;
+
+        for (int i = n-1; i<m; i++){
+            if (st(haystack, i-n+1, i) == needle){
+                return i-n+1;
+            }
+        }
+        
+        return -1;
+    }
+
+    // =======================================================
+    int strStr(string h, string n) {
+        if(n.length()>h.length()) return -1;
+        for(int i = 0; i<h.length()-n.length()+1; i++){
+            if(h.substr(i, n.length())==n) return i;
+        }
+        return -1;
+    }
+    
+    // =======================================================
+    
+    
 };

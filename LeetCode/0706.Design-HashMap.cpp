@@ -2,21 +2,21 @@
 
 class MyHashMap {
 public:
-    int hash[1000000+1];
+    vector<int> mp;
     MyHashMap() {
-        fill(hash, hash+1000000, -1);
+        mp.resize(1+1e6,-1);
     }
     
     void put(int key, int value) {
-        hash[key] = value;
+        mp[key] = value;
     }
     
     int get(int key) {
-        return hash[key];
+        return mp[key];
     }
     
     void remove(int key) {
-        hash[key] = -1;
+        mp[key] = -1;
     }
 };
 

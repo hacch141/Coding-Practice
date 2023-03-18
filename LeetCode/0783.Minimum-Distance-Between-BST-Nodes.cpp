@@ -2,32 +2,21 @@
 
 class Solution {
 public:
-    int minDiffInBST(TreeNode* root) {
-        queue<TreeNode*> q;
-        q.push(root);
-        int mini = INT_MAX;
 
-        while(!q.empty()) {
-            TreeNode* curr = q.front();
-            q.pop();
-            if(curr->left) q.push(curr->left);
-            if(curr->right) q.push(curr->right);
-            int currval = curr->val;
-            if(curr->left) {
-                TreeNode* temp1 = curr->left;
-                while(temp1->right!=NULL) {
-                    temp1 = temp1->right;
-                }
-                mini = min(mini,currval-temp1->val);
-            }
-            if(curr->right) {
-                TreeNode* temp2 = curr->right;
-                while(temp2->left!=NULL) {
-                    temp2 = temp2->left;
-                }
-                mini = min(mini,temp2->val-currval);
-            }
+    int prev = INT_MAX;
+    int mindiff = INT_MAX;
+
+    void helper(TreeNode* root) {
+        if(root) {
+            if(root->left) helper(root->left);
+            mindiff = min(mindiff,abs(root->val-prev));
+            prev = root->val;
+            if(root->right) helper(root->right);
         }
-        return mini;
+    }
+
+    int minDiffInBST(TreeNode* root) {
+        helper(root);
+        return mindiff;
     }
 };

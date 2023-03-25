@@ -37,3 +37,56 @@ public:
         return ans;
     }
 };
+
+
+
+
+// ======================================================================
+
+
+class Solution {
+public:
+
+    void bfs(int start, vector<int>& vis, vector<vector<int>>& adj, int& nodes) {
+        vis[start] = 1;
+        nodes++;
+        
+        queue<int> q;
+        q.push(start);
+        while(!q.empty()) {
+            int curr = q.front();
+            q.pop();
+            for(auto i : adj[curr]) {
+                if(!vis[i]) {
+                    vis[i] = 1;
+                    nodes++;
+                    q.push(i);
+                }
+            }
+        }
+    }
+
+    long long countPairs(int n, vector<vector<int>>& edges) {
+        vector<vector<int>> adj(n);
+        for(auto i : edges) {
+            adj[i[0]].push_back(i[1]);
+            adj[i[1]].push_back(i[0]);
+        }
+
+        vector<int> vis(n,0);
+        long long ans = 0;
+        int curr_total = 0;
+
+        for(int i=0; i<n; i++) {
+            if(!vis[i]) {
+                vis[i] = 1;
+                int nodes = 0;
+                bfs(i,vis,adj,nodes);
+                ans += (long long)nodes*curr_total;
+                curr_total += nodes;
+            }
+        }
+
+        return ans;
+    }
+};

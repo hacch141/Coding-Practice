@@ -3,6 +3,33 @@
 class Solution {
 public:
     int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        if(obstacleGrid[0][0]==1) return 0;
+        int n = obstacleGrid.size();
+        int m = obstacleGrid[0].size();
+
+        vector<int> dp(m,0);
+        dp[0] = !obstacleGrid[0][0];
+        for(int i=1; i<m; i++) if(obstacleGrid[0][i]==0) dp[i] = dp[i-1];
+
+        for(int i=1; i<n; i++) {
+            if(obstacleGrid[i][0]==1) dp[0] = 0;
+            for(int j=1; j<m; j++) {
+                if(obstacleGrid[i][j]==0) {
+                    dp[j] = dp[j] + dp[j-1];
+                }
+                else dp[j] = 0;
+            }
+        }
+
+        return dp[m-1];
+    }
+};
+
+// ==========================================================================================
+
+class Solution {
+public:
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
         int mod = 2*(1e9);
         int n = obstacleGrid.size();
         int m = obstacleGrid[0].size();

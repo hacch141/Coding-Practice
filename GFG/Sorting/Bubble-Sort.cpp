@@ -36,3 +36,21 @@ void bubbleSort(int arr[], int n)
         }
     }
 }
+
+
+// Recursive
+void bubbleSort(int arr[], int n)
+{
+    // Your code here
+    int isSwap = 0;
+    for(int i=0; i<n-1; i++) {
+        if(arr[i] > arr[i+1]) {
+            int temp = arr[i];
+            arr[i] = arr[i+1];
+            arr[i+1] = temp;
+            isSwap = 1;
+        }
+    }
+    if(isSwap==0) return;
+    bubbleSort(arr,n-1);
+}

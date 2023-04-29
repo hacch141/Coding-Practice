@@ -42,11 +42,19 @@ public:
 class Solution {
 public:
 
-    void dfs(int idx, string currStr, vector<string>& strs, vector<bool>& vis, int& n) {
+    void bfs(int idx, string currStr, vector<string>& strs, vector<bool>& vis, int& n) {
         vis[idx] = true;
-        for(int i=0; i<n; i++) {
-            if(!vis[i] && isValid(currStr,strs[i])) {
-                dfs(i,strs[i],strs,vis,n);
+        queue<int> q;
+        q.push(idx);
+
+        while(!q.empty()) {
+            string s = strs[q.front()];
+            q.pop();
+            for(int i=0; i<n; i++) {
+                if(!vis[i] && isValid(s,strs[i])) {
+                    q.push(i);
+                    vis[i] = 1;
+                }
             }
         }
     }
@@ -66,7 +74,7 @@ public:
 
         for(int i=0; i<n; i++) {
             if(!vis[i]) {
-                dfs(i,strs[i],strs,vis,n);
+                bfs(i,strs[i],strs,vis,n);
                 ans++;
             }
         }

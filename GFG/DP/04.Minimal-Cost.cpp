@@ -58,3 +58,5 @@ class Solution {
 };
 // T : O(N * K)
 // M : O(N)
+
+// https://takeuforward.org/data-structure/dynamic-programming-frog-jump-with-k-distances-dp-4/

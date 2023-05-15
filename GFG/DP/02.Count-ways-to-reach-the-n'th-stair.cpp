@@ -1,3 +1,5 @@
+// Count ways to reach the n'th stair
+
 // Memoization 
 class Solution
 {
@@ -5,9 +7,12 @@ class Solution
     int mod = 1e9+7;
     
     int solve(int n, vector<int> &dp) {
+        if(n<=1) return 1;
         if(dp[n] != -1) return dp[n];
+        
         int one = solve(n-1,dp);
         int two = solve(n-2,dp);
+        
         return dp[n] = (one + two)%mod;
     }
     

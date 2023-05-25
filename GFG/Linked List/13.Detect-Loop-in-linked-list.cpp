@@ -18,3 +18,6 @@ class Solution
         return false;
     }
 };
+
+// T : O(N)
+// S : O(1)

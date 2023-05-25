@@ -20,3 +20,6 @@ int getNthFromLast(Node *head, int n)
        
     return slow->data;
 }
+
+// T : O(N)
+// S : O(1)

@@ -1,0 +1,12 @@
+// 231. Power of Two
+
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        if(n<=0) return false;
+        return (n & (n-1)) == 0;
+    }
+};
+
+// T : O(1)
+// S : O(1)

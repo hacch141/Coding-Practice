@@ -1,5 +1,30 @@
 // Power Of Numbers
 
+
+// Recursion
+class Solution{
+    public:
+    //You need to complete this fucntion
+    int modulo = 1e9+7;
+    
+    long long power(int N,int R)
+    {
+        //Your code here
+        if(N==1 || N==0) return N;
+        if(R==0) return 1;
+        
+        long long half = power(N,R/2);
+        long long ans = (half*half)%modulo;
+        if(R%2==1) {
+            ans = (ans*N)%modulo;
+        }
+        
+        return ans;
+    }
+};
+
+
+// Iterative
 class Solution{
     public:
     //You need to complete this fucntion

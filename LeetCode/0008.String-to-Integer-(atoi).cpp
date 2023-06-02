@@ -6,15 +6,11 @@ public:
     int helper(string s, bool& flag) {
         int ans = 0;
         for(auto i : s) {
-            if(flag) {
-                if((long long)ans*10 + (i-'0') > INT_MAX) {
-                    return INT_MIN;
-                }
+            if(flag && ((long long)ans*10 + (i-'0') >= (long long)INT_MAX+1) ) {
+                return INT_MIN;
             }
-            else {
-                if((long long)ans*10 + (i-'0') >= INT_MAX) {
-                    return INT_MAX;
-                }
+            if(!flag && ((long long)ans*10 + (i-'0') >= INT_MAX) ) {
+                return INT_MAX;
             }
             ans = ans*10 + (i-'0');
         }

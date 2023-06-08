@@ -4,33 +4,31 @@
 class Solution {
   public:
   
-    int solve(int n, int task, vector<vector<int>>& points, vector<vector<int>>& dp) {
-        if(n==0) {
-            int maxpoints = INT_MIN;
-            for(int i=0; i<3; i++) {
-                if(i!=task) {
-                    maxpoints = max(maxpoints,points[n][i]);
+    int solve(int idx, int prev, vector<vector<int>>& points, int& n, vector<vector<int>>& dp) {
+        if(idx==0) {
+            int maxi = 0;
+            for(int task=0; task<3; task++) {
+                if(task!=prev) {
+                    maxi = max(maxi,points[0][task]);
                 }
             }
-            return dp[n][task] = maxpoints;
+            return dp[0][prev] = maxi;
         }
+        if(dp[idx][prev]!=-1) return dp[idx][prev];
         
-        if(dp[n][task] != -1) return dp[n][task];
-        
-        int maxpoints = INT_MIN;
-        for(int i=0; i<3; i++) {
-            if(i!=task) {
-                int point = points[n][i] + solve(n-1,i,points,dp);
-                maxpoints = max(maxpoints,point);
+        int maxi = 0;
+        for(int task=0; task<3; task++) {
+            if(task!=prev) {
+                maxi = max(maxi, (points[idx][task] + solve(idx-1,task,points,n,dp)) );
             }
         }
-        return dp[n][task] = maxpoints;
+        return dp[idx][prev] = maxi;
     }
   
     int maximumPoints(vector<vector<int>>& points, int n) {
         // Code here
-        vector<vector<int>> dp(n, vector<int> (4,-1));
-        return solve(n-1,3,points,dp);
+        vector<vector<int>> dp(n, vector<int>(4,-1));
+        return solve(n-1,3,points,n,dp);
     }
 };
 // T : O(N*4*3)

@@ -1,3 +1,5 @@
+// Minimum sum partition
+
 class Solution{
 
   public:
@@ -26,3 +28,6 @@ class Solution{
 	    return mini;
 	} 
 };
+
+// T : O(n*sum)
+// S : O(n*sum)

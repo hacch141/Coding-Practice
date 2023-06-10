@@ -1,33 +1,4 @@
-// Recursion
-class Solution{
-    
-    private:
-    int solve(int idx, int coins[], int V) {
-        if(idx==0) {
-            if(V%coins[0] == 0) {
-                return V/coins[0];
-            }
-            return 1e9;
-        }
-        int notpick = 0 +solve(idx-1, coins, V);
-        int pick = INT_MAX;
-        if(coins[idx] <= V) {
-            pick = 1 + solve(idx,coins,V-coins[idx]);
-        }
-        return min(pick,notpick);
-    }
-
-	public:
-	int minCoins(int coins[], int M, int V) 
-	{ 
-	    // Your code goes here
-	    int ans = solve(M-1,coins,V);
-	    if(ans >= 1e9) return -1;
-	    return ans;
-	} 
-	  
-};
-
+// Minimum coins
 
 
 // Memoization

@@ -1,26 +1,4 @@
-// Recursion
-class Solution{
-    
-  private:
-    int solve(int idx, int price[], int n) {
-        if(idx==0) return n*price[0];
-        int notpick = solve(idx-1,price,n);
-        int pick = INT_MIN;
-        int len = idx+1;
-        if(len <= n) {
-            pick = price[idx] + solve(idx,price,n-len);
-        }
-        return max(pick,notpick);
-    }
-    
-  public:
-    int cutRod(int price[], int n) {
-        //code here
-        return solve(n-1,price,n);
-    }
-};
-
-
+// Rod Cutting
 
 // Memoization
 class Solution{

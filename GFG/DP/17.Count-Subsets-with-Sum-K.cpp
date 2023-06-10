@@ -1,6 +1,6 @@
-// Recursion
+// Perfect Sum Problem
 
-class Solution{
+class Solution {
     
     int mod = (int)1e9+7;
     private:

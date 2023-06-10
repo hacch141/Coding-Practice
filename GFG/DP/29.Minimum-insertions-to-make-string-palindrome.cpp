@@ -1,6 +1,8 @@
+// Form a palindrome
+
 class Solution{
   public:
-    int countMin(string str){
+    int countMin(string str) {
         //complete the function here
         int m = str.length();
         string str2 = str;

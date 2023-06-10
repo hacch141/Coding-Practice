@@ -1,27 +1,7 @@
-// Recursion
-class Solution
-{
-    private:
-    int solve(int ind1, int ind2, string s1, string s2) {
-        if(ind1<0 || ind2<0) return 0;
-        if(s1[ind1]==s2[ind2]) return 1 + solve(ind1-1,ind2-1,s1,s2);
-        return max(solve(ind1-1,ind2,s1,s2),solve(ind1,ind2-1,s1,s2));
-    }
-    
-    public:
-    //Function to find the length of longest common subsequence in two strings.
-    int lcs(int x, int y, string s1, string s2)
-    {
-        // your code here
-        return solve(x-1,y-1,s1,s2);
-    }
-};
-
-
+// Longest Common Subsequence
 
 // Memoization
-class Solution
-{
+class Solution {
     private:
     int solve(int ind1, int ind2, string s1, string s2, vector<vector<int>>& dp) {
         if(ind1<0 || ind2<0) return 0;
@@ -48,8 +28,7 @@ class Solution
 
 
 // Tabulation
-class Solution
-{
+class Solution {
     private:
     int solve(int n, int m, string s1, string s2) {
         vector<vector<int>> dp(n+1, vector<int> (m+1,0));

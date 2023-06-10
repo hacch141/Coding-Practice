@@ -1,26 +1,4 @@
-// Recursion
-class Solution {
-    
-  private:
-    long long solve(int idx, int coins[], int n, int sum) {
-        if(idx == 0) return (sum%coins[0]==0);
-        long notpick = solve(idx-1,coins,n,sum);
-        long pick = 0;
-        if(coins[idx] <= sum) {
-            pick = solve(idx,coins,n,sum-coins[idx]);
-        }
-        return pick + notpick;
-    }
-    
-  public:
-    long long int count(int coins[], int N, int sum) {
-
-        // code here.
-        return solve(N-1, coins,N,sum);
-    }
-};
-
-
+// Coin Change
 
 // Memoization
 class Solution {

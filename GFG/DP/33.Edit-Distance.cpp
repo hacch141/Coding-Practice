@@ -1,25 +1,4 @@
-// Recursion
-class Solution {
-    
-  private:
-    int solve(int i, int j, string& s, string& t) {
-        if(i<0) return j+1;
-        if(j<0) return i+1;
-        if(s[i] == t[j]) {
-            return solve(i-1,j-1,s,t);
-        }
-        return 1 + min(solve(i-1,j,s,t) , min(solve(i,j-1,s,t),solve(i-1,j-1,s,t)) );
-    }
-    
-  public:
-    int editDistance(string s, string t) {
-        // Code here
-        int n = s.length();
-        int m = t.length();
-        return solve(n-1,m-1,s,t);
-    }
-};
-
+// Edit Distance
 
 
 // Memoization
@@ -61,7 +40,7 @@ class Solution {
         
         for(int i=1; i<=n; i++) {
             for(int j=1; j<=m; j++) {
-                if(s[i-1] ==t[j-1]) {
+                if(s[i-1] == t[j-1]) {
                     dp[i][j] = dp[i-1][j-1];
                 }
                 else {

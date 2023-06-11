@@ -1,36 +1,4 @@
-// Recursion
-class Solution{
-    
-  private:
-    bool solve(int i, int j, string& pattern, string& str) {
-        if(i<0 && j<0) return true;
-        if(i<0 && j>=0) return false;
-        if(i>=0 && j<0) {
-            while(i>=0) {
-                if(str[i--] != '*') return false;
-            }
-            return true;
-        }
-        if(pattern[i] == str[j] || pattern[i] == '?') {
-            return solve(i-1,j-1,pattern,str);
-        }
-        else if(pattern[i] == '*'){
-            return solve(i,j-1,pattern,str) | solve(i-1,j,pattern,str);
-        }
-        return false;
-    }
-    
-  public:
-/*You are required to complete this method*/
-    int wildCard(string pattern,string str)
-    {
-        int n = pattern.length();
-        int m = str.length();
-        
-        return solve(n-1,m-1,pattern,str);
-    }
-};
-
+// Wildcard Pattern Matching
 
 
 // Memoization

@@ -41,3 +41,25 @@ class Solution{
         return dp[0][1];
     }
 };
+
+
+
+// Space Optimization
+class Solution{
+    public:
+    long long maximumProfit(vector<long long>&prices, int n) {
+        // Code here
+        vector<long long> prev1(2,0), prev2(2,0), curr(2,0);
+        for(int idx=n-1; idx>=0; idx--) {
+            long long Buy = -prices[idx] + prev1[0];
+            long long notbuy = 0 + prev1[1];
+            curr[1] = max(Buy,notbuy);
+            long long sell = prices[idx] + prev2[1];
+            long long notsell = 0 + prev1[0];
+            curr[0] = max(sell,notsell);
+            prev2 = prev1;
+            prev1 = curr;
+        }
+        return curr[1];
+    }
+};

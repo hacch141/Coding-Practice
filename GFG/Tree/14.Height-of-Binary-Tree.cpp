@@ -1,0 +1,16 @@
+// Height of Binary Tree
+
+class Solution{
+    public:
+    //Function to find the height of a binary tree.
+    int height(struct Node* node){
+        // code here 
+        if(!node) return 0;
+        return 1 + max(height(node->left),height(node->right));
+    }
+};
+
+// Or you can do level order traversal
+
+// T : O(N)
+// S : O(N)

@@ -1,18 +1,34 @@
 // Delete a node from BST
 
-void find(Node* root, int& X, Node* prev, Node*& parent, Node*& curr) {
+void find(Node* root, int& X, Node*& parent, Node*& curr) {
     if(!root) return;
     
     if(X == root -> data) {
         curr = root;
-        parent = prev;
         return;
     }
-    else if(X < root -> data) {
-        find(root -> left, X, root, parent, curr);
-    }
-    else {
-        find(root -> right, X, root, parent, curr);
+    
+    while(root) {
+        if(X < root -> data) {
+            if(root -> left && root -> left -> data == X) {
+                parent = root;
+                curr = root -> left;
+                break;
+            }
+            else {
+                root = root -> left;
+            }
+        }
+        else if(X > root -> data) {
+            if(root -> right && root -> right -> data == X) {
+                parent = root;
+                curr = root -> right;
+                break;
+            }
+            else {
+                root = root -> right;
+            }
+        }
     }
 }
 
@@ -30,14 +46,13 @@ Node* helperDel(Node* curr) {
     return leftC;
 }
 
-
 // Function to delete a node from BST.
 Node *deleteNode(Node *root, int X) {
     // your code goes here
     Node* parent = new Node(-1);
     Node* curr = new Node(-1);
 
-    find(root,X,new Node(-1),parent,curr);
+    find(root,X,parent,curr);
     if(curr -> data == -1) return root;
     
     Node* newN = helperDel(curr);

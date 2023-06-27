@@ -52,3 +52,47 @@ class Solution{
 
 // T : O(M+N)
 // S : O(Height)
+
+
+// STRIVER
+class bstIterator{
+        stack<Node*> st;
+        int reverse=1;
+    private:
+        void pushall(Node* root){
+            while(root){
+                st.push(root);
+                if(reverse) root=root->right;
+                else root=root->left;
+            }
+        }
+    public:
+        bstIterator(Node* root, int isreverse){
+            reverse=isreverse;
+            pushall(root);
+        }
+        int next(){
+            Node* node=st.top();
+            st.pop();
+            if(!reverse) pushall(node->right);
+            else pushall(node->left);
+            return node->data;
+        }
+};
+
+class Solution{
+  public:
+    int isPairPresent(struct Node *root, int k){
+        if(!root) return false;
+        bstIterator next(root,false);
+        bstIterator before(root,true);
+        int i=next.next();
+        int j=before.next();
+        while(i<j){
+            if(i+j==k) return true;
+            if(i+j<k) i=next.next();
+            else j=before.next();
+        }
+        return false;
+    }
+};

@@ -10,7 +10,13 @@ public:
         
         while(low <= high) {
             int mid = (high-low)/2 + low;
-            if(arr[low] <= arr[mid]) {
+            
+            // If low to high is already sorted then we comp first ele and break
+            if(arr[low] <= arr[high]) {
+                ans = min(ans,arr[low]);
+                break;
+            }
+            else if(arr[low] <= arr[mid]) {
                 ans = min(ans,arr[low]);
                 low = mid + 1;
             }

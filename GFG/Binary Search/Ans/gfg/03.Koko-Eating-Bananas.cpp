@@ -41,5 +41,5 @@ class Solution {
     }
 };
 
-// T : O(N + LogN)
+// T : O(N + N*LogN)
 // S : O(1)

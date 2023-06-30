@@ -5,23 +5,21 @@ class Solution{
         // code here
         int low = 0;
         int high = N-1;
+        int ind = N;
         
         while(low <= high) {
-            
             int mid = (high-low)/2 + low;
-            
-            if(k == Arr[mid]) {
-                return mid;
+            if(Arr[mid] >= k) {
+                ind = mid;
+                high = mid - 1;
             }
-            
-            else if(k > Arr[mid]) {
-                low = mid+1;
-            }
-            
             else {
-                high = mid-1;
+                low = mid + 1;
             }
         }
-        return low;
+        return ind;
     }
 };
+
+// T : O(LogN)
+// S : O(1)

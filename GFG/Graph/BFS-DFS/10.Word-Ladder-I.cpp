@@ -4,7 +4,7 @@ class Solution {
 public:
     int wordLadderLength(string startWord, string targetWord, vector<string>& wordList) {
         // Code here
-        set<string> st(wordList.begin(),wordList.end());
+        unordered_set<string> st(wordList.begin(),wordList.end());
         
         // Check if targetWord is not in wordList
         if (st.find(targetWord) == st.end()) {
@@ -41,5 +41,5 @@ public:
     }
 };
 
-// T : O(N * M * 26 * LogN) N = wordList.size() M = word length of words present in the wordList
+// T : O(N * M * 26) N = wordList.size() M = word length of words present in the wordList
 // S : O(N)

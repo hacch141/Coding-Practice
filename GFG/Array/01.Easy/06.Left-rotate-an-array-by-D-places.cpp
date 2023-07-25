@@ -20,26 +20,26 @@ void Rotatetoright(int arr[], int n, int k) {
 // S : O(K)
 
 
-void Reverse(int arr[], int start, int end)
-{
-  while (start <= end)
-  {
-    int temp = arr[start];
-    arr[start] = arr[end];
-    arr[end] = temp;
-    start++;
-    end--;
-  }
-}
-// Function to Rotate k elements to left
-void Rotateeletoleft(int arr[], int n, int k)
-{
-  // Reverse first k elements
-  Reverse(arr,0,k-1);
-  // Reverse last n-k elements
-  Reverse(arr,k,n-1);
-  // Reverse whole array
-  Reverse(arr,0,n-1);
-}
+    void Reverse(int arr[], int start, int end)
+    {
+      while (start <= end)
+      {
+        int temp = arr[start];
+        arr[start] = arr[end];
+        arr[end] = temp;
+        start++;
+        end--;
+      }
+    }
+
+    
+    //Function to rotate an array by d elements in counter-clockwise direction. 
+    void rotateArr(int arr[], int d, int n){
+        // code here
+        d = d%n;
+        Reverse(arr,0,n-1);
+        Reverse(arr,n-d,n-1);
+        Reverse(arr,0,n-d-1);
+    }
 // T : O(N)
 // S : O(1)

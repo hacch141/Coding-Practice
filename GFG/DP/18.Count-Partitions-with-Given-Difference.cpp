@@ -24,8 +24,8 @@ class Solution {
         // Code here
         int k = 0;
         for(auto i : arr) k += i;
-        if((k-d)%2 || (k-d)<0) return false;
-        int sum = (k-d)/2;
+        if((k+d)%2 || (k-d)<0) return false;
+        int sum = (k+d)/2;
         vector<vector<int>> dp(n, vector<int> (k+1,-1));
         return solve(n-1,sum,arr,dp);
     }
@@ -59,8 +59,8 @@ class Solution {
         // Code here
         int k = 0;
         for(auto i : arr) k += i;
-        if((k-d)%2 || (k-d)<0) return 0;
-        int sum = (k-d)/2;
+        if((k+d)%2 || (k-d)<0) return 0;
+        int sum = (k+d)/2;
         return solve(sum,arr,n);
     }
 };
@@ -93,8 +93,8 @@ class Solution {
         // Code here
         int k = 0;
         for(auto i : arr) k += i;
-        if((k-d)%2 || (k-d)<0) return 0;
-        int sum = (k-d)/2;
+        if((k+d)%2 || (k-d)<0) return 0;
+        int sum = (k+d)/2;
         return solve(sum,arr,n);
     }
 };

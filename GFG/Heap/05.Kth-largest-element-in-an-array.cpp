@@ -1,4 +1,4 @@
-// Kth largest/smallest element in an array
+// Kth largest element in an array
 
 #include <bits/stdc++.h>
 

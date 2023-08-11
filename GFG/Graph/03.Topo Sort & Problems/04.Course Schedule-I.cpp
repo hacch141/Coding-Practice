@@ -51,7 +51,7 @@ private:
         
         for(auto v : adj[u]) {
             if(!vis[v]) {
-                if(dfs(v,adj,vis,pathvis,cnt));
+                if(dfs(v,adj,vis,pathvis,cnt) == false) return false;
             }
             else if(pathvis[v]) {
                 return false;

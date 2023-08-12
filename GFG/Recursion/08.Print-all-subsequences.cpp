@@ -1,27 +1,48 @@
 // Print all subsequences/Power Set
 
-class Solution{
-public:
-    void solve(int idx, string& s, string curr, vector<string>& ans) {
-        if(idx == s.length()) {
-            if(curr!="") ans.push_back(curr);
-            return;
-        }
-        
-        solve(idx+1,s,curr+s[idx],ans);
-        solve(idx+1,s,curr,ans);
+void solve(int i, string& curr, string& s, vector<string>& ans) {
+    if(i == s.size()) {
+        ans.push_back(curr);
+        return;
     }
+    solve(i+1,curr,s,ans);
+    curr += s[i];
+    solve(i+1,curr,s,ans);
+    curr.pop_back();
+    return;
+}
 
-    vector<string> AllPossibleStrings(string s){
-        // Code here
-        int n = s.length();
-        vector<string> ans;
+vector<string> generateSubsequences(string s) {
+    // Write your code here.
+    vector<string> ans;
+    string curr;
+    solve(0,curr,s,ans);
+    return ans;
+}
+
+// T : O(2^N)
+// S : O(N)
+
+
+// BitMasking
+vector<string> generateSubsequences(string s)
+{
+    // Write your code here.
+    int n = s.size();
+    vector<string> ans;
+    
+    int total = (1<<n);
+    for(int i=0; i<total; i++) {
         string curr = "";
-        solve(0,s,curr,ans);
-        sort(ans.begin(),ans.end());
-        return ans;
+        for(int j=n-1; j>=0; j--) {
+            if((i>>j) & 1) {
+                curr += s[n-1-j];
+            }
+        }
+        ans.push_back(curr);
     }
-};
+    return ans;
+}
 
-// T : O(n*2^n)
-// S : O(n*2^n)
+// T : O(2^N * N)
+// S : O(ans)

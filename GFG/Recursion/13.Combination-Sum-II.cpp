@@ -28,3 +28,43 @@ class Solution {
         return ans;
     }
 };
+// T : O(2^n + n*Log N)
+// S : O(n)
+
+
+// Brute Force 
+#include <bits/stdc++.h>
+
+void solve(int i, int& n, int sum, vector<int>& arr,
+ vector<int>& curr, set<vector<int>>& st) {
+	if(i == n) {
+		if(sum == 0) {
+			st.insert(curr);
+		}
+		return;
+	}
+
+	solve(i+1,n,sum,arr,curr,st);
+	if(arr[i] <= sum) {
+		curr.push_back(arr[i]);
+		solve(i+1,n,sum-arr[i],arr,curr,st);
+		curr.pop_back();
+	}
+	return;
+}
+
+vector<vector<int>> combinationSum2(vector<int> &arr,
+ int n, int target){
+	// Write your code here.
+	vector<vector<int>> ans;
+	vector<int> curr;
+	set<vector<int>> st;
+
+	sort(arr.begin(),arr.end());
+	
+	solve(0,n,target,arr,curr,st);
+	for(auto i : st) {
+		ans.push_back(i);
+	}
+	return ans;
+}

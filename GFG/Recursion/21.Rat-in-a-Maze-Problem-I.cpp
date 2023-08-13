@@ -1,38 +1,41 @@
 // Rat in a Maze Problem - I
 
-class Solution{
-    
-    private:
-    void solve(int i, int j, vector<vector<int>> &m, int n, vector<string>& ans, string move, vector<vector<int>>& vis, int delRow[], int delCol[]) {
-        if(i==n-1 && j==n-1) {
-            ans.push_back(move);
-            return;
-        }
-        string dir = "URDL";
-        for(int idx=0; idx<4; idx++) {
-            int nRow = i+delRow[idx];
-            int nCol = j+delCol[idx];
-            if(nRow>=0 && nRow<n && nCol>=0 && nCol<n && !vis[nRow][nCol] && m[nRow][nCol]==1) {
-                vis[i][j] = 1;
-                solve(nRow,nCol,m,n,ans,move+dir[idx],vis,delRow, delCol);
-                vis[i][j] = 0;
-            }
-        }
-    }
-    
-    public:
-    vector<string> findPath(vector<vector<int>> &m, int n) {
-        // Your code goes here
-        vector<string> ans;
-        vector<vector<int>> vis(n,vector<int>(n,0));
-        int delRow[] = {-1,0,+1,0};
-        int delCol[] = {0,+1,0,-1};
-        if(m[0][0]==1) {
-            solve(0,0,m,n,ans,"",vis,delRow,delCol);
-        }
-        return ans;
-    }
-};
+string direction = "URDL";
+vector<int> delRow = {-1, 0, +1, 0};
+vector<int> delCol = {0, +1, 0, -1};
 
-// T : O(3^(n^2))
-// S : O(L * X), L = length of the path, X = number of paths.
+void solve(int row, int col, int& n, int& m, string& curr, vector<vector<int>> &mat,
+vector<string>& ans, vector<vector<int>>& vis) {
+    if(row == n-1 && col == m-1) {
+        ans.push_back(curr);
+        return;
+    }
+
+    vis[row][col] = 1;
+    for(int del=0; del<4; del++) {
+        int nRow = row + delRow[del];
+        int nCol = col + delCol[del];
+        curr += direction[del];
+        if(nRow>=0 && nRow<n && nCol>=0 && nCol<m && !vis[nRow][nCol] && mat[nRow][nCol]==1) {
+            solve(nRow,nCol,n,m,curr,mat,ans,vis);
+        }
+        curr.pop_back();
+    }
+    vis[row][col] = 0;
+}
+
+vector<string> ratMaze(vector<vector<int>> &mat) {
+    // Write your code here.
+    int n = mat.size();
+    int m = mat[0].size();
+    
+    vector<string> ans;
+    vector<vector<int>> vis(n, vector<int>(m,0));
+    string curr = "";
+
+    solve(0,0,n,m,curr,mat,ans,vis);
+    return ans;
+}
+
+// T : O(4^(N*M)
+// S : O(N*M)

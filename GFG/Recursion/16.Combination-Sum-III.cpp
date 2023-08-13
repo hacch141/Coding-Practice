@@ -25,5 +25,5 @@ vector<vector<int>> combinationSum(int k, int n) {
     return ans;
 }
 
-// T : O(2^9)
+// T : O(9^k)  k = height of recursion tree and 9 callspre recursion
 // S : O(k)

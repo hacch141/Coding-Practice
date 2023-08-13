@@ -8,12 +8,15 @@ class Solution {
             }
             return;
         }
+
+        helper(ind+1, target, A, ds, ans);
+        
         if(A[ind]<=target) {
             ds.push_back(A[ind]);
             helper(ind, target-A[ind], A, ds, ans);
             ds.pop_back();
         }
-        helper(ind+1, target, A, ds, ans);
+        
         return;
     }
     
@@ -25,7 +28,7 @@ class Solution {
         vector<vector<int> > ans;
         vector<int> ds;
         sort(A.begin(),A.end());
-        A.erase(unique(A.begin(),A.end()),A.end());
+        A.erase(unique(A.begin(),A.end()),A.end()); // not necessary if all elements are distinct
         helper(0,B,A,ds,ans);
         return ans;
     }

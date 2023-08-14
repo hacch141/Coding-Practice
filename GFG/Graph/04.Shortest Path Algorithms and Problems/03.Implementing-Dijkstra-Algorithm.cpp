@@ -1,74 +1,87 @@
 // Implementing Dijkstra Algorithm
 
 // Using Priority Queue
-class Solution
+vector<int> dijkstra(vector<vector<int>> &edge, int vertices, int edges, int source)
 {
-	public:
-	//Function to find the shortest distance of all the vertices
-    //from the source vertex S.
-    vector <int> dijkstra(int V, vector<vector<int>> adj[], int S)
-    {
-        // Code here
-        vector<int> dist(V,1e9);
-        dist[S] = 0;
-        
-        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>> > pq;
-        pq.push({S,0});
-        
-        while(!pq.empty()) {
-            int u = pq.top().first;
-            pq.pop();
-            
-            for(auto it : adj[u]) {
-                int v = it[0];
-                int w = it[1];
-                if(w + dist[u] < dist[v]) {
-                    dist[v] = w + dist[u];
-                    pq.push({v,dist[v]});
-                }
+    // Write your code here.
+    // 'edge' contains {u, v, distance} vectors.
+    vector<vector<pair<int,int>>> adj(vertices);
+    for(auto i : edge) {
+        int u = i[0];
+        int v = i[1];
+        int w = i[2];
+        adj[u].push_back({v,w});
+        adj[v].push_back({u,w});
+    }
+
+    priority_queue<pair<int,int> , vector<pair<int,int>> , greater<pair<int,int>>> pq;
+    pq.push({0,source});
+
+    vector<int> dist(vertices,1e9);
+    dist[source] = 0;
+
+    while(!pq.empty()) {
+        int u = pq.top().second;
+        int d = pq.top().first;
+        pq.pop();
+        for(auto it : adj[u]) {
+            int v = it.first;
+            int w = it.second;
+            if(d + w < dist[v]) {
+                dist[v] = d + w;
+                pq.push({dist[v],v});
             }
         }
-        
-        return dist;
     }
-};
+
+    return dist;
+}
 
 // T : O((V + 2*E) * LogV)
 // S : O(V)
 
+
+
 // Using Set
-class Solution
+vector<int> dijkstra(vector<vector<int>> &edge, int vertices, int edges, int source)
 {
-	public:
-	//Function to find the shortest distance of all the vertices
-    //from the source vertex S.
-    vector <int> dijkstra(int V, vector<vector<int>> adj[], int S)
-    {
-        // Code here
-        vector<int> dist(V,1e9);
-        dist[S] = 0;
-        
-        set<pair<int,int>> st;
-        st.insert({S,0});
-        
-        while(!st.empty()) {
-            auto it = *(st.begin());
-            int u = it.first;
-            st.erase(it);
-            
-            for(auto it : adj[u]) {
-                int v = it[0];
-                int w = it[1];
-                if(w + dist[u] < dist[v]) {
-                    dist[v] = w + dist[u];
-                    st.insert({v,dist[v]});
+    // Write your code here.
+    // 'edge' contains {u, v, distance} vectors.
+    vector<vector<pair<int,int>>> adj(vertices);
+    for(auto i : edge) {
+        int u = i[0];
+        int v = i[1];
+        int w = i[2];
+        adj[u].push_back({v,w});
+        adj[v].push_back({u,w});
+    }
+
+    set<pair<int,int>> st;
+    st.insert({0,source});
+
+    vector<int> dist(vertices,1e9);
+    dist[source] = 0;
+
+    while(!st.empty()) {
+        auto i = *(st.begin());
+        int u = i.second;
+        int d = i.first;
+        st.erase(i);
+        for(auto it : adj[u]) {
+            int v = it.first;
+            int w = it.second;
+            if(d + w < dist[v]) {
+                if(dist[v] != 1e9) {
+                    st.erase({dist[v],v});
                 }
+                dist[v] = d + w;
+                st.insert({dist[v],v});
             }
         }
-        
-        return dist;
     }
-};
+
+    return dist;
+}
 
 // T : O((V + 2*E) * LogV)
 // S : O(V)

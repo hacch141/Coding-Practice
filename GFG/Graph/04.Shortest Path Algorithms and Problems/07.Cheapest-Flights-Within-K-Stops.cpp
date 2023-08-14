@@ -36,5 +36,5 @@ class Solution {
     }
 };
 
-// T : O(V + 2*E)
-// S : O(V + 2*E)
+// T : O(E)   Additional log(N) of time eliminated here because we’re using a simple queue rather than a priority queue which is usually used in Dijkstra’s Algorithm
+// S : O(V + E)

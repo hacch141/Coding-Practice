@@ -18,6 +18,29 @@ long long maxSubarraySum(int arr[], int n)
 // T : O(N)
 // S : O(1)
 
+// Two Pointer
+#include <bits/stdc++.h> 
+long long maxSubarraySum(int arr[], int n)
+{
+    long long sum = 0;
+    long long ans = 0;
+    int i=0, j=0;
+    while(j<n) {
+        sum += arr[j];
+        while(sum < 0) {
+            sum -= arr[i];
+            i++;
+        }
+        ans = max(ans,sum);
+        j++;
+    }
+    return ans;
+}
+// T : O(N)
+// S : O(1)
+
+
+
 /*
     Time Complexity: O(N^2)
     Space Complexity: O(1)

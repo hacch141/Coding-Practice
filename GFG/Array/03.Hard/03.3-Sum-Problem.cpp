@@ -3,33 +3,31 @@
 vector<vector<int>> triplet(int n, vector<int> &arr)
 {
     // Write your code here.
-    sort(arr.begin(),arr.end());
     vector<vector<int>> ans;
+    sort(arr.begin(),arr.end());
 
     for(int i=0; i<n; i++) {
+        if(i>0 && arr[i]==arr[i-1]) continue;
         int low = i+1;
         int high = n-1;
-        int target = -arr[i];
-
-        if(i>0 && arr[i]==arr[i-1]) continue;
-
         while(low < high) {
-            int sum = arr[low] + arr[high];
-            if(sum == target) {
+            int sum = arr[i] + arr[low] + arr[high];
+            if(sum == 0) {
                 ans.push_back({arr[i],arr[low],arr[high]});
                 low++;
                 high--;
-                while(low<n && arr[low]==arr[low-1]) low++;
-                while(high>=0 && arr[high]==arr[high+1]) high--;
+                while(low<high && arr[low]==arr[low-1]) low++;
+                while(low<high && arr[high]==arr[high+1]) high--;
             }
-            else if(sum < target) {
-                low++;
+            else if(sum > 0) {
+                high--;
             }
             else {
-                high--;
+                low++;
             }
         }
     }
+
     return ans;
 }
 // T : O(N*Log N + N^2)

@@ -34,26 +34,26 @@ vector<vector<int>> triplet(int n, vector<int> &arr)
 // S : O(1)
 
 
-vector<vector<int>> triplet(int n, vector<int> &arr) {
+vector<vector<int>> triplet(int n, vector<int> &arr)
+{
+    // Write your code here.
     set<vector<int>> st;
-    for (int i=0; i<n; i++) {
-        set<int> hashset;
-        for (int j=i+1; j<n; j++) {
-            //Calculate the 3rd element:
-            int third = -(arr[i] + arr[j]);
 
-            //Find the element in the set:
-            if (hashset.find(third) != hashset.end()) {
-                vector<int> temp = {arr[i], arr[j], third};
-                sort(temp.begin(), temp.end());
-                st.insert(temp);
+    for(int i=0; i<n; i++) {
+        unordered_map<int,int> mp;
+        for(int j=i+1; j<n; j++) {
+            int sum = arr[i] + arr[j];
+            if(mp.find(-sum) != mp.end()) {
+                vector<int> v = {arr[i],arr[j],arr[mp[-sum]]};
+                sort(v.begin(),v.end());
+                st.insert(v);
             }
-            hashset.insert(arr[j]);
+            mp[arr[j]] = j;
         }
     }
 
-    //store the set in the answer:
-    vector<vector<int>> ans(st.begin(), st.end());
+    vector<vector<int>> ans(st.begin(),st.end());
+
     return ans;
 }
 // T : O(N^2 * Log (Triplet))

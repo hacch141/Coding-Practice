@@ -75,3 +75,85 @@ int minSubstring(string &a, string &b) {
 }
 // T : O(N)
 // S : O(1)
+
+
+
+
+class Solution {
+public:
+
+    bool isValid(vector<int>& a, vector<int>& b) {
+        for(int i=0; i<60; i++) {
+            if(a[i] < b[i]) return false;
+        }
+        return true;
+    }
+
+    string minWindow(string s, string t) {
+
+        if(t.length() > s.length()) return "";
+
+        vector<int> freqS(60,0), freqT(60,0);
+        for(auto i : t) {
+            freqT[i-'A']++;
+        }
+
+        int i=0, j=0, cnt=0, st=-1, end=-1, mini=INT_MAX;
+        while(j<s.length()) {
+            freqS[s[j]-'A']++;
+            while(isValid(freqS,freqT)) {
+                if(j-i+1 < mini) {
+                    st = i;
+                    end = j;
+                    mini = j-i+1;
+                }
+                freqS[s[i]-'A']--;
+                i++;
+            }
+            j++;
+        }
+
+        if(st==-1 && end==-1) return "";
+        return s.substr(st,end-st+1);
+    }
+};
+
+
+
+class Solution {
+public:
+
+    string minWindow(string s, string t) {
+
+        if(t.length() > s.length()) return "";
+
+        vector<int> freqS(60,0), freqT(60,0);
+        for(auto i : t) {
+            freqT[i-'A']++;
+        }
+
+        int i=0, j=0, cnt=0, st=-1, end=-1, mini=INT_MAX;
+        while(j<s.length()) {
+            freqS[s[j]-'A']++;
+            if(freqS[s[j]-'A'] <= freqT[s[j]-'A']) {
+                cnt++;
+            }
+            while(cnt == t.length()) {
+                if(j-i+1 < mini) {
+                    st = i;
+                    end = j;
+                    mini = j-i+1;
+                }
+                freqS[s[i]-'A']--;
+                if(freqS[s[i]-'A'] < freqT[s[i]-'A']) {
+                    cnt--;
+                }
+                i++;
+            }
+            j++;
+        }
+
+        if(st==-1 && end==-1) return "";
+        return s.substr(st,end-st+1);
+    }
+};

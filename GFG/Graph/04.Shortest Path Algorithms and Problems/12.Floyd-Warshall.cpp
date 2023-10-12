@@ -13,10 +13,10 @@ class Solution {
 	    
 	    for(int v=0; v<n; v++) {
 	        for(int i=0; i<n; i++) {
-    	        for(int j=0; j<n; j++) {
-    	            matrix[i][j] = min(matrix[i][j], matrix[i][v] + matrix[v][j]);
+    	            for(int j=0; j<n; j++) {
+    	                matrix[i][j] = min(matrix[i][j], matrix[i][v] + matrix[v][j]);
+    	            }
     	        }
-    	    }
 	    }
 	    
 	    for(int i=0; i<n; i++) {

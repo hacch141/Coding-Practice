@@ -6,14 +6,7 @@ using namespace std;
 int main() {
 
     int n , k , l , c , d , p , nl , np;
-    cin >> n;
-    cin >> k;
-    cin >> l;
-    cin >> c;
-    cin >> d;
-    cin >> p;
-    cin >> nl;
-    cin >> np;
+    cin >> n >> k >> l >> c >> d >> p >> nl >> np;
 
     cout << min((k*l)/nl , min(c*d , p/np))/n ;
 

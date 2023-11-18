@@ -19,3 +19,27 @@ public:
         return ans;
     }
 };
+
+
+
+// ==========================================================
+
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_map<char,int> mp;
+        int l=0, r=0, n=s.length(), ans=0;
+
+        for(r=0; r<n; r++) {
+            while(mp.find(s[r]) != mp.end()) {
+                mp.erase(s[l]);
+                l++;
+            }
+            mp[s[r]]++;
+            ans = max(ans, r-l+1);
+        }
+
+        return ans;
+    }
+};

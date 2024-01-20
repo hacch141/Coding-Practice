@@ -47,7 +47,8 @@ public:
         for(int i=0; i<arr.size(); i++) {
             lt = abs(i - l[i]) - 1;
             rt = abs(i - r[i]) - 1;
-            ans += arr[i] * (lt + 1) * (rt + 1);
+            // ans += arr[i] * (lt + 1) * (rt + 1);
+            ans += arr[i] * (lt * rt + lt + rt + 1);
             ans %= mod;
         }
         return (int)ans;

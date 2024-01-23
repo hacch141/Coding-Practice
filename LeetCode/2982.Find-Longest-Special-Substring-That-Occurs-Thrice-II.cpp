@@ -1,5 +1,51 @@
 // 2982. Find Longest Special Substring That Occurs Thrice II
 
+
+class Solution {
+public:
+
+    int maximumLength(string s) {
+        int n = s.length(), ans = -1, c = 1;
+        vector<vector<int>> freq(26, vector<int>(3, -1));
+
+        char prev = s[0];
+        freq[prev - 'a'][0] = 1;
+        for(int i = 1; i < n; i++) {
+            if(s[i] == prev) {
+                c++;
+            }
+            else {
+                c = 1;
+                prev = s[i];
+            }
+            
+            int ind = prev - 'a';
+            if(c > freq[ind][0]) {
+                freq[ind][2] = freq[ind][1];
+                freq[ind][1] = freq[ind][0];
+                freq[ind][0] = c;
+            }
+            else if(c > freq[ind][1]) {
+                freq[ind][2] = freq[ind][1];
+                freq[ind][1] = c;
+            }
+            else if(c > freq[ind][2]) {
+                freq[ind][2] = c;
+            }
+        }
+
+        for(int i = 0; i < 26; i++) {
+            if(freq[i][2] > ans) ans = freq[i][2];
+        }
+
+        return ans;
+    }
+};
+
+// ================================================================
+
+
+
 class Solution {
 public:
 

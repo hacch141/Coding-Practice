@@ -2,51 +2,35 @@
 
 class Solution {
 public:
-    
-    bool compare(vector<int> &selected, string &currStr) {
-        vector<int> noRepeat(26,0);
-        for(int i=0; i<currStr.length(); i++) {
-            if(noRepeat[currStr[i]-'a'] == 1) {
-                return false;
-            }
-            noRepeat[currStr[i]-'a'] = 1;
+
+    int isValid(string& str, int& mask) {
+        int newMask = mask;
+        for(auto i : str) {
+            if(newMask & (1 << (i - 'a'))) return -1;
+            newMask |= (1 << (i - 'a'));
         }
-        
-        for(int i=0; i<currStr.length(); i++) {
-            if(selected[currStr[i]-'a'] == 1) {
-                return false;
-            }
-        }
-        return true;
+        return newMask;
     }
-    
-    
-    int helper(vector<string>& arr, int i, vector<int>& selected, int len) {
+
+    int solve(int ind, int& n, vector<string>& arr, int& mask, vector<unordered_map<int,int>>& dp) {
+        if(ind == n) return __builtin_popcount(mask);
+
+        if(dp[ind].find(mask) != dp[ind].end()) return dp[ind][mask];
+
+        int nottake, take = 0;
+        int newMask = isValid(arr[ind], mask);
         
-        if(i == arr.size()) {
-            return len;
+        if(newMask != -1) {
+            take = solve(ind + 1, n, arr, newMask, dp);
         }
-        
-        string currStr = arr[i];
-        if(compare(selected,currStr) == false) {
-            return helper(arr,i+1,selected,len);
-        }
-        else {
-            for(int i=0; i<currStr.length(); i++) {
-                selected[currStr[i]-'a'] = 1;
-            }
-            int ans1 = helper(arr,i+1,selected,len+currStr.length());
-            
-            for(int i=0; i<currStr.length(); i++) {
-                selected[currStr[i]-'a'] = 0;
-            }
-            int ans2 = helper(arr,i+1,selected,len);
-            return max(ans1,ans2);
-        }
+
+        nottake = solve(ind + 1, n, arr, mask, dp);
+        return dp[ind][mask] = max(take, nottake);
     }
-    
+
     int maxLength(vector<string>& arr) {
-        vector<int> selected(26,0);
-        return helper(arr,0,selected,0);
+        int mask = 0, n = arr.size();
+        vector<unordered_map<int,int>> dp(n+1);
+        return solve(0, n, arr, mask, dp);
     }
 };

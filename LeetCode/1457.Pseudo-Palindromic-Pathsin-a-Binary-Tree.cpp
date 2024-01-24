@@ -1,16 +1,36 @@
 // 1457. Pseudo-Palindromic Paths in a Binary Tree
 
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
+class Solution {
+public:
+
+    int solve(TreeNode* root, int& mask) {
+        if(!root) return 0;
+
+        if(!root->left && !root->right) {
+            mask ^= (1 << root->val);
+            bool ans = (mask == 0 || __builtin_popcount(mask) == 1);
+            mask ^= (1 << root->val);
+            return  ans ? 1 : 0;
+        }
+
+        mask ^= (1 << root->val);
+        int l = solve(root->left , mask);
+        int r = solve(root->right , mask);
+        mask ^= (1 << root->val);
+
+        return l + r;
+    }
+
+    int pseudoPalindromicPaths (TreeNode* root) {
+        int mask = 0;
+        return solve(root, mask);
+    }
+};
+
+
+
+// =============================================================
+
 class Solution {
 public:
 

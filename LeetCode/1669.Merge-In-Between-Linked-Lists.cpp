@@ -13,27 +13,13 @@
 class Solution {
 public:
     ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
-        ListNode* slist2 = list2;
-        ListNode* elist2 = list2;
-        
-        while(elist2->next != NULL) {
-            elist2 = elist2->next;
-        }
-        
-        ListNode* med1list1 = list1;
-        
-        for(int i=0; i<a-1; i++) {
-            med1list1 = med1list1->next;
-        }
-        
-        ListNode* med2list1 = list1;
-        for(int i=0; i<=b; i++) {
-            med2list1 = med2list1->next;
-        }
-        
-        med1list1->next = slist2;
-        elist2->next = med2list1;
-        
+        ListNode* start = list1;
+        ListNode* end = list1;
+        for(int i = 0; i < a - 1; i++) start = start->next;
+        for(int i = 0; i <= b; i++) end = end->next;
+        start->next = list2;
+        while(start->next) start = start->next;
+        start->next = end;
         return list1;
     }
 };

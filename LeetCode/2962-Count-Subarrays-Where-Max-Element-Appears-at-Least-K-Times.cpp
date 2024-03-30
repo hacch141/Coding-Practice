@@ -12,8 +12,8 @@ public:
             while(l <= r && f >= k) {
                 f -= nums[l] == mx;
                 l++;
+                ans += n - r;
             }
-            if(f == k - 1) ans += l;
         }
         return ans;
     }

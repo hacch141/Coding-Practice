@@ -22,3 +22,25 @@ public:
         return solve(0, n, s, k, '{', dp);
     }
 };
+
+
+
+class Solution {
+public:
+
+    int longestIdealString(string s, int k) {
+        int n = s.length(), ans = 0;
+        vector<int> dp(26, 0);
+        for(int i = 0; i < n; i++) {
+            int mx = dp[s[i] - 'a'];
+            for(char prev = 'a' ; prev <= 'z'; prev++) {
+                if(abs(s[i] - prev) <= k) {
+                    mx = max(mx, 1 + dp[prev - 'a']);
+                }
+            }
+            dp[s[i] - 'a'] = mx;
+            ans = max(ans, mx);
+        }
+        return ans;
+    }
+};

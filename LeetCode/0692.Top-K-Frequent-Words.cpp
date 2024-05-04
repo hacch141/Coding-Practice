@@ -3,25 +3,25 @@
 class Solution {
 public:
     
-    struct compare {
-        bool operator()(pair<string,int> &p1, pair<string,int> &p2) {
-            if(p1.second == p2.second) {
-                return p1.first > p2.first;
-            }
-            return p1.second < p2.second;
+    static bool cmp(pair<string,int> &p1, pair<string,int> &p2) {
+        if(p1.second == p2.second) {
+            return p1.first < p2.first;
         }
-    };
+        return p1.second > p2.second;
+    }
     
     vector<string> topKFrequent(vector<string>& words, int k) {
         unordered_map<string,int> mp;
         for(auto i : words) {
             mp[i]++;
         }
-        priority_queue<pair<string,int>, vector<pair<string,int>>, compare> pq(mp.begin(),mp.end());
+
+        vector<pair<string,int>> v(mp.begin(),mp.end());
+        sort(v.begin(), v.end(), cmp);
+        
         vector<string> ans;
-        while(k--) {
-            ans.push_back(pq.top().first);
-            pq.pop();
+        for(int i = 0; i < k; i++) {
+            ans.push_back(v[i].first);
         }
         return ans;
     }

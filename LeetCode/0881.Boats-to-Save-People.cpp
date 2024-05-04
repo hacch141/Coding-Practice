@@ -3,25 +3,15 @@
 class Solution {
 public:
     int numRescueBoats(vector<int>& people, int limit) {
-        sort(people.begin(),people.end());
-        int low = 0;
-        int high = people.size()-1;
-        int ans = 0;
-        while(low<=high) {
-            if(low==high) {
-                ans++;
-                break;
+        sort(people.begin(), people.end());
+        int n = people.size(), l = 0, r = n - 1, boat = 0;
+        while(l <= r) {
+            if(l == r || (people[l] + people[r] <= limit)) {
+                l++;
             }
-            if(people[low]+people[high] <= limit) {
-                ans++;
-                low++;
-                high--;
-            }
-            else {
-                ans++;
-                high--;
-            }
+            r--;
+            boat++;
         }
-        return ans;
+        return boat;
     }
 };

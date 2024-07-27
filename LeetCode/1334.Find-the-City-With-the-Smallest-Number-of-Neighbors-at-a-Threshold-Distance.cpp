@@ -3,7 +3,7 @@
 class Solution {
 public:
 
-    int bfs(int start, int& n, vector<vector<pair<int,int>>>& adj, int distanceThreshold) {
+    int dijkstra(int start, int& n, vector<vector<pair<int,int>>>& adj, int distanceThreshold) {
 
         priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
         pq.push({0, start});

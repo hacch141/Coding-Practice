@@ -41,3 +41,50 @@ public:
         return dijkstra(adj, time, change);
     }
 };
+
+// USING BFS
+class Solution {
+public:
+
+    int dijkstra(vector<vector<int>>& adj, int time, int change) {
+        int n = adj.size();
+        vector<int> dist1(n, 1e9), dist2(n, 1e9);
+        queue<pair<int,int>> q;
+        q.push({0,0});
+        dist1[0] = 0;
+        while(!q.empty()) {
+            int sz = q.size();
+            while(sz--) {
+                int du = q.front().first;
+                int u = q.front().second;
+                q.pop();
+
+                int div = (du / change);
+                if(div & 1) du = (div + 1) * change;
+
+                for(auto v : adj[u]) {
+                    int dv = time;
+                    if(du + dv < dist1[v]) {
+                        dist2[v] = dist1[v];
+                        dist1[v] = du + dv;
+                        q.push({du + dv, v});
+                    }
+                    else if(du + dv < dist2[v] && du + dv != dist1[v]) {
+                        dist2[v] = du + dv;
+                        q.push({du + dv , v});
+                    }
+                }
+            }
+        }
+        return dist2[n - 1];
+    }
+
+    int secondMinimum(int n, vector<vector<int>>& edges, int time, int change) {
+        vector<vector<int>> adj(n);
+        for(auto i : edges) {
+            adj[i[0]-1].push_back(i[1]-1);
+            adj[i[1]-1].push_back(i[0]-1);
+        }
+        return dijkstra(adj, time, change);
+    }
+};

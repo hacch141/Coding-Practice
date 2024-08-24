@@ -1,5 +1,50 @@
 // 564. Find the Closest Palindrome
 
+#define ll long long
+
+class Solution {
+public:
+    ll getPal(ll num, bool odd) {
+        ll ans = num;
+        if(odd) num /= 10;
+        while(num) {
+            ans = ans * 10 + (num % 10);
+            num /= 10;
+        }
+        return ans;
+    }
+
+    string nearestPalindromic(string n) {
+        int len = n.length();
+        ll num = stoll(n);
+        for(int i = 0; i < len / 2; i++) num /= 10;
+        vector<ll> v;
+        v.push_back(getPal(num, len & 1));
+        v.push_back(getPal(num - 1, len & 1));
+        v.push_back(getPal(num + 1, len & 1));
+        v.push_back(pow(10, len) + 1);
+        v.push_back(pow(10, len - 1) - 1);
+        
+        ll ans = INT_MAX, diff = INT_MAX, org = stoll(n);
+        for(auto i : v) {
+            if(i == org) continue;
+            ll cur = abs(org - i);
+            if(cur < diff) {
+                diff = cur;
+                ans = i;
+            }
+            else if(cur == diff) {
+                ans = min(ans, i);
+            }
+        }
+        return to_string(ans);
+    }
+};
+
+
+// =================================================================
+
+
 class Solution {
 public:
     bool isPal(string& s) {

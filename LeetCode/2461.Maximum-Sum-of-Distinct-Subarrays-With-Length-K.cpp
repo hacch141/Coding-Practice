@@ -3,24 +3,19 @@
 class Solution {
 public:
     long long maximumSubarraySum(vector<int>& nums, int k) {
-        long long ans = 0, total = 0, l = 0, r = 0, n = nums.size();
-        unordered_map<int,int> mp;
-
-        for(r=0; r<n; r++) {
-            while(l<r && (mp.find(nums[r]) != mp.end() || (r-l+1) > k)) {
-                mp.erase(nums[l]);
-                total -= nums[l];
-                l++;
+        int n = nums.size();
+        long long sum = 0, ans = 0;
+        map<int,int> mp;
+        for(int i = 0; i < n; i++) {
+            sum += nums[i];
+            mp[nums[i]]++;
+            if(i >= k) {
+                sum -= nums[i - k];
+                mp[nums[i - k]]--;
+                if(mp[nums[i - k]] == 0) mp.erase(nums[i - k]);
             }
-
-            total += nums[r];
-            mp[nums[r]]++;
-
-            if((r-l+1) == k) {
-                ans = max(ans,total);
-            }
+            if(mp.size() == k) ans = max(ans, sum);
         }
-
         return ans;
     }
 };

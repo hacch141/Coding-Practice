@@ -1,47 +1,21 @@
 // 3042. Count Prefix and Suffix Pairs I
 
-class StringHash {
-public:
-    long long base1 = 31, base2 = 61, mod1 = 1e9 + 7, mod2 = 1e9 + 9;
-    vector<long long> hs1, hs2;
-
-    StringHash(string s) {
-        int n = s.length();
-        hs1.resize(n + 1, 0);
-        hs2.resize(n + 1, 0);
-        for(int i = 1; i <= n; i++) {
-            int c = s[i - 1] + 1;
-            hs1[i] = ((hs1[i - 1] * base1) % mod1 + c) % mod1;
-            hs2[i] = ((hs2[i - 1] * base2) % mod2 + c) % mod2;
-        }
-    }
-
-    long long powxy(long long num, long long pow, long long mod) {
-        if(pow == 0) return 1;
-        long long half = powxy(num, pow / 2, mod);
-        return (((half * half) % mod) * (pow % 2 == 1 ? num : 1)) % mod;
-    }
-
-    pair<long long, long long> substrHash(int l, int r) {
-        long long rem1 = (powxy(base1, r - l + 1, mod1) * hs1[l]) % mod1;
-        long long rem2 = (powxy(base2, r - l + 1, mod2) * hs2[l]) % mod2;
-        return {(hs1[r + 1] - rem1 + mod1) % mod1 , (hs2[r + 1] - rem2 + mod2) % mod2};
-    }
-};
-
 class Solution {
 public:
+    bool isPrefixAndSuffix(int i, int j, vector<string>& words) {
+        int ni = words[i].length(), nj = words[j].length();
+        if(ni > nj) return false;
+        for(int k = 0; k < ni; k++) {
+            if(words[i][k] != words[j][k] || words[i][ni - 1 - k] != words[j][nj - 1 - k]) return false;
+        }
+        return true;
+    }
+
     int countPrefixSuffixPairs(vector<string>& words) {
         int n = words.size(), ans = 0;
-        map<pair<long long, long long>,int> mp;
-        for(int i = n - 1; i >= 0; i--) {
-            auto it = StringHash(words[i]);
-            int m = words[i].length();
-            ans += mp[it.substrHash(0, m - 1)];
-            for(int j = 0; j < m; j++) {
-                if(it.substrHash(0, j) == it.substrHash(m - 1 - j, m - 1)) {
-                    mp[it.substrHash(0, j)]++;
-                }
+        for(int i = 0; i < n - 1; i++) {
+            for(int j = i + 1; j < n; j++) {
+                ans += isPrefixAndSuffix(i, j, words);
             }
         }
         return ans;

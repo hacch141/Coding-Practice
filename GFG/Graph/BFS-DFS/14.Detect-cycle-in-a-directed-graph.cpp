@@ -1,35 +1,25 @@
 // Detect cycle in a directed graph
 
 class Solution {
-    
-  private:
-    bool dfs(int u, vector<int> adj[], vector<int>& vis, vector<int>& pathVis) {
-        vis[u] = 1;
-        pathVis[u] = 1;
-        
-        for(auto v : adj[u]) {
-            if(!vis[v]) {
-                if(dfs(v,adj,vis,pathVis) == true) return true;
-            }
-            else {
-                if(pathVis[v]) return true;
-            }
+  public:
+    bool dfs(int u, vector<vector<int>> adj, vector<bool> &vis, vector<bool> &pathVis) {
+        vis[u] = true;
+        pathVis[u] = true;
+        for(auto &v : adj[u]) {
+            if(pathVis[v]) return true;
+            if(vis[v]) continue;
+            if(dfs(v, adj, vis, pathVis)) return true;
         }
-        pathVis[u] = 0;
+        pathVis[u] = false;
         return false;
     }
-    
-  public:
+  
     // Function to detect cycle in a directed graph.
-    bool isCyclic(int V, vector<int> adj[]) {
+    bool isCyclic(int V, vector<vector<int>> adj) {
         // code here
-        vector<int> vis(V,0);
-        vector<int> pathVis(V,0);
-        
-        for(int i=0; i<V; i++) {
-            if(!vis[i]) {
-                if(dfs(i,adj,vis,pathVis) == true) return true;
-            }
+        vector<bool> vis(V, false), pathVis(V, false);
+        for(int u = 0; u < V; u++) {
+            if(!vis[u] && dfs(u, adj, vis, pathVis)) return true;
         }
         
         return false;

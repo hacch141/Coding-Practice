@@ -2,37 +2,25 @@
 
 // DFS
 class Solution {
-    
-  private:
-    bool dfs(int u, int parent, vector<int> adj[], vector<int>& vis) {
-        vis[u] = 1;
-        
-        for(auto v : adj[u]) {
-            if(!vis[v]) {
-                if(dfs(v,u,adj,vis)) return true;
-            }
-            else {
-                if(v != parent) return true;
-            }
+  public:
+    bool dfs(int u, int par, vector<vector<int>>& adj, vector<bool>& vis) {
+        vis[u] = true;
+        for(auto &v : adj[u]) {
+            if(v == par) continue;
+            if(vis[v]) return true;
+            if(dfs(v, u, adj, vis)) return true;
         }
-        
         return false;
     }
-    
-  public:
+  
     // Function to detect cycle in an undirected graph.
-    bool isCycle(int V, vector<int> adj[]) {
+    bool isCycle(vector<vector<int>>& adj) {
         // Code here
-        vector<int> vis(V,0);
-        
-        for(int i=0; i<V; i++) {
-            if(!vis[i]) {
-                if(dfs(i,-1,adj,vis)) {
-                    return true;
-                }
-            }
+        int n = adj.size();
+        vector<bool> vis(n, false);
+        for(int u = 0; u < n; u++) {
+            if(!vis[u] && dfs(u, -1, adj, vis)) return true;
         }
-        
         return false;
     }
 };

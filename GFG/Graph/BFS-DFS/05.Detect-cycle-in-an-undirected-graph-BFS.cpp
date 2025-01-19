@@ -2,47 +2,41 @@
 
 // BFS
 class Solution {
-    
-  private:
-    bool bfs(int u, vector<int> adj[], vector<int>& vis) {
-        vis[u] = 1;
+  public:
+    bool bfs(int u, int par, vector<vector<int>>& adj, vector<bool>& vis) {
+        vis[u] = true;
         
         queue<pair<int,int>> q;
-        q.push({u,-1});
+        q.push({u, par});
         
         while(!q.empty()) {
-            int u = q.front().first;
-            int parent = q.front().second;
-            q.pop();
-            
-            for(auto v : adj[u]) {
-                if(!vis[v]) {
-                    vis[v] = 1;
-                    q.push({v,u});
-                }
-                else {
-                    if(v != parent) return true;
+            int len = q.size();
+            while(len--) {
+                auto curr = q.front();
+                q.pop();
+                int u = curr.first, par = curr.second;
+                for(auto &v : adj[u]) {
+                    if(v == par) continue;
+                    if(vis[v]) return true;
+                    vis[v] = true;
+                    q.push({v, u});
                 }
             }
         }
         
         return false;
     }
-    
-  public:
+  
     // Function to detect cycle in an undirected graph.
-    bool isCycle(int V, vector<int> adj[]) {
+    bool isCycle(vector<vector<int>>& adj) {
         // Code here
-        vector<int> vis(V,0);
-        
-        for(int i=0; i<V; i++) {
-            if(!vis[i]) {
-                if(bfs(i,adj,vis)) {
-                    return true;
-                }
+        int n = adj.size();
+        vector<bool> vis(n, false);
+        for(int u = 0; u < n; u++) {
+            if(!vis[u])  {
+                if(bfs(u, -1, adj, vis)) return true;
             }
         }
-        
         return false;
     }
 };

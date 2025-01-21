@@ -12,9 +12,6 @@ public:
         queue<pair<int,int>> q;
         q.push({0, 0});
 
-        set<pair<int,int>> vis;
-        vis.insert({0, 0});
-
         int cells = 1;
         while(!q.empty()) {
             int len = q.size();
@@ -25,9 +22,9 @@ public:
                 if(x == n - 1 && y == n - 1) return cells;
                 for(int k = 0; k < 8; k++) {
                     int nx = x + dx[k], ny = y + dy[k];
-                    if(nx >= 0 && nx < n && ny >= 0 && ny < n && grid[nx][ny] == 0 && !vis.count({nx, ny})) {
+                    if(nx >= 0 && nx < n && ny >= 0 && ny < n && grid[nx][ny] == 0) {
                         q.push({nx, ny});
-                        vis.insert({nx, ny});
+                        grid[nx][ny] = 1;
                     }
                 }
             }

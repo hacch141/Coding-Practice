@@ -24,6 +24,10 @@ class Solution {
 	            if(matrix[i][j] == 1e9) matrix[i][j] = -1;
 	        }
 	    }
+
+	    for(int i=0; i<n; i++) {
+	        if(matrix[i][i] < 0) {//then there is a neg cycle}
+	    }
 	}
 };
 

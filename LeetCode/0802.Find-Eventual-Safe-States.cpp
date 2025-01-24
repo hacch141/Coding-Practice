@@ -1,41 +1,69 @@
 // 802. Find Eventual Safe States
 
 class Solution {
-
-private:
-    bool dfs(int u, vector<int>& vis, vector<int>& pathvis, vector<vector<int>>& graph) {
-        vis[u] = 1;
-        pathvis[u] = 1;
-        for(auto v : graph[u]) {
-            if(!vis[v]) {
-                if(dfs(v,vis,pathvis,graph)) {
-                    return true;
-                }
-            }
-            else if(pathvis[v]) {
-                return true;
-            }
+public:
+    bool dfs(int u, vector<bool>& vis, vector<bool>& pathvis, vector<vector<int>>& graph) {
+        vis[u] = true;
+        pathvis[u] = true;
+        for(auto &v : graph[u]) {
+            if(pathvis[v]) return true;
+            if(!vis[v] && dfs(v, vis, pathvis, graph)) return true;
         }
-        pathvis[u] = 0;
+        pathvis[u] = false;
         return false;
     }
 
-public:
     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
         int n = graph.size();
-        vector<int> vis(n,0);
-        vector<int> pathvis(n,0);
-        for(int i=0; i<n; i++) {
-            if(!vis[i]) {
-                dfs(i,vis,pathvis,graph);
+
+        vector<bool> vis(n, false), pathvis(n, false);
+        for(int u = 0; u < n; u++) {
+            if(!vis[u]) {
+                dfs(u, vis, pathvis, graph);
             }
         }
 
         vector<int> ans;
-        for(int i=0; i<n; i++) {
-            if(pathvis[i] == 0) {
-                ans.push_back(i);
+        for(int u = 0; u < n; u++) {
+            if(!pathvis[u]) ans.push_back(u);
+        }
+
+        return ans;
+    }
+};
+
+
+
+class Solution {
+public:
+
+    bool dfs(int u, vector<bool>& vis, vector<bool>& pathvis, vector<bool>& safe, vector<vector<int>>& graph) {
+        if(vis[u]) return safe[u];
+        
+        vis[u] = true;
+        pathvis[u] = true;
+        for(auto &v : graph[u]) {
+            if(pathvis[v]) return safe[u] = false;
+            if(vis[v] && !safe[v]) return safe[v];
+            if(!dfs(v, vis, pathvis, safe, graph)) return safe[u] = false;
+        }
+        pathvis[u] = false;
+        return safe[u];
+    }
+
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        int n = graph.size();
+
+        vector<bool> vis(n, false), pathvis(n, false), safe(n, true);
+        for(int u = 0; u < n; u++) {
+            if(!vis[u]) {
+                dfs(u, vis, pathvis, safe, graph);
             }
+        }
+
+        vector<int> ans;
+        for(int u = 0; u < n; u++) {
+            if(safe[u]) ans.push_back(u);
         }
 
         return ans;

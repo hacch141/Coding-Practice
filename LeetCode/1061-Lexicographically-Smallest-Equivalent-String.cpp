@@ -34,8 +34,7 @@ public:
 
         string ans;
         for(auto &ch : baseStr) {
-            if(lex[ch - 'a'] == -1) ans += ch;
-            else ans += (lex[ch - 'a'] + 'a');
+            ans += (lex[ch - 'a'] + 'a');
         }
 
         return ans;

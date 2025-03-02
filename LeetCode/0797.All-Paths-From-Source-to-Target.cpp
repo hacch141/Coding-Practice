@@ -1,26 +1,56 @@
 // 797. All Paths From Source to Target
 
 class Solution {
-
-private: 
-    void dfs(int start, int end, vector<vector<int>>& graph, vector<int> &v, vector<vector<int>> &ans) {
-        v.push_back(start);
-        if(start==end) {
-            ans.push_back(v);
-        } else {
-            for(auto it : graph[start]) {
-                dfs(it,end,graph,v,ans);
-            }
+public:
+    void dfs(int u, int dest, vector<int>& curr, vector<vector<int>>& graph, vector<vector<int>>& ans) {
+        curr.push_back(u);
+        if(u == dest) {
+            ans.push_back(curr);
+            curr.pop_back();
+            return;
         }
-        v.pop_back();
+        for(auto &v : graph[u]) {
+            dfs(v, dest, curr, graph, ans);
+        }
+        curr.pop_back();
     }
 
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+        int n = graph.size();
+        vector<vector<int>> ans;
+        vector<int> curr;
+        dfs(0, n - 1, curr, graph, ans);
+        return ans;
+    }
+};
+
+// ===========================================================================
+
+class Solution {
 public:
     vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
         int n = graph.size();
         vector<vector<int>> ans;
-        vector<int> v;
-        dfs(0,n-1,graph,v,ans);
+
+        queue<pair<int,vector<int>>> q;
+        q.push({0, {0}});
+        
+        while(!q.empty()) {
+            auto it = q.front();
+            q.pop();
+            int u = it.first;
+            vector<int> curr = it.second;
+            if(u == n - 1) {
+                ans.push_back(curr);
+                continue;
+            }
+            for(auto &v : graph[u]) {
+                curr.push_back(v);
+                q.push({v, curr});
+                curr.pop_back();
+            }
+        }
+        
         return ans;
     }
 };

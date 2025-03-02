@@ -2,12 +2,12 @@
 
 class Solution {
 public:
-    void dfs(int u, int par, vector<vector<int>>& adj, vector<int>& cnt, vector<int>& ans) {
+    void dfs(int u, int par, vector<vector<int>>& adj, vector<int>& cnt, int depth, int& root_ans) {
+        root_ans += depth;
         for(auto &v : adj[u]) {
             if(v == par) continue;
-            dfs(v, u, adj, cnt, ans);
+            dfs(v, u, adj, cnt, depth + 1, root_ans);
             cnt[u] += cnt[v];
-            ans[u] += cnt[v] + ans[v];
         }
     }
 
@@ -27,7 +27,10 @@ public:
         }
 
         vector<int> cnt(n, 1), ans(n, 0);
-        dfs(0, -1, adj, cnt, ans);
+        int root_ans = 0;
+        dfs(0, -1, adj, cnt, 0, root_ans);
+        
+        ans[0] = root_ans;
         dfs2(0, 0, adj, cnt, ans, n);
 
         return ans;

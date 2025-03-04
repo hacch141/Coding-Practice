@@ -1,41 +1,58 @@
 // 2360. Longest Cycle in a Graph
 
+// dfs
 class Solution {
 public:
-
-    void dfs(int start, vector<int>& vis, map<int,int>& prevIdx, vector<vector<int>>& adj, int cnt, int& ans) {
-        vis[start] = 1;
-        prevIdx[start] = cnt;
-
-        for(auto i : adj[start]) {
-            if(!vis[i]) {
-                dfs(i, vis, prevIdx, adj, cnt+1, ans);
+    void dfs(int u, vector<int>& edges, vector<bool>& vis, vector<bool>& path_vis, vector<int>& cnt, int& ans) {
+        vis[u] = true;
+        path_vis[u] = true;
+        int v = edges[u];
+        if(v != -1) {
+            if(!vis[v]) {
+                cnt[v] += cnt[u];
+                dfs(v, edges, vis, path_vis, cnt, ans);
             }
-            else if(prevIdx.count(i)){
-                ans = max(ans,cnt-prevIdx[i]+1);
+            else if(path_vis[v]) {
+                ans = max(ans, cnt[u] - cnt[v] + 1);
             }
         }
+        path_vis[u] = false;
     }
 
     int longestCycle(vector<int>& edges) {
-        int n = edges.size();
-        vector<int> vis(n,0);
-        vector<vector<int>> adj(n);
+        int n = edges.size(), ans = -1;
+        vector<int> cnt(n, 1);
+        vector<bool> vis(n, false), path_vis(n, false);
 
-        for(int i=0; i<n; i++) {
-            if(edges[i]!=-1) {
-                adj[i].push_back(edges[i]);
-            }
+        for(int i = 0; i < n; i++) {
+            if(!vis[i]) dfs(i, edges, vis, path_vis, cnt, ans);
         }
 
-        int ans = -1;
-        int cnt = 0;
+        return ans;
+    }
+};
 
-        for(int i=0; i<n; i++) {
-            if(!vis[i]) {
-                cnt = 0;
-                map<int,int> prevIdx;
-                dfs(i,vis,prevIdx,adj,cnt,ans);
+// ====================================================================
+
+class Solution {
+public:
+    int longestCycle(vector<int>& edges) {
+        int n = edges.size(), ans = -1;
+        vector<int> cnt(n, 1);
+        vector<bool> curr_vis(n, false);
+
+        for(int i = 0; i < edges.size(); i++) {
+            fill(curr_vis.begin(), curr_vis.end(), false);
+            int u = i;
+            curr_vis[u] = true;
+            if(edges[u] == -1) continue;
+            while(edges[u] != -1) {
+                int v = edges[u];
+                if(curr_vis[v]) ans = max(ans, cnt[u] - cnt[v] + 1);
+                edges[u] = -1;
+                curr_vis[v] = true;
+                cnt[v] += cnt[u];
+                u = v;
             }
         }
 

@@ -45,7 +45,7 @@ public:
     }
 };
 
-// bfs
+// bfs (topological)
 class Solution {
 public:
     int largestPathValue(string colors, vector<vector<int>>& edges) {
@@ -64,26 +64,27 @@ public:
         queue<int> q;
         for(int i = 0; i < n; i++) {
             if(indegree[i] == 0) q.push(i);
+            dp[i][colors[i] - 'a']++;
         }
+
+        int cnt_nodes = 0;
 
         while(!q.empty()) {
             int u = q.front();
             q.pop();
+            cnt_nodes++;
             vis[u] = true;
-            dp[u][colors[u] - 'a']++;
             ans = max(ans, *max_element(dp[u].begin(), dp[u].end()));
             for(auto &v : adj[u]) {
                 indegree[v]--;
                 if(indegree[v] == 0) q.push(v);
                 for(int i = 0; i < 26; i++) {
-                    dp[v][i] = max(dp[v][i], dp[u][i]);
+                    dp[v][i] = max(dp[v][i], dp[u][i] + (colors[v] - 'a' == i));
                 }
             }
         }
 
-        for(int i = 0; i < n; i++) {
-            if(!vis[i]) return -1;
-        }
+        if(cnt_nodes != n) return -1;
 
         return ans;
     }

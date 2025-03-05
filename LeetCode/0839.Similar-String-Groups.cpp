@@ -147,19 +147,16 @@ public:
         vector<vector<int>> adj(n);
         DisjointSet ds(n);
 
+        int cnt = n;
         for(int u = 0; u < n; u++) {
             for(int v = u + 1; v < n; v++) {
-                if(is_similar(strs[u], strs[v])) {
+                if(is_similar(strs[u], strs[v]) && ds.find_par(u) != ds.find_par(v)) {
                     ds.union_by_size(u, v);
+                    cnt--;
                 }
             }
         }
 
-        set<int> st;
-        for(int i = 0; i < n; i++) {
-            st.insert(ds.find_par(i));
-        }
-
-        return st.size();
+        return cnt;
     }
 };

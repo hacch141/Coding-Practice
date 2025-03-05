@@ -3,82 +3,163 @@
 // DFS
 class Solution {
 public:
-
-    void dfs(int idx, string currStr, vector<string>& strs, vector<bool>& vis, int& n) {
-        vis[idx] = true;
-        for(int i=0; i<n; i++) {
-            if(!vis[i] && isValid(currStr,strs[i])) {
-                dfs(i,strs[i],strs,vis,n);
-            }
+    void dfs(int u, vector<vector<int>>& adj, vector<bool>& vis) {
+        vis[u] = true;
+        for(auto &v : adj[u]) {
+            if(!vis[v]) dfs(v, adj, vis);
         }
     }
 
-    bool isValid(string& s1, string& s2) {
-        int cnt = 0;
-        for(int i=0; i<s1.size(); i++) {
-            if(s1[i] != s2[i]) cnt++;
+    bool is_similar(string& s1, string& s2) {
+        int n = s1.length(), cnt = 0;
+        for(int i = 0; i < n; i++) {
+            if(s1[i] != s2[i]) {
+                cnt++;
+            }
         }
-        return cnt==0 || cnt==2;
+        return cnt == 0 || cnt == 2;
     }
 
     int numSimilarGroups(vector<string>& strs) {
         int n = strs.size();
-        vector<bool> vis(n,false);
-        int ans = 0;
-
-        for(int i=0; i<n; i++) {
-            if(!vis[i]) {
-                dfs(i,strs[i],strs,vis,n);
-                ans++;
+        vector<vector<int>> adj(n);
+        for(int u = 0; u < n; u++) {
+            for(int v = u + 1; v < n; v++) {
+                if(is_similar(strs[u], strs[v])) {
+                    adj[u].push_back(v);
+                    adj[v].push_back(u);
+                }
             }
         }
 
-        return ans;
+        int cnt = 0;
+        vector<bool> vis(n, false);
+        for(int i = 0; i < n; i++) {
+            if(!vis[i]) {
+                cnt++;
+                dfs(i, adj, vis);
+            }
+        }
+
+        return cnt;
     }
 };
-
 
 // BFS
 class Solution {
 public:
-
-    void bfs(int idx, string currStr, vector<string>& strs, vector<bool>& vis, int& n) {
-        vis[idx] = true;
+    void bfs(int node, vector<vector<int>>& adj, vector<bool>& vis) {
         queue<int> q;
-        q.push(idx);
-
+        q.push(node);
         while(!q.empty()) {
-            string s = strs[q.front()];
+            int u = q.front();
             q.pop();
-            for(int i=0; i<n; i++) {
-                if(!vis[i] && isValid(s,strs[i])) {
-                    q.push(i);
-                    vis[i] = 1;
-                }
+            vis[u] = true;
+            for(auto &v : adj[u]) {
+                if(!vis[v]) q.push(v);
             }
         }
     }
 
-    bool isValid(string& s1, string& s2) {
-        int cnt = 0;
-        for(int i=0; i<s1.size(); i++) {
-            if(s1[i] != s2[i]) cnt++;
+    bool is_similar(string& s1, string& s2) {
+        int n = s1.length(), cnt = 0;
+        for(int i = 0; i < n; i++) {
+            if(s1[i] != s2[i]) {
+                cnt++;
+            }
         }
-        return cnt==0 || cnt==2;
+        return cnt == 0 || cnt == 2;
     }
 
     int numSimilarGroups(vector<string>& strs) {
         int n = strs.size();
-        vector<bool> vis(n,false);
-        int ans = 0;
-
-        for(int i=0; i<n; i++) {
-            if(!vis[i]) {
-                bfs(i,strs[i],strs,vis,n);
-                ans++;
+        vector<vector<int>> adj(n);
+        for(int u = 0; u < n; u++) {
+            for(int v = u + 1; v < n; v++) {
+                if(is_similar(strs[u], strs[v])) {
+                    adj[u].push_back(v);
+                    adj[v].push_back(u);
+                }
             }
         }
 
-        return ans;
+        int cnt = 0;
+        vector<bool> vis(n, false);
+        for(int i = 0; i < n; i++) {
+            if(!vis[i]) {
+                cnt++;
+                bfs(i, adj, vis);
+            }
+        }
+
+        return cnt;
+    }
+};
+
+// DisjointSet
+class DisjointSet {
+private:
+    vector<int> parent, sz;
+public:
+    DisjointSet(int n) {
+        parent.resize(n + 1);
+        sz.resize(n + 1, 1);
+        for(int i = 0; i <= n; i++) {
+            parent[i] = i;
+        }
+    }
+
+    int find_par(int u) {
+        if(parent[u] == u) return u;
+        return parent[u] = find_par(parent[u]);
+    }
+
+    void union_by_size(int u, int v) {
+        int par_u = find_par(u), par_v = find_par(v);
+        if(par_u == par_v) {
+            return;
+        }
+        else if(sz[par_u] > sz[par_v]) {
+            sz[par_u] += sz[par_v];
+            parent[par_v] = par_u;
+        }
+        else {
+            sz[par_v] += sz[par_u];
+            parent[par_u] = par_v;
+        }
+    }
+};
+
+class Solution {
+public:
+    bool is_similar(string& s1, string& s2) {
+        int n = s1.length(), cnt = 0;
+        for(int i = 0; i < n; i++) {
+            if(s1[i] != s2[i]) {
+                cnt++;
+            }
+        }
+        return cnt == 0 || cnt == 2;
+    }
+
+    int numSimilarGroups(vector<string>& strs) {
+        int n = strs.size();
+        vector<vector<int>> adj(n);
+        DisjointSet ds(n);
+
+        for(int u = 0; u < n; u++) {
+            for(int v = u + 1; v < n; v++) {
+                if(is_similar(strs[u], strs[v])) {
+                    ds.union_by_size(u, v);
+                }
+            }
+        }
+
+        set<int> st;
+        for(int i = 0; i < n; i++) {
+            st.insert(ds.find_par(i));
+        }
+
+        return st.size();
     }
 };

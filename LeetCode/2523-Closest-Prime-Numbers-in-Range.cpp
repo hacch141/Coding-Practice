@@ -43,6 +43,10 @@ public:
         return ans;
     }
 };
+// TC : O(N*(Log(Log N)))
+// Outer loop (for int i = 2; i * i <= 1e6; i++):
+// The total number of times is_prime[j] = false is executed across all iterations is roughly 
+// n/2 + n/3 + n/5 + n/7 + ..., which sums up to O(n log log n).
 
 //===========================
 
@@ -84,3 +88,4 @@ private:
         return true;
     }
 };
+// TC : O(N * √N)

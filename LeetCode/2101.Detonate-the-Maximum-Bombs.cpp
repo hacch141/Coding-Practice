@@ -2,52 +2,38 @@
 
 class Solution {
 public:
-
-    void bfs(int start, vector<int>& vis, vector<vector<int>>& adj, int& cnt) {
-        vis[start] = 1;
-        queue<int> q;
-        q.push(start);
-        while(!q.empty()) {
-            int u = q.front();
-            q.pop();
-            cnt++;
-            for(auto v : adj[u]) {
-                if(!vis[v]) {
-                    vis[v] = 1;
-                    q.push(v);
-                }
-            }
+    int dfs(int u, vector<vector<int>>& adj, vector<bool>& vis) {
+        vis[u] = true;
+        int cnt = 1;
+        for(auto &v : adj[u]) {
+            if(!vis[v]) cnt += dfs(v, adj, vis); 
         }
+        return cnt;
+    }
+
+    bool is_detonatable(vector<int>& v1, vector<int>& v2) {
+        long long x2 = 1LL * abs(v1[0] - v2[0]) * abs(v1[0] - v2[0]);
+        long long y2 = 1LL * abs(v1[1] - v2[1]) * abs(v1[1] - v2[1]);
+        return 1LL * v1[2] * v1[2] >= x2 + y2;
     }
 
     int maximumDetonation(vector<vector<int>>& bombs) {
         int n = bombs.size();
         vector<vector<int>> adj(n);
-        long long x1,x2,y1,y2,r1,r2,d;
-        for(int i=0; i<n; i++) {
-            x1 = bombs[i][0];
-            y1 = bombs[i][1];
-            r1 = bombs[i][2];
-            for(int j=0; j<n && i!=j; j++) {
-                x2 = bombs[j][0];
-                y2 = bombs[j][1];
-                r2 = bombs[j][2];
-                d = ((x1-x2)*(x1-x2)) + ((y1-y2)*(y1-y2));
-                if(r1*r1>=d) adj[i].push_back(j);
-                if(r2*r2>=d) adj[j].push_back(i);
+        for(int u = 0; u < n; u++) {
+            for(int v = 0; v < n; v++) {
+                if(u == v) continue;
+                if(is_detonatable(bombs[u], bombs[v])) adj[u].push_back(v);
             }
         }
 
-        vector<int> vis(n,0);
-        int ans = 0;
-        int cnt = 0;
-        for(int i=0; i<n; i++) {
-            cnt = 0;
-            bfs(i,vis,adj,cnt);
-            ans = max(ans,cnt);
-            fill(vis.begin(),vis.end(),0);
+        int mx = 0;
+        for(int i = 0; i < n; i++) {
+            vector<bool> vis(n, false);
+            int cmp_cnt = dfs(i, adj, vis);
+            mx = max(mx, cmp_cnt);
         }
 
-        return ans;
+        return mx;
     }
 };

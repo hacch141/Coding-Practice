@@ -1,5 +1,48 @@
 // 802. Find Eventual Safe States
 
+// bfs (Kahn's Algorithm [Topological Sorting])
+class Solution {
+public:
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        int n = graph.size();
+
+        vector<vector<int>> adj(n);
+        vector<int> indegree(n, 0);
+        for(int u = 0; u < n; u++) {
+            for(auto &v : graph[u]) {
+                adj[v].push_back(u);
+                indegree[u]++;
+            }
+        }
+
+        queue<int> q;
+        for(int i = 0; i < n; i++) {
+            if(indegree[i] == 0) q.push(i);
+        }
+
+        vector<bool> safe(n, false);
+        while(!q.empty()) {
+            int u = q.front();
+            q.pop();
+            safe[u] = true;
+            for(auto &v : adj[u]) {
+                indegree[v]--;
+                if(indegree[v] == 0) q.push(v);
+            }
+        }
+
+        vector<int> ans;
+        for(int i = 0; i < n; i++) {
+            if(safe[i]) ans.push_back(i);
+        }
+
+        return ans;
+    }
+};
+
+// ================================================================
+
+// dfs
 class Solution {
 public:
     bool dfs(int u, vector<bool>& vis, vector<bool>& pathvis, vector<vector<int>>& graph) {

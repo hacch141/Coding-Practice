@@ -35,35 +35,29 @@ public:
 
 class Solution {
 public:
-    static bool cmp(pair<int, vector<int>>& p1, pair<int, vector<int>>& p2) {
-        return p1.second[2] < p2.second[2];
-    }
-
-    static bool cmp2(vector<int>& v1, vector<int>& v2) {
-        return v1[2] < v2[2];
-    }
-
     vector<bool> distanceLimitedPathsExist(int n, vector<vector<int>>& edgeList, vector<vector<int>>& queries) {
         int len = queries.size();
-
-        vector<pair<int, vector<int>>> new_queries;
         for(int i = 0; i < len; i++) {
-            new_queries.push_back({i, queries[i]});
+            queries[i].push_back(i);
         }
 
-        sort(new_queries.begin(), new_queries.end(), cmp);
-        sort(edgeList.begin(), edgeList.end(), cmp2);
+        auto lambda = [&](vector<int>& v1, vector<int>& v2) {
+            return v1[2] < v2[2];
+        };
+
+        sort(queries.begin(), queries.end(), lambda);
+        sort(edgeList.begin(), edgeList.end(), lambda);
 
         vector<bool> ans(len);
         DisjointSet ds(n);
         int ind = 0;
         for(int i = 0; i < len; i++) {
-            while(ind < edgeList.size() && edgeList[ind][2] < new_queries[i].second[2]) {
+            while(ind < edgeList.size() && edgeList[ind][2] < queries[i][2]) {
                 ds.union_by_size(edgeList[ind][0], edgeList[ind][1]);
                 ind++;
             }
-            int u = new_queries[i].second[0], v = new_queries[i].second[1];
-            ans[new_queries[i].first] = (ds.find_par(u) == ds.find_par(v));
+            int u = queries[i][0], v = queries[i][1];
+            ans[queries[i][3]] = (ds.find_par(u) == ds.find_par(v));
         }
 
         return ans;

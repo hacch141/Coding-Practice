@@ -1,51 +1,71 @@
 // 1697. Checking Existence of Edge Length Limited Paths
 
-class DSU {
-    public:
-    vector<int> Parent, Rank;
-    DSU(int n) {
-        Parent.resize(n);
-        Rank.resize(n, 0);
-        for (int i = 0; i < n; i++) Parent[i] = i;
-    }
-    int Find(int x) {
-        return Parent[x] = Parent[x] == x ? x : Find(Parent[x]);
-    }
-    bool Union(int x, int y) {
-        int xset = Find(x), yset = Find(y);
-        if (xset != yset) {
-            Rank[xset] < Rank[yset] ? Parent[xset] = yset : Parent[yset] = xset;
-            Rank[xset] += Rank[xset] == Rank[yset];
-            return true;
+class DisjointSet {
+private:
+    vector<int> parent, sz;
+public:
+    DisjointSet(int n) {
+        parent.resize(n + 1);
+        sz.resize(n + 1, 1);
+        for(int i = 0; i <= n; i++) {
+            parent[i] = i;
         }
-        return false;
+    }
+
+    int find_par(int u) {
+        if(parent[u] == u) return u;
+        return parent[u] = find_par(parent[u]);
+    }
+
+    void union_by_size(int u, int v) {
+        int par_u = find_par(u), par_v = find_par(v);
+        if(par_u == par_v) {
+            return;
+        }
+        else if(sz[par_u] > sz[par_v]) {
+            sz[par_u] += sz[par_v];
+            parent[par_v] = par_u;
+        }
+        else {
+            sz[par_v] += sz[par_u];
+            parent[par_u] = par_v;
+        }
     }
 };
 
 class Solution {
-    public:
-    vector<bool> distanceLimitedPathsExist(int n, vector<vector<int>>& edgeList,
-    vector<vector<int>>& queries) {
-        DSU dsu(n);
-        for(int i=0;i<queries.size();i++) queries[i].push_back(i);
+public:
+    static bool cmp(pair<int, vector<int>>& p1, pair<int, vector<int>>& p2) {
+        return p1.second[2] < p2.second[2];
+    }
 
-        sort(queries.begin(), queries.end(), [&](auto const &a, auto const &b){
-        return a[2] < b[2];
-        });
+    static bool cmp2(vector<int>& v1, vector<int>& v2) {
+        return v1[2] < v2[2];
+    }
 
-        sort(edgeList.begin(), edgeList.end(), [&](auto const &a, auto const &b){
-        return a[2] < b[2];
-        });
+    vector<bool> distanceLimitedPathsExist(int n, vector<vector<int>>& edgeList, vector<vector<int>>& queries) {
+        int len = queries.size();
 
-        int i=0;
-        vector<bool> res(queries.size(), false);
-        for(auto q: queries){
-            while(i<edgeList.size() && edgeList[i][2]<q[2]){
-                dsu.Union(edgeList[i][0] , edgeList[i][1]);
-                i++;
-            }
-            if(dsu.Find(q[0]) == dsu.Find(q[1])) res[q[3]] = true;
+        vector<pair<int, vector<int>>> new_queries;
+        for(int i = 0; i < len; i++) {
+            new_queries.push_back({i, queries[i]});
         }
-        return res;
+
+        sort(new_queries.begin(), new_queries.end(), cmp);
+        sort(edgeList.begin(), edgeList.end(), cmp2);
+
+        vector<bool> ans(len);
+        DisjointSet ds(n);
+        int ind = 0;
+        for(int i = 0; i < len; i++) {
+            while(ind < edgeList.size() && edgeList[ind][2] < new_queries[i].second[2]) {
+                ds.union_by_size(edgeList[ind][0], edgeList[ind][1]);
+                ind++;
+            }
+            int u = new_queries[i].second[0], v = new_queries[i].second[1];
+            ans[new_queries[i].first] = (ds.find_par(u) == ds.find_par(v));
+        }
+
+        return ans;
     }
 };

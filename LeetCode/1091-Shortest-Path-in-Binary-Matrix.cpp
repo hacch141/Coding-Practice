@@ -6,20 +6,21 @@ public:
         int n = grid.size();
         if(grid[0][0] == 1 || grid[n - 1][n - 1] == 1) return -1;
 
-        vector<int> dx = {+1, 0, -1, 0, +1, +1, -1, -1};
-        vector<int> dy = {0, +1, 0, -1, +1, -1, +1, -1};
-
         queue<pair<int,int>> q;
         q.push({0, 0});
+        grid[0][0] = 1;
+        int lvl = 1;
 
-        int cells = 1;
+        vector<int> dx = {0, +1, 0, -1, +1, +1, -1, -1};
+        vector<int> dy = {+1, 0, -1, 0, +1, -1, -1, +1};
+
         while(!q.empty()) {
-            int len = q.size();
-            while(len--) {
-                auto curr = q.front();
+            int sz = q.size();
+            while(sz--) {
+                auto it = q.front();
                 q.pop();
-                int x = curr.first, y = curr.second;
-                if(x == n - 1 && y == n - 1) return cells;
+                int x = it.first, y = it.second;
+                if(x == n - 1 && y == n - 1) return lvl;
                 for(int k = 0; k < 8; k++) {
                     int nx = x + dx[k], ny = y + dy[k];
                     if(nx >= 0 && nx < n && ny >= 0 && ny < n && grid[nx][ny] == 0) {
@@ -28,7 +29,7 @@ public:
                     }
                 }
             }
-            cells++;
+            lvl++;
         }
 
         return -1;

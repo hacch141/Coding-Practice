@@ -1,4 +1,42 @@
 // 2976. Minimum Cost to Convert String I
+
+class Solution {
+public:
+    long long minimumCost(string source, string target, vector<char>& original, vector<char>& changed, vector<int>& cost) {
+        int len = original.size();
+
+        vector<vector<int>> adj(26, vector<int>(26, 1e9));
+        for(int i = 0; i < 26; i++) adj[i][i] = 0;
+
+        for(int x = 0; x < len; x++) {
+            int i = original[x] - 'a';
+            int j = changed[x] - 'a';
+            adj[i][j] = min(adj[i][j], cost[x]);
+        }
+
+        // Floyd Warshall
+        for(int via = 0; via < 26; via++) {
+            for(int i = 0; i < 26; i++) {
+                for(int j = 0; j < 26; j++) {
+                    adj[i][j] = min(adj[i][j], adj[i][via] + adj[via][j]);
+                }
+            }
+        }
+
+        long long total_cost = 0;
+        for(int x = 0; x< source.length(); x++) {
+            int i = source[x] - 'a';
+            int j = target[x] - 'a';
+            if(adj[i][j] == 1e9) return -1;
+            total_cost += adj[i][j];
+        }
+
+        return total_cost;
+    }
+};
+
+// ==================================================================================
+
 class Solution {
 public:
 

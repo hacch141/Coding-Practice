@@ -2,44 +2,47 @@
 
 class Solution {
 public:
-    
-    void bfs(int start, vector<vector<int>>& adj, vector<bool>& vis, vector<int>& ans) {
+    void bfs(int start, int n, vector<vector<int>>& adj, vector<int>& ans) {
+
         queue<int> q;
         q.push(start);
+
+        vector<bool> vis(n, false);
         vis[start] = true;
-        int len = 0;
+
+        int dist = 0;
         while(!q.empty()) {
             int sz = q.size();
-            for(int i=0; i<sz; i++) {
+            if(dist > 0) ans[dist - 1] += sz;
+            while(sz--) {
                 int u = q.front();
                 q.pop();
-                for(auto v : adj[u]) {
+                for(auto &v : adj[u]) {
                     if(!vis[v]) {
                         vis[v] = true;
                         q.push(v);
                     }
                 }
             }
-            ans[len] += q.size();
-            len++;
+            dist++;
         }
     }
-    
+
     vector<int> countOfPairs(int n, int x, int y) {
         vector<vector<int>> adj(n);
-        for(int i=0; i<n-1; i++) {
-            adj[i].push_back(i+1);
-            adj[i+1].push_back(i);
+        for(int i = 0; i < n - 1; i++) {
+            adj[i].push_back(i + 1);
+            adj[i + 1].push_back(i);
         }
-        x--;
-        y--;
-        adj[x].push_back(y);
-        adj[y].push_back(x);
-        vector<int> ans(n,0);
-        for(int i=0; i<n; i++) {
-            vector<bool> vis(n,false);
-            bfs(i,adj,vis,ans);
+
+        adj[x - 1].push_back(y - 1);
+        adj[y - 1].push_back(x - 1);
+
+        vector<int> ans(n, 0);
+        for(int i = 0; i < n; i++) {
+            bfs(i, n, adj, ans);
         }
+
         return ans;
     }
 };

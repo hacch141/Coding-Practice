@@ -3,17 +3,19 @@
 class Solution {
 public:
     long long maximumImportance(int n, vector<vector<int>>& roads) {
-        vector<int> indegree(n, 0);
-        for(auto i : roads) {
-            int u = i[0], v = i[1];
-            indegree[u]++;
-            indegree[v]++;
+        vector<int> degree(n, 0);
+        for(auto &it : roads) {
+            degree[it[0]]++;
+            degree[it[1]]++;
         }
-        sort(indegree.rbegin(), indegree.rend());
-        long long imp = 0;
-        for(int i = 0; i < n; i++) {
-            imp += 1LL * indegree[i] * (n - i);
+
+        sort(degree.begin(), degree.end());
+
+        long long ans = 0;
+        for(int i = 1; i <= n; i++) {
+            ans += 1LL * degree[i - 1] * i;
         }
-        return imp;
+
+        return ans;
     }
 };

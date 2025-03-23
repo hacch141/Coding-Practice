@@ -1,5 +1,59 @@
 // 2092. Find All People With Secret
 
+class Solution {
+public:
+    static bool cmp(vector<int>& v1, vector<int>& v2) {
+        return v1[2] < v2[2];
+    }
+
+    void dfs(int u, unordered_map<int,vector<int>>& adj, unordered_set<int>& vis, unordered_set<int>& has_secret) {
+        vis.insert(u);
+        has_secret.insert(u);
+        for(auto &v : adj[u]) {
+            if(!vis.count(v)) {
+                dfs(v, adj, vis, has_secret);
+            }
+        }
+    }
+
+    vector<int> findAllPeople(int n, vector<vector<int>>& meetings, int firstPerson) {
+        sort(meetings.begin(), meetings.end(), cmp);
+        int ind = 0;
+
+        unordered_set<int> has_secret = {0, firstPerson};
+        
+        while(ind < meetings.size()) {
+            unordered_map<int,vector<int>> adj;
+            unordered_set<int> start_from;
+
+            int curr_time = meetings[ind][2];
+
+            while(ind < meetings.size() && meetings[ind][2] == curr_time) {
+                int u = meetings[ind][0], v = meetings[ind][1];
+                adj[u].push_back(v);
+                adj[v].push_back(u);
+                if(has_secret.count(u)) start_from.insert(u);
+                if(has_secret.count(v)) start_from.insert(v);
+                ind++;
+            }
+
+            unordered_set<int> vis;
+            for(auto &st : start_from) {
+                if(!vis.count(st)) {
+                    dfs(st, adj, vis, has_secret);
+                }
+            }
+        }
+
+        vector<int> ans;
+        for(auto &p : has_secret) ans.push_back(p);
+
+        return ans;
+    }
+};
+
+// ==============================================================
+
 class DisjointSet {
 public:
     vector<int> parent,rank;

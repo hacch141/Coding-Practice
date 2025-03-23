@@ -1,5 +1,59 @@
 // 3123. Find Edges in Shortest Paths
 
+// Dijkstra
+class Solution {
+public:
+    vector<int> dijkstra(int st, int n, vector<vector<pair<int,int>>>& adj) {
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0, st});
+
+        vector<int> dist(n, 1e9);
+        dist[st] = 0;
+
+        while(!pq.empty()) {
+            auto curr = pq.top();
+            pq.pop();
+            int d = curr.first;
+            int u = curr.second;
+            for(auto &it : adj[u]) {
+                int v = it.first;
+                int new_d = it.second;
+                if(d + new_d < dist[v]) {
+                    dist[v] = d + new_d;
+                    pq.push({dist[v], v});
+                }
+            }
+        }
+
+        return dist;
+    }
+
+    vector<bool> findAnswer(int n, vector<vector<int>>& edges) {
+        vector<vector<pair<int,int>>> adj(n);
+        for(auto &it : edges) {
+            adj[it[0]].push_back({it[1], it[2]});
+            adj[it[1]].push_back({it[0], it[2]});
+        }
+
+        vector<int> zero_to_n = dijkstra(0, n, adj);
+        vector<int> n_to_zero = dijkstra(n - 1, n, adj);
+
+        int len = edges.size();
+        vector<bool> ans(len, false);
+
+        for(int i = 0; i < len; i++) {
+            int u = edges[i][0], v = edges[i][1], w = edges[i][2];
+            if((zero_to_n[u] + w + n_to_zero[v] == zero_to_n[n - 1]) || (n_to_zero[u] + w + zero_to_n[v] == zero_to_n[n - 1])) {
+                ans[i] = true;
+            }
+        }
+
+        return ans;
+    }
+};
+
+// ================================================================================================
+
 class Solution {
 public:
     vector<bool> findAnswer(int n, vector<vector<int>>& edges) {

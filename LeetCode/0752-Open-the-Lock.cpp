@@ -2,55 +2,63 @@
 
 class Solution {
 public:
-
-    char rotateLeft(char ch) {
-        return ch == '0' ? '9' : ch - 1;
+    char get_next(char ch) {
+        if(ch == '9') return '0';
+        ch++;
+        return ch;
     }
 
-    char rotateRight(char ch) {
-        return ch == '9' ? '0' : ch + 1;
-    }
-
-    vector<string> genAll(string s) {
-        vector<string> v;
-        for(int i = 0; i < 4; i++) {
-            string temp = s;
-
-            temp[i] = rotateLeft(s[i]);
-            v.push_back(temp);
-
-            temp[i] = rotateRight(s[i]);
-            v.push_back(temp);
-        }
-        return v;
+    char get_prev(char ch) {
+        if(ch == '0') return '9';
+        ch--;
+        return ch;
     }
 
     int openLock(vector<string>& deadends, string target) {
+        unordered_set<string> st;
+        for(auto &s : deadends) st.insert(s);
+
+        if (st.count("0000")) return -1; 
+
         queue<string> q;
         q.push("0000");
-        map<string,bool> vis;
-        for(auto s : deadends) {
-            vis[s] = true;
-        }
 
-        int lvl = 0;
+        unordered_set<string> vis;
+        vis.insert("0000");
+
+        int cnt = 0;
+
         while(!q.empty()) {
             int sz = q.size();
             while(sz--) {
-                string curr = q.front();
+                string u = q.front();
                 q.pop();
 
-                if(curr == target) return lvl;
-                if(vis[curr]) continue;
-                vis[curr] = true;
+                if(u == target) return cnt;
 
-                vector<string> nxt = genAll(curr);
-                for(auto s : nxt) {
-                    if(!vis[s]) q.push(s);
+                for(int i = 0; i < 4; i++) {
+                    char ch = u[i];
+
+                    char nxt = get_next(ch);
+                    u[i] = nxt;
+                    if(!st.count(u) && !vis.count(u)) {
+                        vis.insert(u);
+                        q.push(u);
+                    }
+
+                    char prv = get_prev(ch);
+                    u[i] = prv;
+                    if(!st.count(u) && !vis.count(u)) {
+                        vis.insert(u);
+                        q.push(u);
+                    }
+                    
+                    u[i] = ch;
                 }
             }
-            lvl++;
+            cnt++;
         }
+
         return -1;
     }
 };

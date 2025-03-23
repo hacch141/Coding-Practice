@@ -1,5 +1,6 @@
 // 2092. Find All People With Secret
 
+// bfs
 class Solution {
 public:
     static bool cmp(vector<int>& v1, vector<int>& v2) {
@@ -53,6 +54,50 @@ public:
 };
 
 // ==============================================================
+
+// Dijkstra
+class Solution {
+public:
+    vector<int> findAllPeople(int n, vector<vector<int>>& meetings, int firstPerson) {
+        vector<vector<pair<int,int>>> adj(n);
+        for(auto &it : meetings) {
+            int u = it[0], v = it[1], t = it[2];
+            adj[u].push_back({v, t});
+            adj[v].push_back({u, t});
+        }
+
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        pq.push({0, 0});
+        pq.push({0, firstPerson});
+
+        vector<int> time(n, 1e9);
+        time[0] = time[firstPerson] = 0;
+
+        while(!pq.empty()) {
+            auto curr = pq.top();
+            pq.pop();
+            int t = curr.first;
+            int u = curr.second;
+            for(auto it : adj[u]) {
+                int v = it.first;
+                int next_t = it.second;
+                if(next_t >= t && next_t < time[v]) {
+                    time[v] = next_t;
+                    pq.push({next_t, v});
+                }
+            }
+        }
+
+        vector<int> ans;
+        for(int i = 0; i < n; i++) {
+            if(time[i] != 1e9) ans.push_back(i);
+        }
+
+        return ans;
+    }
+};
+
+// ===============================================================
 
 class DisjointSet {
 public:

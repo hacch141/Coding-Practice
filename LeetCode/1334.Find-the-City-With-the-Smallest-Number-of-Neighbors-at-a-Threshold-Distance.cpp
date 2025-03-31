@@ -1,5 +1,46 @@
 // 1334. Find the City With the Smallest Number of Neighbors at a Threshold Distance
 
+// Floyd Warshall
+class Solution {
+public:
+    int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
+        vector<vector<int>> adj(n, vector<int>(n, 1e9));
+
+        for(int i = 0; i < n; i++) adj[i][i] = 0;
+
+        for(auto &it : edges) {
+            adj[it[0]][it[1]] = it[2];
+            adj[it[1]][it[0]] = it[2];
+        }
+
+        for(int via = 0; via < n; via++) {
+            for(int u = 0; u < n; u++) {
+                for(int v = 0; v < n; v++) {
+                    adj[u][v] = min(adj[u][v], adj[u][via] + adj[via][v]);
+                }
+            }
+        }
+
+        int ans = -1, mn_city_cnt = 1e9;
+        for(int u = 0; u < n; u++) {
+            int curr_cnt = 0;
+            for(int v = 0; v < n; v++) {
+                if(u == v) continue;
+                curr_cnt += adj[u][v] <= distanceThreshold;
+            }
+            if(ans == -1 || curr_cnt <= mn_city_cnt) {
+                mn_city_cnt = curr_cnt;
+                ans = u;
+            }
+        }
+
+        return ans;
+    }
+};
+
+// =================================================================
+
+// Dijkstra
 class Solution {
 public:
 

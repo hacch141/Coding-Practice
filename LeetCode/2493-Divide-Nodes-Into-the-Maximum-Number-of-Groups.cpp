@@ -3,95 +3,93 @@
 class Solution {
 public:
 
-    bool is_odd_len_cycle(int n, vector<vector<int>> &adj) {
-        vector<int> color(n + 1, -1);
-        
-        for (int i = 1; i <= n; i++) {
-            if (color[i] == -1) {
+    bool bipartite(int n, vector<vector<int>>& adj) {
+        vector<int> color(n, -1);
+        for(int i = 0; i < n; i++) {
+            if(color[i] == -1) {
+                color[i] = 0;
                 queue<int> q;
                 q.push(i);
-                color[i] = 0;
-                
-                while (!q.empty()) {
+                while(!q.empty()) {
                     int u = q.front();
                     q.pop();
-                    
-                    for (int v : adj[u]) {
-                        if (color[v] == -1) {
+                    for(auto &v : adj[u]) {
+                        if(color[v] != -1) {
+                            if(color[v] == color[u]) return false;
+                        }
+                        else {
                             color[v] = 1 - color[u];
                             q.push(v);
-                        } else if (color[v] == color[u]) {
-                            return true; // Odd-length cycle detected
                         }
                     }
                 }
             }
         }
-        return false;
+        return true;
     }
 
-    int bfs(int start, vector<vector<int>>& adj) {
+    int bfs(int node, int& n, vector<vector<int>>& adj) {
+        vector<bool> vis(n, false);
+        vis[node] = true;
+
         queue<int> q;
-        vector<int> dist(adj.size(), -1);
-        q.push(start);
-        dist[start] = 0;
-        int maxDist = 0;
+        q.push(node);
 
-        while (!q.empty()) {
-            int u = q.front();
-            q.pop();
-
-            for (int v : adj[u]) {
-                if (dist[v] == -1) {
-                    dist[v] = dist[u] + 1;
-                    maxDist = max(maxDist, dist[v]);
-                    q.push(v);
+        int cnt = 0;
+        while(!q.empty()) {
+            int sz = q.size();
+            while(sz--) {
+                int u = q.front();
+                q.pop();
+                for(auto &v : adj[u]) {
+                    if(!vis[v]) {
+                        q.push(v);
+                        vis[v] = true;
+                    }
                 }
             }
+            cnt++;
         }
-        return maxDist + 1;
+
+        return cnt;
     }
 
     int magnificentSets(int n, vector<vector<int>>& edges) {
-        vector<vector<int>> adj(n + 1);
-        for (auto &it : edges) {
-            adj[it[0]].push_back(it[1]);
-            adj[it[1]].push_back(it[0]);
+        vector<vector<int>> adj(n);
+        for(auto &it : edges) {
+            adj[it[0] - 1].push_back(it[1] - 1);
+            adj[it[1] - 1].push_back(it[0] - 1);
         }
 
-        if (is_odd_len_cycle(n, adj)) return -1;
+        if(!bipartite(n, adj)) return -1;
 
-        vector<bool> vis(n + 1, false);
-        int totalMax = 0;
-
-        for (int u = 1; u <= n; u++) {
-            if (!vis[u]) {
-                vector<int> component;
+        int ans = 0;
+        vector<bool> vis(n, false);
+        for(int i = 0; i < n; i++) {
+            vector<int> cmp;
+            if(!vis[i]) {
                 queue<int> q;
-                q.push(u);
-                vis[u] = true;
-
-                while (!q.empty()) {
-                    int node = q.front();
+                q.push(i);
+                vis[i] = true;
+                while(!q.empty()) {
+                    int u = q.front();
                     q.pop();
-                    component.push_back(node);
-
-                    for (int v : adj[node]) {
-                        if (!vis[v]) {
+                    cmp.push_back(u);
+                    for(auto &v : adj[u]) {
+                        if(!vis[v]) {
                             vis[v] = true;
                             q.push(v);
                         }
                     }
                 }
-
-                int maxDist = 0;
-                for (int start : component) {
-                    maxDist = max(maxDist, bfs(start, adj));
-                }
-                totalMax += maxDist;
             }
+            int mx = 0;
+            for(auto u : cmp) {
+                mx = max(mx, bfs(u, n, adj));
+            }
+            ans += mx;
         }
-        return totalMax;
+
+        return ans;
     }
 };
-

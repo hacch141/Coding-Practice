@@ -40,25 +40,16 @@ public:
 
     long long get_pnc(long long num) {
         string s = to_string(num);
+        int n = s.length();
         map<long long,long long> mp;
-        for(int i = 0; i < s.length(); i++) {
+        for(int i = 0; i < n; i++) {
             mp[num % 10]++;
             num /= 10;
         }
-        long long cnt = get_factorial(s.length());
+        long long cnt = (n - mp[0]) * get_factorial(n - 1);
 
         for(auto &it : mp) {
             cnt /= get_factorial(it.second);
-        }
-
-        if(mp[0] > 0) {
-            mp[0]--;
-            if(mp[0] == 0) mp.erase(0);
-            long long tmp_cnt = get_factorial(s.length() - 1);
-            for(auto &it : mp) {
-                tmp_cnt /= get_factorial(it.second);
-            }
-            cnt -= tmp_cnt;
         }
 
         return cnt;

@@ -1,39 +1,5 @@
 // 3243. Shortest Distance After Road Addition Queries I
 
-class Solution {
-public:
-    vector<int> shortestDistanceAfterQueries(int n, vector<vector<int>>& queries) {
-        vector<vector<int>> adj(n);
-        vector<int> dp(n, 0), ans;
-        for(int i = 0; i < n - 1; i++) {
-            adj[i].push_back(i + 1);
-            dp[i + 1] = 1 + dp[i];
-        }
-        for(auto it : queries) {
-            adj[it[0]].push_back(it[1]);
-            if(1 + dp[it[0]] < dp[it[1]]) {
-                queue<int> q;
-                q.push(it[0]);
-                while(!q.empty()) {
-                    int sz = q.size();
-                    while(sz--) {
-                        int u = q.front();
-                        q.pop();
-                        for(auto v : adj[u]) {
-                            if(1 + dp[u] < dp[v]) {
-                                q.push(v);
-                                dp[v] = 1 + dp[u];
-                            }
-                        }
-                    }
-                }
-            }
-            ans.push_back(dp[n - 1]);
-        }
-        return ans;
-    }
-};
-
 // simple bfs
 class Solution {
 public:
@@ -71,6 +37,38 @@ public:
             adj[q[0]].push_back(q[1]);
             ans.push_back(bfs(0, n - 1, adj));
         }
+        return ans;
+    }
+};
+
+// dp
+class Solution {
+public:
+    vector<int> shortestDistanceAfterQueries(int n, vector<vector<int>>& queries) {
+        vector<vector<int>> adj(n);
+        vector<int> dist(n, 0);
+        for(int i = n - 2; i >= 0; i--) {
+            adj[i].push_back(i + 1);
+            dist[i] = 1 + dist[i + 1];
+        }
+
+        vector<int> ans;
+        for(auto &it : queries) {
+            int u = it[0], v = it[1];
+            adj[u].push_back(v);
+            if(1 + dist[v] < dist[u]) {
+                dist[u] = 1 + dist[v];
+                for(int uu = u - 1; uu >= 0; uu--) {
+                    for(auto &vv : adj[uu]) {
+                        if(1 + dist[vv] < dist[uu]) {
+                            dist[uu] = 1 + dist[vv];
+                        }
+                    }
+                }
+            }
+            ans.push_back(dist[0]);
+        }
+        
         return ans;
     }
 };

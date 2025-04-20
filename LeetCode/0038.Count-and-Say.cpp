@@ -3,28 +3,31 @@
 class Solution {
 public:
 
-    string helper(string str) {
-        int n = str.length();
-        int cnt = 1;
-        string s = "";
-        for(int i=0; i<n-1; i++) {
-            if(str[i] == str[i+1]) {
+    string rec(int n) {
+        if(n == 1) return "1";
+        string s = rec(n - 1), ans = "";
+        char lst_ch = s[0];
+        int cnt = 0;
+
+        for(int i = 0; i < s.length(); i++) {
+            if(lst_ch == s[i]) {
                 cnt++;
             }
             else {
-                s += to_string(cnt) + str[i];
+                ans += to_string(cnt);
+                ans += lst_ch;
+                lst_ch = s[i];
                 cnt = 1;
             }
         }
-        s += to_string(cnt) + str[n-1];
-        return s;
+
+        ans += to_string(cnt);
+        ans += lst_ch;
+
+        return ans;
     }
 
     string countAndSay(int n) {
-        string s = "1";
-        for(int i=1; i<n; i++) {
-            s = helper(s);
-        }
-        return s;
+        return rec(n);
     }
 };

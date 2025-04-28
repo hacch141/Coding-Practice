@@ -33,3 +33,22 @@ public:
         return ans;
     }
 };
+
+// ===========================================================
+
+class Solution {
+public:
+    long long countSubarrays(vector<int>& nums, long long k) {
+        long long n = nums.size(), l = 0;
+        long long ans = 0, sum = 0;
+        for(int r = 0; r < n; r++) {
+            sum += nums[r];
+            while(sum * (r - l + 1) >= k) {
+                sum -= nums[l];
+                l++;
+            }
+            if(r >= l) ans += r - l + 1;
+        }
+        return ans;
+    }
+};

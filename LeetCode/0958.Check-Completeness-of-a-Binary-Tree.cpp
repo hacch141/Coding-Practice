@@ -5,59 +5,50 @@ public:
     bool isCompleteTree(TreeNode* root) {
         queue<TreeNode*> q;
         q.push(root);
-        bool isNULL = false;
+        bool stop = false;
         while(!q.empty()) {
-            TreeNode* curr = q.front();
-            q.pop();
-            if(curr->left) {
-                if(isNULL) return false;
-                q.push(curr->left);
+            int sz = q.size();
+            while(sz--) {
+                auto curr = q.front();
+                q.pop();
+                if(stop && curr->left) return false;
+                if(!stop && curr->left) {
+                    q.push(curr->left);
+                }
+                else {
+                    stop = true;
+                }
+                if(stop && curr->right) return false;
+                if(!stop && curr->right) {
+                    q.push(curr->right);
+                } 
+                else {
+                    stop = true;
+                }
             }
-            else isNULL = true;
-            if(curr->right) {
-                if(isNULL) return false;
-                q.push(curr->right);
-            }
-            else isNULL = true;
         }
         return true;
     }
 };
-
-// ======================================================================
-
 
 class Solution {
 public:
     bool isCompleteTree(TreeNode* root) {
         queue<TreeNode*> q;
         q.push(root);
+        bool stop = false;
         while(!q.empty()) {
-            int cnt = q.size();
-            bool isNull = false;
-            for(int i=0; i<cnt; i++) {
-                TreeNode* curr = q.front();
-                if(curr->left) {
-                    q.push(curr->left);
-                }
-                else {
-                    isNull = true;
-                    break;
-                }
+            int sz = q.size();
+            while(sz--) {
+                auto curr = q.front();
                 q.pop();
-                if(curr->right) {
-                    q.push(curr->right);
+                if(!curr) {
+                    stop = true;
                 }
                 else {
-                    isNull = true;
-                    break;
-                }
-            }
-            if(isNull) {
-                while(!q.empty()) {
-                    TreeNode* curr2 = q.front();
-                    q.pop();
-                    if(curr2->left || curr2->right) return false;
+                    if(stop) return false;
+                    q.push(curr->left);
+                    q.push(curr->right);
                 }
             }
         }

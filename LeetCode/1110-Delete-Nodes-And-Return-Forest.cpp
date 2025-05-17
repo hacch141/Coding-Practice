@@ -1,16 +1,32 @@
 // 1110. Delete Nodes And Return Forest
 
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
+// DFS
+class Solution {
+public:
+    TreeNode* dfs(TreeNode* root, unordered_set<int>& st, vector<TreeNode*>& ans) {
+        if(!root) return NULL;
+        root->left = dfs(root->left, st, ans);
+        root->right = dfs(root->right, st, ans);
+        if(st.count(root->val)) {
+            if(root->left) ans.push_back(root->left);
+            if(root->right) ans.push_back(root->right);
+            return NULL;
+        }
+        return root;
+    }
+
+    vector<TreeNode*> delNodes(TreeNode* root, vector<int>& to_delete) {
+        unordered_set<int> st;
+        for(auto i : to_delete) st.insert(i);
+
+        vector<TreeNode*> ans;
+        if(!st.count(root->val)) ans.push_back(root);
+
+        dfs(root, st, ans);
+        return ans;
+    }
+};
+
 class Solution {
 public:
 

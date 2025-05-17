@@ -1,5 +1,6 @@
 // 199. Binary Tree Right Side View
 
+// BFS
 class Solution {
 public:
     vector<int> rightSideView(TreeNode* root) {
@@ -17,6 +18,24 @@ public:
                 if(i == sz - 1) ans.push_back(curr->val);
             }
         }
+        return ans;
+    }
+};
+
+// DFS
+class Solution {
+public:
+    void dfs(int lvl, TreeNode* root, vector<int>& ans) {
+        if(!root) return;
+        if(lvl == ans.size()) ans.push_back(root->val);
+        else ans[lvl] = root->val;
+        dfs(lvl + 1, root->left, ans);
+        dfs(lvl + 1, root->right, ans);
+    }
+
+    vector<int> rightSideView(TreeNode* root) {
+        vector<int> ans;
+        dfs(0, root, ans);
         return ans;
     }
 };

@@ -1,35 +1,20 @@
 // 236. Lowest Common Ancestor of a Binary Tree
 
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
+// DFS
 class Solution {
 public:
+    TreeNode* dfs(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(!root) return NULL;
+        if(root == p || root == q) return root;
+        TreeNode* l = dfs(root->left, p, q);
+        TreeNode* r = dfs(root->right, p, q);
+        if(l && r) return root;
+        if(l) return l;
+        if(r) return r;
+        return NULL;
+    }
 
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if(root == NULL) {
-            return NULL;
-        }
-        
-        if(root == p || root == q) {
-            return root;
-        }
-        
-        TreeNode* lca1 = lowestCommonAncestor(root->left, p, q);
-        TreeNode* lca2 = lowestCommonAncestor(root->right, p, q);
-        
-        if(lca1 != NULL && lca2 != NULL) {
-            return root;
-        }
-        if(lca1 != NULL) {
-            return lca1;
-        } 
-        return lca2;
+        return dfs(root, p, q);
     }
 };

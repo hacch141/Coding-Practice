@@ -58,22 +58,21 @@ public:
         }
 
         int ans = 0;
-        vector<bool> vis(n, false);
         vector<vector<int>> dp(n, vector<int>(26, 0));
 
         queue<int> q;
         for(int i = 0; i < n; i++) {
-            if(indegree[i] == 0) q.push(i);
-            dp[i][colors[i] - 'a']++;
+            if(indegree[i] == 0) {
+                q.push(i);
+                dp[i][colors[i] - 'a']++;
+            }
         }
 
         int cnt_nodes = 0;
-
         while(!q.empty()) {
             int u = q.front();
             q.pop();
             cnt_nodes++;
-            vis[u] = true;
             ans = max(ans, *max_element(dp[u].begin(), dp[u].end()));
             for(auto &v : adj[u]) {
                 indegree[v]--;
@@ -84,8 +83,6 @@ public:
             }
         }
 
-        if(cnt_nodes != n) return -1;
-
-        return ans;
+        return cnt_nodes != n ? -1 :  ans;
     }
 };

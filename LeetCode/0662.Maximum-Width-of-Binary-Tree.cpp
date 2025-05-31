@@ -3,21 +3,30 @@
 class Solution {
 public:
     int widthOfBinaryTree(TreeNode* root) {
-        deque<pair<TreeNode*,int>> dq;
         int ans = 1;
-        dq.push_back({root,1});
 
-        while(!dq.empty()) {
-            int size = dq.size();
-            ans = max(ans,dq.back().second-dq.front().second+1);
-            int minus = dq.front().second;
-            for(int i=0; i<size; i++) {
-                TreeNode* curr = dq.front().first;
-                long long idx = dq.front().second;
-                dq.pop_front();
-                if(curr && curr->left) dq.push_back({curr->left,(2*idx)-1-minus});
-                if(curr && curr->right) dq.push_back({curr->right,(2*idx)-minus});
+        queue<pair<TreeNode*,long long>> q;
+        q.push({root, 0});
+
+        while(!q.empty()) {
+            int sz = q.size();
+            long long minus = q.front().second;
+            long long first = 0, last = 0;
+
+            for(int i = 0; i < sz; i++) {
+                auto it = q.front();
+                q.pop();
+
+                TreeNode* curr = it.first;
+                long long ind = it.second - minus;
+
+                if(i == 0) first = ind;
+                if(i == sz - 1) last = ind;
+
+                if(curr->left) q.push({curr->left, (2 * ind) + 1});
+                if(curr->right) q.push({curr->right, (2 * ind) + 2});
             }
+            ans = max(ans, (int)(last - first + 1));
         }
 
         return ans;

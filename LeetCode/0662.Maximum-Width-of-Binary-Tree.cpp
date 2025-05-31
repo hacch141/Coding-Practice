@@ -10,18 +10,14 @@ public:
 
         while(!q.empty()) {
             int sz = q.size();
-            long long minus = q.front().second;
-            long long first = 0, last = 0;
+            long long first = q.front().second, last = q.back().second;
 
-            for(int i = 0; i < sz; i++) {
+            while(sz--) {
                 auto it = q.front();
                 q.pop();
 
                 TreeNode* curr = it.first;
-                long long ind = it.second - minus;
-
-                if(i == 0) first = ind;
-                if(i == sz - 1) last = ind;
+                long long ind = it.second - first;
 
                 if(curr->left) q.push({curr->left, (2 * ind) + 1});
                 if(curr->right) q.push({curr->right, (2 * ind) + 2});

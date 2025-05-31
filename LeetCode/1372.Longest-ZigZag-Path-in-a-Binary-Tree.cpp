@@ -2,21 +2,19 @@
 
 class Solution {
 public:
+    pair<int,int> dfs(TreeNode* root, int& ans) {
+        if(!root) return {-1, -1};
 
-    vector<int> helper(TreeNode* root) {
-        if(!root) return {-1,-1,-1};
+        auto l = dfs(root->left, ans);
+        auto r = dfs(root->right, ans);
 
-        vector<int> left = helper(root->left);
-        vector<int> right = helper(root->right);
-
-        int res = max(1+max(left[1],right[0]), max(left[2],right[2]));
-
-        return {1+left[1],1+right[0],res};
+        ans = max(ans, 1 + max(l.second, r.first));
+        return {1 + l.second, 1 + r.first};
     }
 
     int longestZigZag(TreeNode* root) {
-        return helper(root)[2];
+        int ans = 0;
+        dfs(root, ans);
+        return ans;
     }
 };
-
-

@@ -94,37 +94,46 @@ public:
 
 // =====================================================
 
-class Solution {
-public:
+class DisjointSet {
+private:
     vector<int> parent;
-    int components;
-
-    int find(int x) {
-        if(parent[x] == x) return x;
-        return parent[x] = find(parent[x]);
+    int cmp;
+public:
+    DisjointSet(int n) {
+        cmp = n;
+        parent.resize(n + 1);
+        for(int i = 0; i <= n; i++) parent[i] = i;
     }
 
-    bool Union(int par, int child) {
-        int child_ka_parent  = find(child);
-        int parent_ka_parent = find(par);
-        
-        if(child_ka_parent != child || parent_ka_parent == child) return false;
+    int find_par(int u) {
+        if(parent[u] == u) return u;
+        return parent[u] = find_par(parent[u]);
+    }
+
+    bool union_by_size(int par, int child) {
+        int par_par = find_par(par);
+        int par_child = find_par(child);
+
+        if(par_child != child || par_par == child) return false;
 
         parent[child] = par;
-        components--;
+        cmp--;
         return true;
     }
-    
+
+    int get_cmp() {
+        return cmp;
+    }
+};
+
+class Solution {
+public:
     bool validateBinaryTreeNodes(int n, vector<int>& leftChild, vector<int>& rightChild) {
-        components = n;
-        parent.resize(n);
-        for(int i = 0; i<n; i++) parent[i] = i;
-
-        for (int i = 0; i < n; i++) {
-            if (leftChild[i] >= 0 && !Union(i, leftChild[i])) return false;
-            if (rightChild[i] >= 0 && !Union(i, rightChild[i])) return false;
+        DisjointSet ds(n);
+        for(int i = 0; i < n; i++) {
+            if(leftChild[i] >= 0 && !ds.union_by_size(i, leftChild[i])) return false;
+            if(rightChild[i] >= 0 && !ds.union_by_size(i, rightChild[i])) return false;
         }
-
-        return components == 1;
+        return ds.get_cmp() == 1;
     }
 };

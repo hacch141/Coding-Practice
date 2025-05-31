@@ -2,26 +2,20 @@
 
 class Solution {
 public:
-
-    TreeNode* helper(vector<int>& inorder, int start, int end, vector<int>& postorder, int rootIdx) {
-        if(start>end || rootIdx<0) return NULL;
-        TreeNode* curr = new TreeNode(postorder[rootIdx]);
-        int inIdx = 0;
-        int num;
-        for(int i=start; i<=end; i++) {
-            if(inorder[i]==curr->val) {
-                inIdx = i;
-                num = end-i;
-                break;
-            }
-        }
-        curr->left = helper(inorder,start,inIdx-1,postorder,rootIdx-num-1);
-        curr->right = helper(inorder,inIdx+1,end,postorder,rootIdx-1);
-        return curr;
+    TreeNode* dfs(int& ind, int l, int r, vector<int>& inorder, vector<int>& postorder, unordered_map<int,int>& mp) {
+        if(l > r) return NULL;
+        int val = postorder[ind];
+        TreeNode* root = new TreeNode(val);
+        ind--;
+        root->right = dfs(ind, mp[val] + 1, r, inorder, postorder, mp);
+        root->left = dfs(ind, l, mp[val] - 1, inorder, postorder, mp);
+        return root;
     }
 
-
     TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
-        return helper(inorder, 0, inorder.size()-1, postorder, inorder.size()-1);
+        int n = inorder.size(), ind = n - 1;
+        unordered_map<int,int> mp;
+        for(int i = 0; i < n; i++) mp[inorder[i]] = i;
+        return dfs(ind, 0, n - 1, inorder, postorder, mp);
     }
 };

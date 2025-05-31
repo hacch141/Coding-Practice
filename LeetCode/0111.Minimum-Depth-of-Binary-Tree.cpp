@@ -23,3 +23,21 @@ public:
         return -1;
     }
 };
+
+// DFS
+class Solution {
+public:
+
+    int dfs(TreeNode* root) {
+        if(!root) return INT_MAX;
+        if(!root->left && !root->right) return 1;
+        int l = dfs(root->left);
+        int r = dfs(root->right);
+        return 1 + min(l, r);
+    }
+
+    int minDepth(TreeNode* root) {
+        int ans = dfs(root);
+        return ans == INT_MAX ? 0 : ans;
+    }
+};

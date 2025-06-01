@@ -1,5 +1,6 @@
 // 515. Find Largest Value in Each Tree Row
 
+// BFS
 class Solution {
 public:
     vector<int> largestValues(TreeNode* root) {
@@ -22,6 +23,24 @@ public:
             ans.push_back(mx);
         }
 
+        return ans;
+    }
+};
+
+// DFS
+class Solution {
+public:
+    void dfs(TreeNode* root, int lvl, vector<int>& ans) {
+        if(!root) return;
+        if(lvl == ans.size()) ans.push_back(root->val);
+        else ans[lvl] = max(ans[lvl], root->val);
+        dfs(root->left, lvl + 1, ans);
+        dfs(root->right, lvl + 1, ans);
+    }
+
+    vector<int> largestValues(TreeNode* root) {
+        vector<int> ans;
+        dfs(root, 0, ans);
         return ans;
     }
 };

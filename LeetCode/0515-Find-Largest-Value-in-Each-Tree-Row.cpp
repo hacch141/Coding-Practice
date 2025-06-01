@@ -3,20 +3,25 @@
 class Solution {
 public:
     vector<int> largestValues(TreeNode* root) {
-        queue<TreeNode*> q;
-        if(root) q.push(root);
+        if(!root) return {};
         vector<int> ans;
+
+        queue<TreeNode*> q;
+        q.push(root);
+
         while(!q.empty()) {
-            int sz = q.size(), mx = INT_MIN;
+            int sz = q.size();
+            int mx = INT_MIN;
             while(sz--) {
                 auto curr = q.front();
-                mx = max(mx, curr->val);
                 q.pop();
+                mx = max(mx, curr->val);
                 if(curr->left) q.push(curr->left);
                 if(curr->right) q.push(curr->right);
             }
             ans.push_back(mx);
         }
+
         return ans;
     }
 };

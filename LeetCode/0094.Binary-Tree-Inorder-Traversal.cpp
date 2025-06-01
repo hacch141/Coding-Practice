@@ -1,17 +1,17 @@
+// 94. Binary Tree Inorder Traversal
+
 class Solution {
 public:
-
-    void helper(TreeNode* root, vector<int>& ans) {
-        if(root) {
-            if(root->left) helper(root->left,ans);
-            ans.push_back(root->val);
-            if(root->right) helper(root->right,ans);
-        }
+    void dfs(TreeNode* root, vector<int>& ans) {
+        if(!root) return;
+        dfs(root->left, ans);
+        ans.push_back(root->val);
+        dfs(root->right, ans);
     }
 
     vector<int> inorderTraversal(TreeNode* root) {
         vector<int> ans;
-        helper(root,ans);
+        dfs(root, ans);
         return ans;
     }
 };

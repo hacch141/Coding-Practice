@@ -15,3 +15,30 @@ public:
         return ans;
     }
 };
+
+// Morris Traversal
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> ans;
+        TreeNode* curr = root;
+        TreeNode* st = NULL;
+        while(curr) {
+            if(curr->left) {
+                TreeNode* l = curr->left;
+                while(l->right) l = l->right;
+                l->right = curr;
+
+                TreeNode* tmp = curr;
+                curr = curr->left;
+                tmp->left = NULL;
+            }
+            else {
+                if(!st) st = curr;
+                ans.push_back(curr->val);
+                curr = curr->right;
+            }
+        }
+        return ans;
+    }
+};

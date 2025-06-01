@@ -51,3 +51,51 @@ public:
         return min;
     }
 };
+
+// DFS
+class Solution {
+public:
+    void find_par(TreeNode* root, unordered_map<TreeNode*,TreeNode*>& par, int& start, TreeNode*& st) {
+        if(!root) return;
+        if(root->val == start) st = root;
+
+        if(root->left) {
+            par[root->left] = root;
+            find_par(root->left, par, start, st);
+        }
+        if(root->right) {
+            par[root->right] = root;
+            find_par(root->right, par, start, st);
+        }
+    }
+
+    void dfs(TreeNode* root, int min, unordered_map<TreeNode*,TreeNode*>& par, unordered_set<int>& vis, int& ans) {
+        if(!root) return;
+
+        ans = max(ans, min);
+        vis.insert(root->val);
+
+        if(root->left && !vis.count(root->left->val)) {
+            dfs(root->left, min + 1, par, vis, ans);
+        }
+        if(root->right && !vis.count(root->right->val)) {
+            dfs(root->right, min + 1, par, vis, ans);
+        }
+        if(par.count(root) && !vis.count(par[root]->val)) {
+            dfs(par[root], min + 1, par, vis, ans);
+        }
+
+    }
+
+    int amountOfTime(TreeNode* root, int start) {
+        unordered_map<TreeNode*,TreeNode*> par;
+        TreeNode* st;
+        find_par(root, par, start, st);
+
+        int ans = 0;
+        unordered_set<int> vis;
+        dfs(st, 0, par, vis, ans);
+
+        return ans;
+    }
+};

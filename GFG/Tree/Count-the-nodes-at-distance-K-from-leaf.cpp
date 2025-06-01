@@ -26,6 +26,41 @@ class Solution {
     }
 };
 
+// DFS - 2
+class Solution {
+    public:
+    vector<vector<Node*>> paths;
+    void storeRootToLeaf(Node* root, vector<Node*>& temp) {
+        if(!root) return;
+
+        temp.push_back(root);
+        if(!root->left && !root->right) {
+            paths.push_back(temp);
+        }
+        storeRootToLeaf(root->left, temp);
+        storeRootToLeaf(root->right, temp);
+        temp.pop_back();
+    }
+    
+    //Function to return count of nodes at a given distance from leaf nodes.
+    int printKDistantfromLeaf(Node* root, int k) {
+        paths.clear();
+        vector<Node*> temp;
+    	storeRootToLeaf(root, temp);
+    	unordered_set<Node*> st;
+    	
+    	for(vector<Node*> &vec : paths) {
+    	    int n = vec.size();
+    	    if(n - k > 0) {
+    	        st.insert(vec[n-k-1]);
+    	    }
+    	}
+    	
+    	return st.size();
+    }
+};
+
+
 // BFS
 class Solution {
   public:

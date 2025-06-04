@@ -1,58 +1,106 @@
 // 1530. Number of Good Leaf Nodes Pairs
 
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
+// DFS
 class Solution {
 public:
+    // map<dist,cnt> from root
+    unordered_map<int,int> dfs(TreeNode* root, int& dist, int& ans) {
+        unordered_map<int,int> curr, left, right;
+        if(!root) return curr;
+        if(!root->left && !root->right) {
+            curr[0] = 1;
+            return curr;
+        }
 
-    vector<int> merge(vector<int>& v1, vector<int>& v2) {
-        int n1 = v1.size(), n2 = v2.size(), p1 = 0, p2 = 0;
-        vector<int> v;
-        while(p1 < n1 && p2 < n2) {
-            if(v1[p1] < v2[p2]) {
-                if(v1[p1] + 1 <= 10) v.push_back(v1[p1] + 1);
-                p1++;
-            }
-            else {
-                if(v2[p2] + 1 <= 10) v.push_back(v2[p2] + 1);
-                p2++;
-            }
-        }
-        while(p1 < n1) {
-            if(v1[p1] + 1 <= 10) v.push_back(v1[p1] + 1);
-            p1++;
-        }
-        while(p2 < n2) {
-            if(v2[p2] + 1 <= 10) v.push_back(v2[p2] + 1);
-            p2++;
-        }
-        return v;
-    }
+        left = dfs(root->left, dist, ans);
+        right = dfs(root->right, dist, ans);
 
-    vector<int> solve(TreeNode* root, int distance, int& ans) {
-        if(!root->left && !root->right) return {1};
-        vector<int> l, r, cur;
-        if(root->left) l = solve(root->left, distance, ans);
-        if(root->right) r = solve(root->right, distance, ans);
-        for(auto i : l) {
-            int mx = distance - i;
-            ans += upper_bound(r.begin(), r.end(), mx) - r.begin();
+        for(auto l : left) {
+            int d1 = l.first + 1;
+            int c1 = l.second;
+            for(auto r : right) {
+                int d2 = r.first + 1;
+                int c2 = r.second;
+                if(d1 + d2 <= dist) ans += c1 * c2;
+            }
         }
-        return merge(l, r);
+
+        for(auto l : left) curr[l.first + 1] += l.second;
+        for(auto r : right) curr[r.first + 1] += r.second;
+
+        return curr;
     }
 
     int countPairs(TreeNode* root, int distance) {
         int ans = 0;
-        solve(root, distance, ans);
+        dfs(root, distance, ans);
         return ans;
+    }
+};
+
+//Approach-1 (Using Graph and BFS)
+//T.C : O(n^2)
+//S.C : O(n)
+class Solution {
+public:
+
+    void makeGraph(TreeNode* root, TreeNode* prev, unordered_map<TreeNode*, vector<TreeNode*>>& adj, 
+                    unordered_set<TreeNode*>& st) {
+
+        if(root == NULL) {
+            return;
+        }
+
+        if(root->left == NULL && root->right == NULL) { //LEAF NODE
+            st.insert(root);
+        }
+
+        if(prev != NULL) {
+            adj[root].push_back(prev);
+            adj[prev].push_back(root);
+        }
+
+        makeGraph(root->left, root, adj, st);
+        makeGraph(root->right, root, adj, st);
+
+    }
+
+    int countPairs(TreeNode* root, int distance) {
+        unordered_map<TreeNode*, vector<TreeNode*>> adj; //Graph
+        unordered_set<TreeNode*> st; //leaf nodes
+
+        makeGraph(root, NULL, adj, st);
+
+        int count = 0; //count of good node pairs
+
+        for(auto &leaf : st) {
+
+            //BFS hit karo and see if you can find another leaf nodes within distance
+            queue<TreeNode*> que;
+            unordered_set<TreeNode*> visited;
+            que.push(leaf);
+            visited.insert(leaf);
+
+
+            for(int level = 0; level <= distance; level++) { //only go till level <= distance
+                int size = que.size();
+                while(size--) { //level processed
+                    TreeNode* curr = que.front();
+                    que.pop();
+
+                    if(curr != leaf && st.count(curr)) { 
+                        count++;
+                    }
+
+                    for(auto &ngbr : adj[curr]) {
+                        if(!visited.count(ngbr)) {
+                            que.push(ngbr);
+                            visited.insert(ngbr);
+                        }
+                    }
+                }
+            }
+        }
+        return count/2;
     }
 };

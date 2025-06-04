@@ -7,14 +7,12 @@ public:
         if(root->val == startValue || root->val == destValue) return root;
         TreeNode* l = get_lca(root->left, startValue, destValue);
         TreeNode* r = get_lca(root->right, startValue, destValue);
-        if(l && r) return root;
-        if(l) return l;
-        if(r) return r;
-        return NULL;
+        return l && r ? root : l ? l : r;
     }
 
     void get_root_to_val_path(TreeNode* root, int val, string& curr, string& path) {
         if(!root) return;
+
         if(root->val == val) {
             path = curr;
             return;
@@ -34,8 +32,6 @@ public:
         string up, down, curr = "";
         get_root_to_val_path(lca, startValue, curr, up);
         get_root_to_val_path(lca, destValue, curr, down);
-        string ans(up.length(), 'U');
-        ans += down;
-        return ans;
+        return string(up.length(), 'U') + down;
     }
 };

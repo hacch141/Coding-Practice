@@ -1,5 +1,6 @@
 // 2415. Reverse Odd Levels of Binary Tree
 
+// BFS
 class Solution {
 public:
     TreeNode* reverseOddLevels(TreeNode* root) {
@@ -33,6 +34,23 @@ public:
             lvl++;
         }
 
+        return root;
+    }
+};
+
+// DFS
+class Solution {
+public:
+    void dfs(TreeNode* root1, TreeNode* root2, int lvl) {
+        if(!root1 && !root2) return;
+        if(lvl & 1) swap(root1->val, root2->val);
+
+        dfs(root1->left, root2->right, lvl + 1);
+        dfs(root1->right, root2->left, lvl + 1);
+    }
+
+    TreeNode* reverseOddLevels(TreeNode* root) {
+        dfs(root->left, root->right, 1);
         return root;
     }
 };

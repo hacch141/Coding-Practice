@@ -2,40 +2,36 @@
 
 class Solution {
 public:
-    void dfs(int u, vector<vector<int>>& adj, vector<bool>& vis, vector<int>& cmp, int& mn) {
+    void dfs(int u, int&  mn, vector<vector<int>>& adj, vector<int>& cmp_nodes, vector<int>& vis) {
+        cmp_nodes.push_back(u);
         vis[u] = true;
-        cmp.push_back(u);
         mn = min(mn, u);
-        for(auto &v : adj[u]) {
-            if(!vis[v]) {
-                dfs(v, adj, vis, cmp, mn);
-            }
+        for(auto v : adj[u]) {
+            if(!vis[v]) dfs(v, mn, adj, cmp_nodes, vis);
         }
     }
 
     string smallestEquivalentString(string s1, string s2, string baseStr) {
+        int n = s1.size();
+
         vector<vector<int>> adj(26);
-        int n = s1.length();
         for(int i = 0; i < n; i++) {
-            adj[s1[i] - 'a'].push_back(s2[i] - 'a');
-            adj[s2[i] - 'a'].push_back(s1[i] - 'a');
+            int u = s1[i] - 'a', v = s2[i] - 'a';
+            adj[u].push_back(v);
+            adj[v].push_back(u);
         }
 
-        vector<int> lex(26);
-        for(int i = 0; i < 26; i++) lex[i] = i;
-
-        vector<bool> vis(26, false);
+        unordered_map<int,int> mp;
+        vector<int> vis(26, false);
         for(int i = 0; i < 26; i++) {
+            vector<int> cmp_nodes;
             int mn = i;
-            vector<int> cmp;
-            if(!vis[i]) dfs(i, adj, vis, cmp, mn);
-            for(auto &i : cmp) lex[i] = mn;
+            if(!vis[i]) dfs(i, mn, adj, cmp_nodes, vis);
+            for(auto i : cmp_nodes) mp[i] = mn;
         }
 
-        string ans;
-        for(auto &ch : baseStr) {
-            ans += (lex[ch - 'a'] + 'a');
-        }
+        string ans = baseStr;
+        for(auto &ch : ans) ch = mp[ch - 'a'] + 'a';
 
         return ans;
     }

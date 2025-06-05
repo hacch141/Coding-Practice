@@ -2,44 +2,40 @@
 
 class Solution {
 public:
-
-    void rev_q(queue<TreeNode*>& q, vector<int>& temp) {
-        reverse(temp.begin(),temp.end());
-        int len = q.size();
-        for(int i=0; i<len; i++) {
-            TreeNode* curr = q.front();
-            q.pop();
-            curr->val = temp[i];
-            q.push(curr);
-        }
-    }
-
     TreeNode* reverseOddLevels(TreeNode* root) {
-        bool reverse = true;
         queue<TreeNode*> q;
         q.push(root);
-        vector<int> temp;
 
+        int lvl = 0;
         while(!q.empty()) {
-            int len = q.size();
-            for(int i=0; i<len; i++) {
+            int sz = q.size();
+
+            vector<int> val;
+            vector<TreeNode*> nodes;
+
+            while(sz--) {
                 TreeNode* curr = q.front();
                 q.pop();
-                if(curr->left) {
-                    q.push(curr->left);
-                    temp.push_back(curr->left->val);
+
+                if(lvl & 1) {
+                    val.push_back(curr->val);
+                    nodes.push_back(curr);
                 }
-                if(curr->right) {
-                    q.push(curr->right);
-                    temp.push_back(curr->right->val);
+
+                if(curr->left) q.push(curr->left);
+                if(curr->right) q.push(curr->right);
+            }
+
+            if(lvl & 1) {
+                reverse(val.begin(), val.end());
+                for(int i = 0; i < nodes.size(); i++) {
+                    nodes[i]->val = val[i];
                 }
             }
-            if(reverse) {
-                rev_q(q,temp);
-            }
-            reverse = !reverse;
-            temp.clear();
+
+            lvl++;
         }
+
         return root;
     }
 };

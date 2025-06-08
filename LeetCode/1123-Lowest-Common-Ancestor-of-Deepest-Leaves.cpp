@@ -1,16 +1,5 @@
 // 1123. Lowest Common Ancestor of Deepest Leaves
 
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
 class Solution {
 public:
     pair<TreeNode*, int> dfs(TreeNode* root) {
@@ -28,5 +17,37 @@ public:
 
     TreeNode* lcaDeepestLeaves(TreeNode* root) {
         return dfs(root).first;
+    }
+};
+
+// 
+class Solution {
+public:
+    int get_height(TreeNode* root) {
+        if(!root) return -1;
+        int l = get_height(root->left);
+        int r = get_height(root->right);
+        return 1 + max(l, r);
+    }
+
+    bool dfs(int curr_height, int& mx_height, TreeNode* root, TreeNode*& ans) {
+        if(!root) return false;
+
+        bool l = dfs(curr_height + 1, mx_height, root->left, ans);
+        bool r = dfs(curr_height + 1, mx_height, root->right, ans);
+
+        if((l && r) || curr_height == mx_height) {
+            ans = root;
+            return true;
+        }
+
+        return l || r;
+    }
+
+    TreeNode* lcaDeepestLeaves(TreeNode* root) {
+        int mx_height = get_height(root);
+        TreeNode* ans;
+        dfs(0, mx_height, root, ans);
+        return ans;
     }
 };

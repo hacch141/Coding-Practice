@@ -30,24 +30,21 @@ public:
         return 1 + max(l, r);
     }
 
-    bool dfs(int curr_height, int& mx_height, TreeNode* root, TreeNode*& ans) {
-        if(!root) return false;
+    TreeNode* dfs(int curr_height, int& mx_height, TreeNode* root, TreeNode*& ans) {
+        if(!root) return NULL;
+        if(curr_height == mx_height) return root;
 
-        bool l = dfs(curr_height + 1, mx_height, root->left, ans);
-        bool r = dfs(curr_height + 1, mx_height, root->right, ans);
+        TreeNode* l = dfs(curr_height + 1, mx_height, root->left, ans);
+        TreeNode* r = dfs(curr_height + 1, mx_height, root->right, ans);
 
-        if((l && r) || curr_height == mx_height) {
-            ans = root;
-            return true;
-        }
-
-        return l || r;
+        if(l && r) return root;
+        return l ? l : r;
     }
 
     TreeNode* lcaDeepestLeaves(TreeNode* root) {
         int mx_height = get_height(root);
         TreeNode* ans;
-        dfs(0, mx_height, root, ans);
-        return ans;
+        return dfs(0, mx_height, root, ans);
     }
 };
+

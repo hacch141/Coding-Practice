@@ -2,6 +2,46 @@
 
 class Solution {
 public:
+    TreeNode* dfs(int lvl, int& ind, int& n, string& s) {
+        if (ind >= n) return NULL;
+
+        int cnt = 0;
+        // Count dashes to determine level
+        while (ind < n && s[ind] == '-') {
+            cnt++;
+            ind++;
+        }
+
+        // If level doesn't match, backtrack
+        if (cnt != lvl) {
+            ind -= cnt;  // backtrack to allow parent to parse
+            return NULL;
+        }
+
+        // Parse number (can be multi-digit)
+        int num = 0;
+        while (ind < n && isdigit(s[ind])) {
+            num = num * 10 + (s[ind] - '0');
+            ind++;
+        }
+
+        TreeNode* root = new TreeNode(num);
+        root->left = dfs(lvl + 1, ind, n, s);
+        root->right = dfs(lvl + 1, ind, n, s);
+        return root;
+    }
+
+    TreeNode* recoverFromPreorder(string traversal) {
+        int n = traversal.size();
+        int ind = 0;
+        return dfs(0, ind, n, traversal);
+    }
+};
+
+
+// 
+class Solution {
+public:
     TreeNode* rec(int l, int r, vector<pair<int,int>>& v) {
         if(l > r) return nullptr;
         TreeNode* root = new TreeNode(v[l].first);

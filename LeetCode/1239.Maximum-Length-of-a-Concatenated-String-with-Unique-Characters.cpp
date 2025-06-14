@@ -3,34 +3,32 @@
 class Solution {
 public:
 
-    int isValid(string& str, int& mask) {
-        int newMask = mask;
-        for(auto i : str) {
-            if(newMask & (1 << (i - 'a'))) return -1;
-            newMask |= (1 << (i - 'a'));
-        }
-        return newMask;
-    }
+    unordered_map<int, int> mp;
 
-    int solve(int ind, int& n, vector<string>& arr, int& mask, vector<unordered_map<int,int>>& dp) {
-        if(ind == n) return __builtin_popcount(mask);
+    int solve(int ind, int& n, vector<string>& arr, int vis) {
+        if(ind >= n) return 0;
+        if(mp.find(vis) != mp.end()) return mp[vis];
 
-        if(dp[ind].find(mask) != dp[ind].end()) return dp[ind][mask];
-
-        int nottake, take = 0;
-        int newMask = isValid(arr[ind], mask);
-        
-        if(newMask != -1) {
-            take = solve(ind + 1, n, arr, newMask, dp);
+        int curr_vis = 0;
+        bool can_take = true;
+        for(auto ch : arr[ind]) {
+            int shift = ch - 'a';
+            if((vis & (1 << shift)) || (curr_vis & (1 << shift))) {
+                can_take = false;
+                break;
+            }
+            curr_vis |= (1 << (ch - 'a'));
         }
 
-        nottake = solve(ind + 1, n, arr, mask, dp);
-        return dp[ind][mask] = max(take, nottake);
+        int take = INT_MIN;
+        if(can_take) take = __builtin_popcount(curr_vis) + solve(ind + 1, n, arr, vis | curr_vis);
+        int nottake = solve(ind + 1, n, arr, vis);
+        return mp[vis] = max(take, nottake);
     }
 
     int maxLength(vector<string>& arr) {
-        int mask = 0, n = arr.size();
-        vector<unordered_map<int,int>> dp(n+1);
-        return solve(0, n, arr, mask, dp);
+        int n = arr.size();
+        mp.clear();
+        return solve(0, n, arr, 0);
     }
 };

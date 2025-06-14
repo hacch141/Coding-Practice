@@ -1,5 +1,29 @@
 // 279. Perfect Squares
 
+// rec
+class Solution {
+public:
+    int dp[100001];
+
+    int solve(int n) {
+        if(n <= 1) return n;
+        if(dp[n] != -1) return dp[n];
+
+        int curr = INT_MAX;
+        for(int i = 1; i * i <= n; i++) {
+            curr = min(curr, 1 + solve(n - (i * i)));
+        }
+
+        return dp[n] = curr;
+    }
+
+    int numSquares(int n) {
+        memset(dp, -1, sizeof(dp));
+        return solve(n);
+    }
+};
+
+// dp
 class Solution {
 public:
     int numSquares(int n) {

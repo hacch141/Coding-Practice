@@ -1,4 +1,6 @@
 // 264. Ugly Number II
+
+// DP
 class Solution {
 public:
     int nthUglyNumber(int n) {
@@ -12,5 +14,32 @@ public:
             if(seq[i] == 5 * seq[p5]) p5++;
         }
         return seq[n - 1];
+    }
+};
+
+// MinHeap (prefer this easy to explain)
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        vector<long long> primes = {2, 3, 5};
+        unordered_set<long long> vis;
+        priority_queue<long long, vector<long long>, greater<long long>> pq;
+
+        pq.push(1);
+        vis.insert(1);
+
+        long long curr;
+        for(int i = 0; i < n; i++) {
+            curr = pq.top();
+            pq.pop();
+            for(auto p : primes) {
+                if(!vis.count(curr * p)) {
+                    pq.push(curr * p);
+                    vis.insert(curr * p);
+                }
+            }
+        }
+
+        return (int)curr;
     }
 };

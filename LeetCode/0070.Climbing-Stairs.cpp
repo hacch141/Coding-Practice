@@ -1,7 +1,7 @@
 // 70. Climbing Stairs
 
+// DP
 class Solution {
-
 public:
     int climbStairs(int n) {
         if(n<=1) return n;
@@ -16,10 +16,8 @@ public:
     }
 };
 
-// =======================================================================
-
+// 1D dp
 class Solution {
-
 public:
     int climbStairs(int n) {
         if(n<=1) return n;
@@ -33,28 +31,20 @@ public:
     }
 };
 
-// ============================================================================
-
+// Rec
 class Solution {
+public:
+    int dp[46];
 
-private:
-    int solve(int idx, vector<int>& dp) {
-        if(dp[idx] != 0) return dp[idx];
-        if(idx == 0 || idx == 1) return 1;
-        int left = solve(idx-1,dp);
-        int right = INT_MAX;
-        if(idx > 1) {
-            right = solve(idx-2,dp);
-        }
-        dp[idx] = left+right;
-        return dp[idx];
+    int solve(int n) {
+        if(n == 0) return 1;
+        if(n < 0) return 0;
+        if(dp[n] != -1) return dp[n];
+        return dp[n] = solve(n - 1) + solve(n - 2);
     }
 
-public:
     int climbStairs(int n) {
-        if(n<=1) return n;
-        vector<int> dp(n+1,0);
-        solve(n,dp);
-        return dp[n];
+        memset(dp, -1, sizeof(dp));
+        return solve(n);
     }
 };

@@ -1,7 +1,40 @@
 // 1143. Longest Common Subsequence
 
+// Rec
 class Solution {
+public:
+    int dp[1001][1001];
 
+    int solve(int ind1, int ind2, int& n1, int& n2, string& text1, string& text2) {
+        if(ind1 >= n1 || ind2 >= n2) return 0;
+
+        if(dp[ind1][ind2] != -1) return dp[ind1][ind2];
+
+        int curr = INT_MIN;
+        if(text1[ind1] == text2[ind2]) {
+            curr = max(curr, 1 + solve(ind1 + 1, ind2 + 1, n1, n2, text1, text2));
+        }
+        else {
+            curr = max(curr, solve(ind1 + 1, ind2, n1, n2, text1, text2));
+            curr = max(curr, solve(ind1, ind2 + 1, n1, n2, text1, text2));
+        }
+
+        return dp[ind1][ind2] = curr;
+    }
+
+    int longestCommonSubsequence(string text1, string text2) {
+        int n1 = text1.length(), n2 = text2.length();
+        for(int i = 0; i < n1; i++) {
+            for(int j = 0; j < n2; j++) {
+                dp[i][j] = -1;
+            }
+        }
+        return solve(0, 0, n1, n2, text1, text2);
+    }
+};
+
+// DP
+class Solution {
 public:
     int longestCommonSubsequence(string text1, string text2) {
         int n1 = text1.length();

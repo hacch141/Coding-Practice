@@ -1,25 +1,55 @@
 // 309. Best Time to Buy and Sell Stock with Cooldown
 
-// Recursion
+// Rec
 class Solution {
+public:
+    int dp[5001];
 
-private:
-    int solve(int idx, int n, int buy, vector<int>& prices) {
-        if(idx >= n) return 0;
-        if(buy) {
-            return max(-prices[idx]+solve(idx+1,n,0,prices) , solve(idx+1,n,1,prices));
-        } else {
-            return max( prices[idx]+solve(idx+2,n,1,prices) , solve(idx+1,n,0,prices));
+    int solve(int ind, int& n, vector<int>& prices) {
+        if(ind >= n) return 0;
+
+        if(dp[ind] != -1) return dp[ind];
+
+        int take = 0;
+        for(int i = ind + 1; i < n; i++) {
+            take = max(take, (prices[i] - prices[ind]) + solve(i + 2, n, prices));
         }
+        int nottake = solve(ind + 1, n, prices);
+
+        return dp[ind] = max(take, nottake);
     }
 
-public:
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
-        return solve(0,n,1,prices);
+        memset(dp, -1, sizeof(dp));
+        return solve(0, n, prices);
     }
 };
 
+// DP
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        if(n == 1) return 0;
+
+        vector<int> dp(n, 0);
+        dp[1] = max(dp[1], prices[1] - prices[0]);
+
+        // sell on i day, buy on j day 
+        for(int i = 2; i < n; i++) {
+            // nottake
+            dp[i] = dp[i - 1];
+            // take
+            for(int j = 0; j < i; j++) {
+                int prev_profit = (j >= 2 ? dp[j - 2] : 0);
+                dp[i] = max(dp[i], prices[i] - prices[j] + prev_profit);
+            }
+        }
+
+        return dp[n - 1];
+    }
+};
 
 // Memoization
 class Solution {
@@ -43,11 +73,8 @@ public:
     }
 };
 
-
-
 // Tabulation
 class Solution {
-
 public:
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
@@ -67,11 +94,8 @@ public:
     }
 };
 
-
-
 // space optimization
 class Solution {
-
 public:
     int maxProfit(vector<int>& prices) {
         int n = prices.size();

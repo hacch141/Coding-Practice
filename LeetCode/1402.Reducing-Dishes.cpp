@@ -47,3 +47,21 @@ public:
         return solve(0,1,satisfaction,n,dp);
     }
 };
+
+// =====================================================================
+
+class Solution {
+public:
+    int maxSatisfaction(vector<int>& satisfaction) {
+        sort(satisfaction.begin(), satisfaction.end());
+        int n = satisfaction.size(), ans = 0;
+        for(int i = 0; i < n; i++) {
+            int curr = 0;
+            for(int j = i; j < n; j++) {
+                curr += (j - i + 1) * satisfaction[j];
+            }
+            ans = max(ans, curr);
+        }
+        return ans;
+    }
+};

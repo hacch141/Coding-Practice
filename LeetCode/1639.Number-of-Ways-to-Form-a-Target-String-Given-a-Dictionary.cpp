@@ -30,3 +30,33 @@ public:
         return solve(0, m, 0, target, f, dp);
     }
 };
+
+// iterative
+class Solution {
+public:
+    int MOD = 1e9 + 7;
+
+    int numWays(vector<string>& words, string target) {
+        int n = words[0].size(), m = target.length();
+        
+        vector<vector<int>> f(n, vector<int>(26, 0));
+        for(int i = 0; i < words.size(); i++) {
+            for(int j = 0; j < n; j++) {
+                f[j][words[i][j] - 'a']++;
+            }
+        }
+
+        vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
+        dp[0][0] = 1;
+        for(int i = 1; i <= n; i++) {
+            for(int j = 0; j <= m; j++) {
+                // not_take
+                dp[i][j] = (dp[i][j] + dp[i - 1][j]) % MOD;
+                // take
+                if(j > 0) dp[i][j] = (dp[i][j] + (1LL * f[i - 1][target[j - 1] - 'a'] * dp[i - 1][j - 1]) % MOD) % MOD;
+            }
+        }
+
+        return dp[n][m];
+    }
+};

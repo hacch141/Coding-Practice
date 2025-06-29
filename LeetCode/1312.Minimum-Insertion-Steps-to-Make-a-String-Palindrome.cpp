@@ -1,7 +1,28 @@
 // 1312. Minimum Insertion Steps to Make a String Palindrome
 
+class Solution {
+public:
+    int solve(int l, int r, string& s, vector<vector<int>>& dp) {
+        if(l >= r) return 0;
 
-// Recursive
+        if(dp[l][r] != -1) return dp[l][r];
+
+        if(s[l] == s[r]) {
+            return dp[l][r] = solve(l + 1, r - 1, s, dp);
+        }
+        // add 1 character to make palindrome
+        int left = 1 + solve(l + 1, r, s, dp);
+        int right = 1 + solve(l, r - 1, s, dp);
+        return dp[l][r] = min(left, right);
+    }
+
+    int minInsertions(string s) {
+        int n = s.length();
+        vector<vector<int>> dp(n, vector<int>(n, -1));
+        return solve(0, n - 1, s, dp);
+    }
+};
+
 class Solution {
 public:
 
@@ -28,6 +49,7 @@ public:
 
     int minInsertions(string s) {
         int n = s.length();
+        // find the longest palindrome from s and add characters for the remaining...
         return n-longestPalindromeSubseq(s);
     }
 };

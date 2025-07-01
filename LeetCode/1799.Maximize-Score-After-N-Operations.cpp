@@ -2,10 +2,10 @@
 
 class Solution {
 public:
-    int solve(int ind, int mask, int n, vector<int>& nums, vector<vector<int>>& dp) {
+    int solve(int ind, int mask, int n, vector<int>& nums, vector<int>& dp) {
         if(mask == ((1 << n) - 1)) return 0;
 
-        if(dp[ind][mask] != -1) return dp[ind][mask];
+        if(dp[mask] != -1) return dp[mask];
 
         int score = 0;
         for(int i = 0; i < n; i++) {
@@ -18,12 +18,12 @@ public:
                 }
             }
         }
-        return dp[ind][mask] = score;
+        return dp[mask] = score;
     }
 
     int maxScore(vector<int>& nums) {
         int n = nums.size();
-        vector<vector<int>> dp(n, vector<int>((1 << n), -1));
+        vector<int> dp((1 << n), -1);
         return solve(1, 0, n, nums, dp);
     }
 };

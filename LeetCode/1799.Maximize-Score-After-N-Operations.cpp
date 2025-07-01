@@ -2,33 +2,28 @@
 
 class Solution {
 public:
+    int solve(int ind, int mask, int n, vector<int>& nums, vector<vector<int>>& dp) {
+        if(mask == ((1 << n) - 1)) return 0;
 
-    int solve(int op, int mask, vector<int>& nums, int& n, vector<vector<int>>& gcd, vector<int>& dp) {
-        if(op>n) return 0;
-        if(dp[mask] != -1) return dp[mask];
+        if(dp[ind][mask] != -1) return dp[ind][mask];
 
-        for(int i=0; i<2*n; i++) {
-            if(mask&(1<<i)) continue;
-            for(int j=i+1; j<2*n; j++) {
-                if(mask&(1<<j)) continue;
-                int newmask = mask | (1<<i) | (1<<j);
-                int score = op*gcd[i][j] + solve(op+1,newmask,nums,n,gcd,dp);
-                dp[mask] = max(dp[mask],score);
+        int score = 0;
+        for(int i = 0; i < n; i++) {
+            for(int j = i + 1; j < n; j++) {
+                int new_mask = mask;
+                if(!(mask & (1 << i)) && !(mask & (1 << j))) {
+                    new_mask |= (1 << i);
+                    new_mask |= (1 << j);
+                    score = max(score, ind * __gcd(nums[i], nums[j]) + solve(ind + 1, new_mask, n, nums, dp));
+                }
             }
         }
-        return dp[mask];
+        return dp[ind][mask] = score;
     }
 
     int maxScore(vector<int>& nums) {
-        vector<int> dp(1<<14,-1);
-        int m = nums.size();
-        int n = m/2;
-        vector<vector<int>> gcd(m, vector<int> (m,0));
-        for(int i=0; i<m; i++) {
-            for(int j=0; j<m; j++) {
-                gcd[i][j] = __gcd(nums[i],nums[j]);
-            }
-        }
-        return solve(1,0,nums,n,gcd,dp);
+        int n = nums.size();
+        vector<vector<int>> dp(n, vector<int>((1 << n), -1));
+        return solve(1, 0, n, nums, dp);
     }
 };

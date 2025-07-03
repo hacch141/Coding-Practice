@@ -2,21 +2,25 @@
 
 class Solution {
 public:
-    int maxProfit(vector<int>& prices, int fee) {
-        vector<int> dp(2,0), curr(2,0);
-        int n = prices.size();
+    int solve(int ind, int n, bool buy, vector<int>& prices, int fee, vector<vector<int>>& dp) {
+        if(ind == n) return 0;
 
-        for(int i=n-1; i>=0; i--) {
-            for(int buy=0; buy<=1; buy++) {
-                if(buy) {
-                    curr[buy] = max(-prices[i]-fee+dp[0] , dp[1]);
-                }
-                else {
-                    curr[buy] = max( prices[i]+dp[1] , dp[0]);
-                }
-            }
-            dp = curr;
+        if(dp[ind][buy] != -1) return dp[ind][buy];
+
+        int skip = solve(ind + 1, n, buy, prices, fee, dp);
+        int not_skip = 0;
+        if(buy) {
+            not_skip = -(prices[ind] + fee) + solve(ind + 1, n, !buy, prices, fee, dp);
         }
-        return dp[1];
+        else {
+            not_skip = prices[ind] + solve(ind + 1, n, !buy, prices, fee, dp);
+        }
+        return dp[ind][buy] = max(skip, not_skip);
+    }
+
+    int maxProfit(vector<int>& prices, int fee) {
+        int n = prices.size();
+        vector<vector<int>> dp(n, vector<int>(2, -1));
+        return solve(0, n, true, prices, fee, dp);
     }
 };

@@ -1,52 +1,40 @@
 // 2402. Meeting Rooms III
 
-#define ll long long
-
 class Solution {
 public:
-
-    static bool cpm1(vector<int>& v1, vector<int>& v2) {
-        return v1[0] < v2[0];
-    }
-
     int mostBooked(int n, vector<vector<int>>& meetings) {
-        int len = meetings.size();
-        vector<int> f(n, 0);
-        sort(meetings.begin(), meetings.end(), cpm1);
+        sort(meetings.begin(),meetings.end());
 
-        priority_queue<int, vector<int>, greater<int>> pqR;
-        priority_queue<pair<ll,ll>, vector<pair<ll,ll>>, greater<pair<ll,ll>>> pqM;
+        priority_queue<int, vector<int>, greater<int>> unused;
+        priority_queue<pair<long long,int>, vector<pair<long long,int>>, greater<pair<long long,int>>> used;
+        for(int i = 0; i < n; i++) unused.push(i);
 
-        for(int i = 0; i < n; i++) pqR.push(i);
-        for(int i = 0; i < len; i++) {
-            while(!pqM.empty() && pqM.top().first <= meetings[i][0]) {
-                int room = pqM.top().second;
-                pqM.pop();
-                pqR.push(room);
+        vector<int> cnt(n, 0);
+        for(auto m : meetings) {
+            long long st = m[0];
+            long long end = m[1];
+            while(!used.empty() && used.top().first <= st) {
+                unused.push(used.top().second);
+                used.pop();
             }
-            if(pqR.size()) {
-                int room = pqR.top();
-                pqR.pop();
-                pqM.push({meetings[i][1],room});
-                f[room]++;
+            if(!unused.empty()) {
+                cnt[unused.top()]++;
+                used.push({end, unused.top()});
+                unused.pop();
             }
             else {
-                ll time = pqM.top().first;
-                int room = pqM.top().second;
-                pqM.pop();
-                pqM.push({(ll)meetings[i][1] - (ll)meetings[i][0] + time, room});
-                f[room]++;
+                long long time = used.top().first;
+                int room = used.top().second;
+                used.pop();
+                cnt[room]++;
+                used.push({end - st + time, room});
             }
         }
 
-        int mxf = 0, ans = 0;
+        int mx = *max_element(cnt.begin(), cnt.end());
         for(int i = 0; i < n; i++) {
-            if(f[i] > mxf) {
-                ans = i;
-                mxf = f[i];
-            }
+            if(cnt[i] == mx) return i;
         }
-
-        return ans;
+        return -1;
     }
 };

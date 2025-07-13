@@ -2,23 +2,22 @@
 
 class Solution {
 public:
-    int solve(int n, bool first, vector<vector<int>>& dp) {
-        if(n <= 1) return 1;
+    int solve(int n, vector<int>& dp) {
+        if(n == 1) return 1;
 
-        if(dp[n][first] != -1) return dp[n][first];
+        if(dp[n] != -1) return dp[n];
 
         int mx = 0;
         for(int i = 1; i < n; i++) {
-            mx = max(mx, i * (solve(n - i, false, dp)));
+            int mul = i * max(n - i, solve(n - i, dp));
+            mx = max(mx, mul);
         }
-        if(!first) mx = max(mx, n);
-
-        return dp[n][first] = mx;
+        return dp[n] = mx;
     }
 
     int integerBreak(int n) {
-        vector<vector<int>> dp(n + 1, vector<int>(2, -1));
-        return solve(n, true, dp);
+        vector<int> dp(n + 1, -1);
+        return solve(n, dp);
     }
 };
 

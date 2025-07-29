@@ -5,11 +5,11 @@ public:
     vector<int> smallestSubarrays(vector<int>& nums) {
         int n = nums.size();
 
-        int curr_xor = 0;
-        vector<int> mx_xor(n);
+        int curr_or = 0;
+        vector<int> mx_or(n);
         for(int i = n - 1; i >= 0; i--) {
-            curr_xor |= nums[i];
-            mx_xor[i] = curr_xor;
+            curr_or |= nums[i];
+            mx_or[i] = curr_or;
         }
 
         int l = 0, curr = 0;
@@ -22,7 +22,7 @@ public:
                     if(bits[i] == 1) curr |= (1 << i);
                 }
             }
-            while(l <= r && curr == mx_xor[l]) {
+            while(l <= r && curr == mx_or[l]) {
                 ans.push_back(r - l + 1);
                 int num = nums[l];
                 for(int i = 0; i < 32; i++) {

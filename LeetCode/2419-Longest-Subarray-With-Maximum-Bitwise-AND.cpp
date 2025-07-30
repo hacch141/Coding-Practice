@@ -3,14 +3,19 @@
 class Solution {
 public:
     int longestSubarray(vector<int>& nums) {
-        int mx = INT_MIN, ans = 0;
-        for(auto i : nums) mx = max(mx, i);
-        int cnt = 0;
-        for(int i = 0; i < nums.size(); i++) {
-            if(nums[i] == mx) cnt++;
-            else cnt = 0;
-            ans = max(ans, cnt);
+        int n = nums.size();
+        int mx = *max_element(nums.begin(), nums.end());
+        int ans = 1, cnt = 0;
+        for(auto i : nums) {
+            if(i == mx) {
+                cnt++;
+            }
+            else {
+                ans = max(ans, cnt);
+                cnt = 0;
+            }
         }
+        ans = max(ans, cnt);
         return ans;
     }
 };

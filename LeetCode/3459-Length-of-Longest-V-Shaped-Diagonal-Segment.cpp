@@ -3,32 +3,16 @@
 class Solution {
 public:
     int N, M;
-    int top_right(int i, int j, vector<vector<int>>& grid, bool can_turn, int curr) {
-        if(i < 0 || i >= N || j < 0 || j >= M || grid[i][j] != curr) return 0;
-        int cnt = top_right(i - 1, j + 1, grid, can_turn, curr == 2 ? 0 : 2);
-        if(can_turn) cnt = max(cnt, bottom_right(i + 1, j + 1, grid, false, curr == 2 ? 0 : 2));
-        return cnt + 1;
-    }
+    vector<vector<int>> dir = {{-1, +1}, {+1, +1}, {+1, -1}, {-1, -1}};
 
-    int bottom_right(int i, int j, vector<vector<int>>& grid, bool can_turn, int curr) {
+    int solve(int i, int j, int d, vector<vector<int>>& grid, bool can_turn, int curr) {
         if(i < 0 || i >= N || j < 0 || j >= M || grid[i][j] != curr) return 0;
-        int cnt = bottom_right(i + 1, j + 1, grid, can_turn, curr == 2 ? 0 : 2);
-        if(can_turn) cnt = max(cnt, bottom_left(i + 1, j - 1, grid, false, curr == 2 ? 0 : 2));
-        return cnt + 1;
-    }
-
-    int bottom_left(int i, int j, vector<vector<int>>& grid, bool can_turn, int curr) {
-        if(i < 0 || i >= N || j < 0 || j >= M || grid[i][j] != curr) return 0;
-        int cnt = bottom_left(i + 1, j - 1, grid, can_turn, curr == 2 ? 0 : 2);
-        if(can_turn) cnt = max(cnt, top_left(i - 1, j - 1, grid, false, curr == 2 ? 0 : 2));
-        return cnt + 1;
-    }
-
-    int top_left(int i, int j, vector<vector<int>>& grid, bool can_turn, int curr) {
-        if(i < 0 || i >= N || j < 0 || j >= M || grid[i][j] != curr) return 0;
-        int cnt = top_left(i - 1, j - 1, grid, can_turn, curr == 2 ? 0 : 2);
-        if(can_turn) cnt = max(cnt, top_right(i - 1, j + 1, grid, false, curr == 2 ? 0 : 2));
-        return cnt + 1;
+        int cnt = solve(i + dir[d][0], j + dir[d][1], d, grid, can_turn, curr == 2 ? 0 : 2);
+        if(can_turn) {
+            int nd = (d + 1) % 4;
+            cnt = max(cnt, solve(i + dir[nd][0], j + dir[nd][1], nd, grid, false, curr == 2 ? 0 : 2));
+        }
+        return 1 + cnt;
     }
 
     int lenOfVDiagonal(vector<vector<int>>& grid) {
@@ -37,10 +21,9 @@ public:
         for(int i = 0; i < n; i++) {
             for(int j = 0; j < m; j++) {
                 if(grid[i][j] == 1) {
-                    ans = max(ans, 1 + top_right(i - 1, j + 1, grid, true, 2));
-                    ans = max(ans, 1 + bottom_right(i + 1, j + 1, grid, true, 2));
-                    ans = max(ans, 1 + bottom_left(i + 1, j - 1, grid, true, 2));
-                    ans = max(ans, 1 + top_left(i - 1, j - 1, grid, true, 2));
+                    for(int d = 0; d < 4; d++) {
+                        ans = max(ans, 1 + solve(i + dir[d][0], j + dir[d][1], d, grid, true, 2));
+                    }
                 }
             }
         }

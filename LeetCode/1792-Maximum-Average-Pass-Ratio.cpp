@@ -4,34 +4,27 @@ class Solution {
 public:
     double maxAverageRatio(vector<vector<int>>& classes, int extraStudents) {
         priority_queue<vector<double>> pq;
-
-        for(auto& cls : classes) {
-            double pass = cls[0], total = cls[1];
-            double current = pass / total;
-            double next = (pass + 1) / (total + 1);
-            double improvement = next - current;
-            pq.push({improvement, pass, total});
+        double sum = 0, cnt = 0;
+        for(auto it : classes) {
+            double a = it[0], b = it[1];
+            if(a == b) sum++;
+            else pq.push({((a + 1) / (b + 1)) - (a / b), a, b});
         }
 
-        while(extraStudents--) {
-            auto top = pq.top();
+        while(extraStudents && !pq.empty()) {
+            auto it = pq.top();
             pq.pop();
-            double pass = top[1], total = top[2];
-            pass += 1;
-            total += 1;
-            double current = pass / total;
-            double next = (pass + 1) / (total + 1);
-            double improvement = next - current;
-            pq.push({improvement, pass, total});
+            it[1]++; it[2]++;
+            it[0] = ((it[1] + 1) / (it[2] + 1)) - (it[1] / it[2]);
+            pq.push(it);
+            extraStudents--;
         }
 
-        double totalRatio = 0;
         while(!pq.empty()) {
-            auto top = pq.top();
+            sum += pq.top()[1] / pq.top()[2];
             pq.pop();
-            totalRatio += top[1] / top[2];
         }
 
-        return totalRatio / classes.size();
+        return sum / classes.size();
     }
 };

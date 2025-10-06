@@ -43,3 +43,52 @@ class Solution {
         return -1;
     }
 }
+
+// Binary Search
+class Solution {
+    int[] dx = {-1, 0, +1, 0};
+    int[] dy = {0, +1, 0, -1};
+
+    boolean isValid(int nx, int ny, int n, int m, boolean[][] vis) {
+        return nx >= 0 && nx < n && ny >= 0 && ny < m && !vis[nx][ny];
+    }
+
+    boolean dfs(int x, int y, int n, int[][] grid, boolean[][] vis, int mid) {
+        if (x == n - 1 && y == n - 1) return true;
+        vis[x][y] = true;
+        for (int dir = 0; dir < 4; dir++) {
+            int nx = x + dx[dir];
+            int ny = y + dy[dir];
+            if (isValid(nx, ny, n, n, vis) && grid[nx][ny] <= mid) {
+                if (dfs(nx, ny, n, grid, vis, mid)) return true;
+            }
+        }
+        return false;
+    }
+
+    public int swimInWater(int[][] grid) {
+        int n = grid.length, l = Integer.MAX_VALUE, h = Integer.MIN_VALUE;
+        
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                l = Math.min(l, grid[i][j]);
+                h = Math.max(h, grid[i][j]);
+            }
+        }
+
+        int ans = h;
+        while (l <= h) {
+            int m = (h - l) / 2 + l;
+            boolean[][] vis = new boolean[n][n];
+            if (grid[0][0] <= m && dfs(0, 0, n, grid, vis, m)) {
+                ans = m;
+                h = m - 1;
+            }
+            else {
+                l = m + 1;
+            }
+        }
+
+        return ans;
+    }
+}

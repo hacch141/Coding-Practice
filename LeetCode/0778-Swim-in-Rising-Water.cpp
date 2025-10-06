@@ -92,3 +92,75 @@ class Solution {
         return ans;
     }
 }
+
+// Krushkal
+class DisjointSet {
+    private int[] parent;
+    private int[] sz;
+    public DisjointSet(int n) {
+        parent = new int[n];
+        sz = new int[n];
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            sz[i] = 1;
+        }
+    }
+
+    public int findParent(int u) {
+        if (parent[u] == u) return u;
+        return parent[u] = findParent(parent[u]);
+    }
+
+    public void union(int u, int v) {
+        int parU = findParent(u);
+        int parV = findParent(v);
+        if (parU == parV) {
+            return;
+        }
+        else if (sz[parU] > sz[parV]) {
+            sz[parU] += sz[parV];
+            parent[parV] = parU;
+        }
+        else {
+            sz[parV] += sz[parU];
+            parent[parU] = parV;
+        }
+    }
+}
+
+class Edge {
+    int u, v, w;
+    public Edge(int u, int v, int w) {
+        this.u = u;
+        this.v = v;
+        this.w = w;
+    }
+}
+
+class Solution {
+    Comparator<Edge> cmp = (a, b) -> {
+        return a.w - b.w;
+    };
+
+    public int swimInWater(int[][] grid) {
+        int n = grid.length;
+        List<Edge> edges = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                int curr = (i * n) + j;
+                if (j + 1 < n) edges.add(new Edge(curr, curr + 1, Math.max(grid[i][j], grid[i][j + 1])));
+                if (i + 1 < n) edges.add(new Edge(curr, curr + n, Math.max(grid[i][j], grid[i + 1][j])));
+            }
+        }
+        edges.sort(cmp);
+
+        DisjointSet ds = new DisjointSet(n * n);
+        for (Edge e : edges) {
+            int u = e.u, v = e.v, w = e.w;
+            ds.union(u, v);
+            if (ds.findParent(0) == ds.findParent((n * n) - 1)) return w;
+        }
+
+        return 0;
+    }
+}

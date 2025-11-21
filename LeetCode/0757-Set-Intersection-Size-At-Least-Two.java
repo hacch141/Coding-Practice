@@ -3,7 +3,7 @@
 class Solution {
     List<Integer> lst;
 
-    public int upper_bound(int val) {
+    public int lower_bound(int val) {
         int n = lst.size();
         int l = 0, h = n - 1, ind = n;
         while (l <= h) {
@@ -29,7 +29,7 @@ class Solution {
         lst = new ArrayList<>();
         for (int[] ivl : intervals) {
             int l = ivl[0], r = ivl[1], n = lst.size();
-            int ind = upper_bound(l);
+            int ind = lower_bound(l);
             if (ind == n) {
                 lst.add(r - 1);
                 lst.add(r);
@@ -42,4 +42,3 @@ class Solution {
         return lst.size();
     }
 }
-

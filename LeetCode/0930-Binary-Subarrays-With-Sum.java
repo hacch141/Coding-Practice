@@ -4,15 +4,8 @@ class Solution {
     public int getCnt(int l, int r, int[] nums) {
         int n = nums.length;
         int cl = 0, cr = 0;
-        while (l >= 0 && nums[l] == 0) {
-            cl++;
-            l--;
-        }
-        while (r < n && nums[r] == 0) {
-            cr++;
-            r++;
-        }
-        System.out.println(cr);
+        while (l >= 0 && nums[l--] == 0) cl++;
+        while (r < n && nums[r++] == 0) cr++;
         return (1 + cl) * (1 + cr);
     }
 
@@ -34,10 +27,6 @@ class Solution {
         while (r < n) {
             sum += nums[r];
             while (l < r && nums[l] == 0) l++;
-            while (sum > goal) {
-                sum -= nums[l];
-                l++;
-            }
             if (sum == goal) {
                 ans += getCnt(l - 1, r + 1, nums);
                 sum -= nums[l];

@@ -1,6 +1,16 @@
 // Bottom View of Binary Tree
 
 // Java
+class Pair {
+    Node node;
+    int vertical;
+
+    Pair(Node node, int vertical) {
+        this.node = node;
+        this.vertical = vertical;
+    }
+}
+
 class Solution {
     public ArrayList<Integer> bottomView(Node root) {
         ArrayList<Integer> ans = new ArrayList<>();

@@ -1,71 +1,41 @@
 // Minimum Window Subsequence
 
-string minWindow(string S, string T)
-{
-    // Write your Code here
-    int n = S.length();
-    int m = T.length();
+class Solution {
+    public String minWindow(String s1, String s2) {
+        // code here
+        int n = s1.length(), m = s2.length();
+        int[][] nextPos = new int[n][26];
 
-    string ans = "";
-    for(int i=0; i<n; i++) {
-	string curr = "";
-        int ptr = 0;
-        if(S[i] == T[ptr]) {
-	    for(int j=i; j<n; j++) {
-		if(S[j]==T[ptr]) ptr++;
-		if(ptr==m) {
-		    int st = i;
-		    int end = j;
-		    if(ans.length()==0 || end-st+1<ans.length()) {
-			ans = S.substr(st,end-st+1);
-		    }
-		    break;
-		} 
-	    }
-    	}
-    }
-    return ans;
-}
-// T : O(N^2)
-// S : O(N)
-
-
-
-
-string minWindow(string S, string T)
-{
-    // Write your Code here
-    int n = S.length();
-    int m = T.length();
-
-    string ans = "";
-
-    int i=0, j=0, mini=n;
-
-    while(i<n) {
-	if(S[i] == T[j]) {
-	    j++;
-	    if(j==m) {
-		int end = i;
-		j--;
-
-		while(j>=0) {
-		    if(S[i] == T[j]) {
-			j--;
-		    }
-		    i--;
-		}
-
-		i++;
-	        j++;
-	
-		if(end-i < mini) {
-		    mini = end - i;
-		    ans = S.substr(i,end-i+1);
-		}
-	    }
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(nextPos[i], -1);
         }
-        i++;
+
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = 0; j < 26; j++) {
+                if (i + 1 < n) nextPos[i][j] = nextPos[i + 1][j];
+            }
+            nextPos[i][s1.charAt(i) - 'a'] = i;
+        }
+        
+        String ans = "";
+        int mn = Integer.MAX_VALUE;
+
+        for (int i = 0; i < n; i++) {
+            if (s1.charAt(i) != s2.charAt(0)) continue;
+            int end = i, p = 0;
+            while (p < m && end < n && nextPos[end][s2.charAt(p) - 'a'] != -1) {
+                end = nextPos[end][s2.charAt(p) - 'a'];
+                end++;
+                p++;
+            }
+            if (p == m) {
+                if (end - i < mn) {
+                    mn = end - i;
+                    ans = s1.substring(i, i + mn);
+                }
+            }
+        }
+
+        return ans;
     }
-    return ans;
 }

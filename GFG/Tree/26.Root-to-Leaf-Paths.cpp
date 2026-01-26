@@ -13,6 +13,32 @@ bool getPath(node* root, vector<int>& arr, int x) {
 }
 
 // me
+// Java
+class Solution {
+    private void solve(Node root, List<Integer> curr, List<List<Integer>> ans) {
+        curr.add(root.data);
+        // Leaf node
+        if (root.left == null && root.right == null) {
+            ans.add(new ArrayList<>(curr)); // IMPORTANT: copy
+            curr.remove(curr.size() - 1);
+            return;
+        }
+        if (root.left != null) solve(root.left, curr, ans);
+        if (root.right != null) solve(root.right, curr, ans);
+        // Backtrack
+        curr.remove(curr.size() - 1);
+    }
+
+    public List<List<Integer>> Paths(Node root) {
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> curr = new ArrayList<>();
+        if (root == null) return ans;
+        solve(root, curr, ans);
+        return ans;
+    }
+}
+
+
 void solve(Node* root, vector<int>& curr, vector<vector<int>>& ans) {
     curr.push_back(root->data);
     if(!root->left && !root->right) {

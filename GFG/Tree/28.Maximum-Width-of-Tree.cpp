@@ -25,27 +25,74 @@ int widthOfBinaryTree(node * root) {
   return ans;
 }
 
+// java
+class Pair {
+    TreeNode node;
+    long index;
+    Pair(TreeNode node, long index) {
+        this.node = node;
+        this.index = index;
+    }
+}
+
 class Solution {
-  public:
-    // Function to get the maximum width of a binary tree.
-    int getMaxWidth(Node* root) {
-        // Your code here
-        queue<Node*> q;
-        q.push(root);
-        int res = 0;
-        while(!q.empty()) {
-            int cnt = q.size();
-            res = max(res,cnt);
-            for(int i=0; i<cnt; i++) {
-                Node* curr = q.front();
-                q.pop();
-                if(curr->left) q.push(curr->left);
-                if(curr->right) q.push(curr->right);
+    public int widthOfBinaryTree(TreeNode root) {
+        if (root == null) return 0;
+        int ans = 1;
+        Queue<Pair> queue = new LinkedList<>();
+        queue.offer(new Pair(root, 0L));
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            long first = queue.peek().index;
+            long last = first;   // will be updated
+
+            for (int i = 0; i < size; i++) {
+                Pair p = queue.poll();
+                TreeNode curr = p.node;
+                long idx = p.index - first; // normalize
+
+                last = p.index;
+
+                if (curr.left != null) queue.offer(new Pair(curr.left, 2 * idx + 1));
+                if (curr.right != null) queue.offer(new Pair(curr.right, 2 * idx + 2));
             }
+
+            ans = Math.max(ans, (int) (last - first + 1));
         }
-        return res;
+        return ans;
+    }
+}
+
+class Solution {
+public:
+    int widthOfBinaryTree(TreeNode* root) {
+        int ans = 1;
+
+        queue<pair<TreeNode*,long long>> q;
+        q.push({root, 0});
+
+        while(!q.empty()) {
+            int sz = q.size();
+            long long first = q.front().second, last = q.back().second;
+
+            while(sz--) {
+                auto it = q.front();
+                q.pop();
+
+                TreeNode* curr = it.first;
+                long long ind = it.second - first;
+
+                if(curr->left) q.push({curr->left, (2 * ind) + 1});
+                if(curr->right) q.push({curr->right, (2 * ind) + 2});
+            }
+            ans = max(ans, (int)(last - first + 1));
+        }
+
+        return ans;
     }
 };
+
 
 // T : O(N)
 // S : O(H)

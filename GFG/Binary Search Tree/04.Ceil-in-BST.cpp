@@ -1,5 +1,24 @@
 // Ceil in BST
 
+class Solution {
+    int findCeil(Node root, int input) {
+        int ceil = -1;
+        Node curr = root;
+
+        while (curr != null) {
+            if (input == curr.data) {
+                return input;
+            } else if (input < curr.data) {
+                ceil = curr.data;
+                curr = curr.left;
+            } else {
+                curr = curr.right;
+            }
+        }
+        return ceil;
+    }
+}
+
 // Function to return the ceil of given number in BST.
 int findCeil(Node* root, int input) {
     // Your code here

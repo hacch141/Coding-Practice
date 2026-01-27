@@ -1,6 +1,54 @@
 // Largest BST in Binary Tree
 
 class NodeValue {
+    int minVal;
+    int maxVal;
+    int maxSize;
+
+    NodeValue(int minVal, int maxVal, int maxSize) {
+        this.minVal = minVal;
+        this.maxVal = maxVal;
+        this.maxSize = maxSize;
+    }
+}
+
+class Solution {
+
+    private NodeValue solve(TreeNode root) {
+        // Base case: empty tree is a valid BST of size 0
+        if (root == null) {
+            return new NodeValue(Integer.MAX_VALUE, Integer.MIN_VALUE, 0);
+        }
+
+        NodeValue left = solve(root.left);
+        NodeValue right = solve(root.right);
+
+        // Check BST property
+        if (left.maxVal < root.data && root.data < right.minVal) {
+            return new NodeValue(
+                Math.min(left.minVal, root.data),
+                Math.max(right.maxVal, root.data),
+                left.maxSize + right.maxSize + 1
+            );
+        }
+
+        // Not a BST → propagate largest BST size found so far
+        return new NodeValue(
+            Integer.MIN_VALUE,
+            Integer.MAX_VALUE,
+            Math.max(left.maxSize, right.maxSize)
+        );
+    }
+
+    // Function to find the size of the largest BST in a binary tree
+    public int largestBST(TreeNode root) {
+        return solve(root).maxSize;
+    }
+}
+
+// ==========================================================================
+
+class NodeValue {
     public:
     int minVal, maxVal, maxSize;
     NodeValue(int minVal, int maxVal, int maxSize) {

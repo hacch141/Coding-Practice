@@ -1,5 +1,58 @@
 // Merge two BST 's
 
+class Solution {
+    private void pushLeft(Node root, Stack<Node> st) {
+        while (root != null) {
+            st.push(root);
+            root = root.left;
+        }
+    }
+
+    // Function to return a list of integers denoting the node
+    // values of both the BST in a sorted order.
+    public List<Integer> merge(Node root1, Node root2) {
+
+        Stack<Node> st1 = new Stack<>();
+        Stack<Node> st2 = new Stack<>();
+
+        pushLeft(root1, st1);
+        pushLeft(root2, st2);
+
+        List<Integer> ans = new ArrayList<>();
+
+        while (!st1.isEmpty() && !st2.isEmpty()) {
+            Node curr1 = st1.peek();
+            Node curr2 = st2.peek();
+
+            if (curr1.data <= curr2.data) {
+                st1.pop();
+                ans.add(curr1.data);
+                pushLeft(curr1.right, st1);
+            } else {
+                st2.pop();
+                ans.add(curr2.data);
+                pushLeft(curr2.right, st2);
+            }
+        }
+
+        while (!st1.isEmpty()) {
+            Node curr = st1.pop();
+            ans.add(curr.data);
+            pushLeft(curr.right, st1);
+        }
+
+        while (!st2.isEmpty()) {
+            Node curr = st2.pop();
+            ans.add(curr.data);
+            pushLeft(curr.right, st2);
+        }
+
+        return ans;
+    }
+}
+
+// ===========================================================
+
 class Solution
 {
     public:

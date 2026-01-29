@@ -1,6 +1,34 @@
 // Tree from Postorder and Inorder
 
 class Solution {
+    TreeNode build(int is, int ie, int[] inorder, int ps, int pe, int[] postorder) {
+        if (is > ie || ps > pe) return null;
+
+        TreeNode root = new TreeNode(postorder[pe]);
+
+        int ind = -1;
+        for (int i = is; i <= ie; i++) {
+            if (inorder[i] == root.val) {
+                ind = i;
+                break;
+            }
+        }
+
+        int leftSize = ind - is;
+
+        root.left = build(is, ind - 1, inorder, ps, ps + leftSize - 1, postorder);
+        root.right = build(ind + 1, ie, inorder, ps + leftSize, pe - 1, postorder);
+
+        return root;
+    }
+
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        int n = inorder.length;
+        return build(0, n - 1, inorder, 0, n - 1, postorder);
+    }
+}
+
+class Solution {
     int ptr;
 
     TreeNode build(int l, int r, int[] inorder, int[] postorder) {

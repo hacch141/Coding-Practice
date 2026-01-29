@@ -1,6 +1,34 @@
 // Construct Tree from Inorder & Preorder
 
 class Solution {
+    public TreeNode build(int is, int ie, int[] inorder, int ps, int pe, int[] preorder) {
+        if (is > ie || ps > pe) return null;
+
+        TreeNode root = new TreeNode(preorder[ps]);
+
+        int ind = -1;
+        for (int i = is; i <= ie; i++) {
+            if (inorder[i] == root.val) {
+                ind = i;
+                break;
+            }
+        }
+
+        int leftSize = ind - is;
+
+        root.left = build(is , ind - 1, inorder, ps + 1, ps + leftSize, preorder);
+        root.right = build(ind + 1, ie, inorder, ps + leftSize + 1, pe, preorder);
+
+        return root;
+    }
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        int n = preorder.length;
+        return build(0, n - 1, inorder, 0, n - 1, preorder);
+    }
+}
+
+class Solution {
     int ptr = 0;
 
     public TreeNode build(int l, int r, int[] inorder, int[] preorder) {

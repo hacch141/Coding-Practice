@@ -1,5 +1,38 @@
 // Tree from Postorder and Inorder
 
+class Solution {
+    int ptr;
+
+    TreeNode build(int l, int r, int[] inorder, int[] postorder) {
+        if (l > r || ptr < 0) return null;
+
+        TreeNode root = new TreeNode(postorder[ptr--]);
+
+        int ind = -1;
+        for (int i = l; i <= r; i++) {
+            if (inorder[i] == root.val) {
+                ind = i;
+                break;
+            }
+        }
+
+        if (ind == -1) return null;
+
+        root.right = build(ind + 1, r, inorder, postorder);
+        root.left = build(l, ind - 1, inorder, postorder);
+
+        return root;
+    }
+
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        int n = inorder.length;
+        ptr = n - 1;
+        return build(0, n - 1, inorder, postorder);
+    }
+}
+
+// =================================================================
+
 Node* build(int in[], int is, int ie, int post[], int ps, int pe, map<int,int>& inmp) {
     if(is>ie || ps>pe) return NULL;
     

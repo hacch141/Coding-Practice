@@ -36,6 +36,7 @@ class Solution {
     }
 }
 
+// Kahn’s Algorithm
 class Solution {
     // Function to return list containing vertices in Topological order
     public int[] topoSort(int V, List<List<Integer>> adj) {

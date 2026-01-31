@@ -1,5 +1,56 @@
 // Eventual Safe States
 
+class Solution {
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+        int V = graph.length;
+
+        // indegree = outdegree in original graph
+        int[] indegree = new int[V];
+
+        // reverse graph
+        ArrayList<Integer>[] revAdj = new ArrayList[V];
+        for (int i = 0; i < V; i++) {
+            revAdj[i] = new ArrayList<>();
+        }
+
+        // build reverse graph and indegree
+        for (int u = 0; u < V; u++) {
+            for (int v : graph[u]) {
+                revAdj[v].add(u);
+                indegree[u]++;
+            }
+        }
+
+        // queue for terminal nodes
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < V; i++) {
+            if (indegree[i] == 0) {
+                q.offer(i);
+            }
+        }
+
+        List<Integer> ans = new ArrayList<>();
+
+        // Kahn's Algorithm
+        while (!q.isEmpty()) {
+            int u = q.poll();
+            ans.add(u);
+
+            for (int v : revAdj[u]) {
+                indegree[v]--;
+                if (indegree[v] == 0) {
+                    q.offer(v);
+                }
+            }
+        }
+
+        Collections.sort(ans);
+        return ans;
+    }
+}
+
+// =============================================================
+
 // BFS
 class Solution {
   public:
@@ -89,6 +140,55 @@ class Solution {
         return ans;
     }
 };
+
+// dfs
+class Solution {
+
+    private boolean dfs(int u, int[][] graph, boolean[] vis, boolean[] pathVis, boolean[] safe) {
+        vis[u] = true;
+        pathVis[u] = true;
+
+        for (int v : graph[u]) {
+            if (!vis[v]) {
+                if (!dfs(v, graph, vis, pathVis, safe)) {
+                    return false;
+                }
+            } else if (pathVis[v]) {
+                // cycle detected
+                return false;
+            }
+        }
+
+        pathVis[u] = false;
+        safe[u] = true;   // no cycle reachable from u
+        return true;
+    }
+
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+
+        int V = graph.length;
+
+        boolean[] vis = new boolean[V];
+        boolean[] pathVis = new boolean[V];
+        boolean[] safe = new boolean[V];
+
+        for (int i = 0; i < V; i++) {
+            if (!vis[i]) {
+                dfs(i, graph, vis, pathVis, safe);
+            }
+        }
+
+        List<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            if (safe[i]) {
+                ans.add(i);
+            }
+        }
+
+        return ans;
+    }
+}
+
 
 // T : O(V + 2*E)
 // S : O(V)

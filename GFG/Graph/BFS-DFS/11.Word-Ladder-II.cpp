@@ -7,7 +7,7 @@ class Solution {
         if (currWord.equals(beginWord)) {
             List<String> tmp = new ArrayList<>(path);
             Collections.reverse(tmp);
-            ans.add(new ArrayList<>(tmp));
+            ans.add(tmp);
             return;
         }
 

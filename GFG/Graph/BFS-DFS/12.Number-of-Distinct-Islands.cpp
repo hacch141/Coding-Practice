@@ -1,5 +1,67 @@
 // Number of Distinct Islands
 
+import java.util.*;
+
+class Solution {
+
+    private void dfs(int row, int col, int[][] grid, boolean[][] vis, int n, int m, List<int[]> shape, int baseR, int baseC) {
+
+        vis[row][col] = true;
+
+        // store relative position
+        shape.add(new int[]{row - baseR, col - baseC});
+
+        int[] delRow = {-1, 0, 1, 0};
+        int[] delCol = {0, -1, 0, 1};
+
+        for (int d = 0; d < 4; d++) {
+            int nRow = row + delRow[d];
+            int nCol = col + delCol[d];
+
+            if (nRow >= 0 && nRow < n &&
+                nCol >= 0 && nCol < m &&
+                !vis[nRow][nCol] &&
+                grid[nRow][nCol] == 1) {
+
+                dfs(nRow, nCol, grid, vis, n, m, shape, baseR, baseC);
+            }
+        }
+    }
+
+    public int countDistinctIslands(int[][] grid) {
+
+        int n = grid.length;
+        int m = grid[0].length;
+
+        boolean[][] vis = new boolean[n][m];
+
+        // Set of island shapes
+        Set<String> shapes = new HashSet<>();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (!vis[i][j] && grid[i][j] == 1) {
+
+                    List<int[]> shape = new ArrayList<>();
+                    dfs(i, j, grid, vis, n, m, shape, i, j);
+
+                    // Convert shape to string for hashing
+                    StringBuilder sb = new StringBuilder();
+                    for (int[] p : shape) {
+                        sb.append(p[0]).append(",").append(p[1]).append(";");
+                    }
+
+                    shapes.add(sb.toString());
+                }
+            }
+        }
+
+        return shapes.size();
+    }
+}
+
+// =========================================================================
+
 // BFS
 class Solution {
     

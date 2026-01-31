@@ -1,5 +1,56 @@
 // Word Ladder I
 
+import java.util.*;
+
+class Solution {
+
+    public int ladderLength(String startWord, String targetWord, List<String> wordList) {
+        Set<String> set = new HashSet<>(wordList);
+
+        // If targetWord is not present
+        if (!set.contains(targetWord)) {
+            return 0;
+        }
+
+        Queue<String> q = new LinkedList<>();
+        q.offer(startWord);
+        set.remove(startWord);
+
+        int cnt = 1;
+
+        while (!q.isEmpty()) {
+            int size = q.size();
+
+            for (int i = 0; i < size; i++) {
+                String word = q.poll();
+                char[] arr = word.toCharArray();
+
+                for (int j = 0; j < arr.length; j++) {
+                    char original = arr[j];
+
+                    for (char ch = 'a'; ch <= 'z'; ch++) {
+                        arr[j] = ch;
+                        String newWord = new String(arr);
+
+                        if (set.contains(newWord)) {
+                            if (newWord.equals(targetWord)) {
+                                return cnt + 1;
+                            }
+                            q.offer(newWord);
+                            set.remove(newWord);
+                        }
+                    }
+                    arr[j] = original;
+                }
+            }
+            cnt++;
+        }
+        return 0;
+    }
+}
+
+// =================================================================
+
 class Solution {
 public:
     int wordLadderLength(string startWord, string targetWord, vector<string>& wordList) {

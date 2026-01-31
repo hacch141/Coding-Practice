@@ -1,5 +1,46 @@
 // Detect cycle in an undirected graph
 
+import java.util.*;
+
+class Solution {
+
+    private boolean bfs(int src, int parent, List<List<Integer>> adj, boolean[] vis) {
+        Queue<int[]> q = new LinkedList<>();
+        vis[src] = true;
+        q.offer(new int[]{src, parent});
+
+        while (!q.isEmpty()) {
+            int[] curr = q.poll();
+            int u = curr[0];
+            int par = curr[1];
+
+            for (int v : adj.get(u)) {
+                if (v == par) continue;
+
+                if (vis[v]) return true;   // cycle found
+
+                vis[v] = true;
+                q.offer(new int[]{v, u});
+            }
+        }
+        return false;
+    }
+
+    // Function to detect cycle in an undirected graph.
+    public boolean isCycle(List<List<Integer>> adj) {
+        int n = adj.size();
+        boolean[] vis = new boolean[n];
+
+        for (int u = 0; u < n; u++) {
+            if (!vis[u]) {
+                if (bfs(u, -1, adj, vis)) return true;
+            }
+        }
+        return false;
+    }
+}
+
+
 // BFS
 class Solution {
   public:

@@ -1,6 +1,47 @@
 // Number of Provinces
 
 class Solution {
+    List<Integer>[] adj;
+
+    public void dfs(int u, boolean[] vis) {
+        vis[u] = true;
+        for (int v : adj[u]) {
+            if (!vis[v]) {
+                dfs(v, vis);
+            }
+        }
+    }
+
+    public int findCircleNum(int[][] isConnected) {
+        int n = isConnected.length;
+
+        adj = new ArrayList[n];
+        for (int i = 0; i < n; i++) adj[i] = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (isConnected[i][j] == 1) {
+                    adj[i].add(j);
+                }
+            }
+        }
+
+        int cnt = 0;
+        boolean[] vis = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            if (!vis[i]) {
+                cnt++;
+                dfs(i, vis);
+            }
+        }
+
+        return cnt;
+    }
+}
+
+// ==================================================================
+
+class Solution {
     
   private:
     void dfs(int node, vector<int> adjList[], int vis[]) {

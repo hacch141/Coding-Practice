@@ -1,5 +1,67 @@
 // Alien Dictionary
 
+import java.util.*;
+
+class Solution {
+
+    public String findOrder(String[] dict, int N, int K) {
+
+        ArrayList<Integer>[] adj = new ArrayList[K];
+        for (int i = 0; i < K; i++) {
+            adj[i] = new ArrayList<>();
+        }
+
+        // Build graph from dictionary
+        for (int i = 1; i < N; i++) {
+            String s1 = dict[i - 1];
+            String s2 = dict[i];
+
+            int len = Math.min(s1.length(), s2.length());
+
+            for (int j = 0; j < len; j++) {
+                if (s1.charAt(j) != s2.charAt(j)) {
+                    adj[s1.charAt(j) - 'a'].add(s2.charAt(j) - 'a');
+                    break;
+                }
+            }
+        }
+
+        // Compute indegree
+        int[] indegree = new int[K];
+        for (int u = 0; u < K; u++) {
+            for (int v : adj[u]) {
+                indegree[v]++;
+            }
+        }
+
+        // Kahn's Algorithm
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < K; i++) {
+            if (indegree[i] == 0) {
+                q.offer(i);
+            }
+        }
+
+        StringBuilder ans = new StringBuilder();
+
+        while (!q.isEmpty()) {
+            int u = q.poll();
+            ans.append((char) (u + 'a'));
+
+            for (int v : adj[u]) {
+                indegree[v]--;
+                if (indegree[v] == 0) {
+                    q.offer(v);
+                }
+            }
+        }
+
+        return ans.toString();
+    }
+}
+
+// ===================================================================
+
 // BFS
 class Solution{
     public:

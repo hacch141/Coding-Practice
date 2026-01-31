@@ -1,5 +1,56 @@
 // Course Schedule - II
 
+class Solution {
+    public int[] findOrder(int n, int m, int[][] prerequisites) {
+        int[] indegree = new int[n];
+
+        // adj[]
+        ArrayList<Integer>[] adj = new ArrayList[n];
+        for (int i = 0; i < n; i++) {
+            adj[i] = new ArrayList<>();
+        }
+
+        // Build graph
+        for (int[] p : prerequisites) {
+            int course = p[0];
+            int prereq = p[1];
+            adj[prereq].add(course);
+            indegree[course]++;
+        }
+
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            if (indegree[i] == 0) {
+                q.offer(i);
+            }
+        }
+
+        int[] ans = new int[n];
+        int idx = 0;
+        int cnt = 0;
+
+        while (!q.isEmpty()) {
+            int u = q.poll();
+            ans[idx++] = u;
+            cnt++;
+
+            for (int v : adj[u]) {
+                indegree[v]--;
+                if (indegree[v] == 0) {
+                    q.offer(v);
+                }
+            }
+        }
+
+        // If cycle exists, return empty array
+        if (cnt != n) return new int[0];
+
+        return ans;
+    }
+}
+
+// ========================================================================
+
 // BFS
 class Solution
 {

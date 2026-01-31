@@ -49,6 +49,54 @@ class Solution {
     }
 }
 
+// dfs
+class Solution {
+
+    private boolean dfs(int u, int[][] graph, boolean[] vis, boolean[] pathVis, boolean[] safe) {
+        vis[u] = true;
+        pathVis[u] = true;
+
+        for (int v : graph[u]) {
+            if (!vis[v]) {
+                if (!dfs(v, graph, vis, pathVis, safe)) {
+                    return false;
+                }
+            } else if (pathVis[v]) {
+                // cycle detected
+                return false;
+            }
+        }
+
+        pathVis[u] = false;
+        safe[u] = true;   // no cycle reachable from u
+        return true;
+    }
+
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+
+        int V = graph.length;
+
+        boolean[] vis = new boolean[V];
+        boolean[] pathVis = new boolean[V];
+        boolean[] safe = new boolean[V];
+
+        for (int i = 0; i < V; i++) {
+            if (!vis[i]) {
+                dfs(i, graph, vis, pathVis, safe);
+            }
+        }
+
+        List<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            if (safe[i]) {
+                ans.add(i);
+            }
+        }
+
+        return ans;
+    }
+}
+
 // =============================================================
 
 // BFS
@@ -140,55 +188,6 @@ class Solution {
         return ans;
     }
 };
-
-// dfs
-class Solution {
-
-    private boolean dfs(int u, int[][] graph, boolean[] vis, boolean[] pathVis, boolean[] safe) {
-        vis[u] = true;
-        pathVis[u] = true;
-
-        for (int v : graph[u]) {
-            if (!vis[v]) {
-                if (!dfs(v, graph, vis, pathVis, safe)) {
-                    return false;
-                }
-            } else if (pathVis[v]) {
-                // cycle detected
-                return false;
-            }
-        }
-
-        pathVis[u] = false;
-        safe[u] = true;   // no cycle reachable from u
-        return true;
-    }
-
-    public List<Integer> eventualSafeNodes(int[][] graph) {
-
-        int V = graph.length;
-
-        boolean[] vis = new boolean[V];
-        boolean[] pathVis = new boolean[V];
-        boolean[] safe = new boolean[V];
-
-        for (int i = 0; i < V; i++) {
-            if (!vis[i]) {
-                dfs(i, graph, vis, pathVis, safe);
-            }
-        }
-
-        List<Integer> ans = new ArrayList<>();
-        for (int i = 0; i < V; i++) {
-            if (safe[i]) {
-                ans.add(i);
-            }
-        }
-
-        return ans;
-    }
-}
-
 
 // T : O(V + 2*E)
 // S : O(V)

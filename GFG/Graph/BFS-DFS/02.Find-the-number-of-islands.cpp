@@ -1,5 +1,47 @@
 // Find the number of islands
 
+class Solution {
+    private void dfs(int row, int col, char[][] grid, boolean[][] vis, int n, int m) {
+        vis[row][col] = true;
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                int nRow = row + i;
+                int nCol = col + j;
+
+                if (nRow >= 0 && nRow < n &&
+                    nCol >= 0 && nCol < m &&
+                    !vis[nRow][nCol] &&
+                    grid[nRow][nCol] == '1') {
+
+                    dfs(nRow, nCol, grid, vis, n, m);
+                }
+            }
+        }
+    }
+
+    // Function to find the number of islands.
+    public int numIslands(char[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+
+        boolean[][] vis = new boolean[n][m];
+        int ans = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (!vis[i][j] && grid[i][j] == '1') {
+                    ans++;
+                    dfs(i, j, grid, vis, n, m);
+                }
+            }
+        }
+
+        return ans;
+    }
+}
+
+// =========================================================
+
 // BFS
 class Solution {
     

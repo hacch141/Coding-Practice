@@ -1,5 +1,69 @@
 // Replace O's with X's
 
+class Solution {
+
+    private void dfs(int row, int col, char[][] board, boolean[][] vis) {
+        int n = board.length;
+        int m = board[0].length;
+
+        vis[row][col] = true;
+
+        int[] delRow = {-1, 0, 1, 0};
+        int[] delCol = {0, -1, 0, 1};
+
+        for (int d = 0; d < 4; d++) {
+            int nRow = row + delRow[d];
+            int nCol = col + delCol[d];
+
+            if (nRow >= 0 && nRow < n &&
+                nCol >= 0 && nCol < m &&
+                board[nRow][nCol] == 'O' &&
+                !vis[nRow][nCol]) {
+
+                dfs(nRow, nCol, board, vis);
+            }
+        }
+    }
+
+    public void solve(char[][] board) {
+        int n = board.length;
+        int m = board[0].length;
+
+        boolean[][] vis = new boolean[n][m];
+
+        // 1️⃣ Traverse left & right boundaries
+        for (int i = 0; i < n; i++) {
+            if (board[i][0] == 'O' && !vis[i][0]) {
+                dfs(i, 0, board, vis);
+            }
+            if (board[i][m - 1] == 'O' && !vis[i][m - 1]) {
+                dfs(i, m - 1, board, vis);
+            }
+        }
+
+        // 2️⃣ Traverse top & bottom boundaries
+        for (int j = 0; j < m; j++) {
+            if (board[0][j] == 'O' && !vis[0][j]) {
+                dfs(0, j, board, vis);
+            }
+            if (board[n - 1][j] == 'O' && !vis[n - 1][j]) {
+                dfs(n - 1, j, board, vis);
+            }
+        }
+
+        // 3️⃣ Flip unvisited O → X
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (board[i][j] == 'O' && !vis[i][j]) {
+                    board[i][j] = 'X';
+                }
+            }
+        }
+    }
+}
+
+// =======================================================================
+
 // BFS
 class Solution{
     

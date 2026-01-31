@@ -1,5 +1,50 @@
 // Course Schedule - I
 
+class Solution {
+    public boolean isPossible(int N, int[][] prerequisites) {
+        // create adj[]
+        ArrayList<Integer>[] adj = new ArrayList[N];
+        for (int i = 0; i < N; i++) {
+            adj[i] = new ArrayList<>();
+        }
+
+        int[] indegree = new int[N];
+
+        // build graph
+        for (int[] p : prerequisites) {
+            int course = p[0];
+            int prereq = p[1];
+            adj[prereq].add(course);
+            indegree[course]++;
+        }
+
+        // Kahn's Algorithm
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < N; i++) {
+            if (indegree[i] == 0) {
+                q.offer(i);
+            }
+        }
+
+        int cnt = 0;
+        while (!q.isEmpty()) {
+            int u = q.poll();
+            cnt++;
+
+            for (int v : adj[u]) {
+                indegree[v]--;
+                if (indegree[v] == 0) {
+                    q.offer(v);
+                }
+            }
+        }
+
+        return cnt == N;
+    }
+}
+
+// ===============================================================================
+
 // BFS
 class Solution {
 public:

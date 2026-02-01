@@ -1,6 +1,73 @@
 // Minimize connections
 
 class DisjointSet {
+    int[] parent;
+    int[] size;
+    DisjointSet(int n) {
+        parent = new int[n + 1];
+        size = new int[n + 1];
+        for (int i = 0; i <= n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    int findPar(int node) {
+        if (node == parent[node]) {
+            return node;
+        }
+        return parent[node] = findPar(parent[node]); // path compression
+    }
+
+    void unionBySize(int u, int v) {
+        int ulp_u = findPar(u);
+        int ulp_v = findPar(v);
+
+        if (ulp_u == ulp_v) return;
+
+        if (size[ulp_v] > size[ulp_u]) {
+            parent[ulp_u] = ulp_v;
+            size[ulp_v] += size[ulp_u];
+        } else {
+            parent[ulp_v] = ulp_u;
+            size[ulp_u] += size[ulp_v];
+        }
+    }
+}
+
+class Solution {
+    public int minimumConnections(int[][] c, int n) {
+        DisjointSet ds = new DisjointSet(n);
+        int extra = 0;
+
+        // process edges
+        for (int[] it : c) {
+            int u = it[0], v = it[1];
+            if (ds.findPar(u) != ds.findPar(v)) {
+                ds.unionBySize(u, v);
+            } else {
+                extra++; // extra cable
+            }
+        }
+
+        // count connected components
+        int cnt_comp = 0;
+        for (int i = 0; i < n; i++) {
+            if (ds.findPar(i) == i) {
+                cnt_comp++;
+            }
+        }
+
+        // need (components - 1) edges to connect
+        if (extra < cnt_comp - 1) return -1;
+
+        return cnt_comp - 1;
+    }
+}
+
+// ===================================================================
+
+class DisjointSet {
     vector<int> parent, size;
 public:
     DisjointSet(int n) {

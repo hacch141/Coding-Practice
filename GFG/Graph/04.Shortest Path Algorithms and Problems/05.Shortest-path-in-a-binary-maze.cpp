@@ -1,89 +1,89 @@
 // Shortest path in a binary maze
 
-// Using Djikstra's Algo
 class Solution {
-  public:
-    int shortestPath(vector<vector<int>> &grid, pair<int, int> source, pair<int, int> destination) {
-        // code here
-        if (source.first == destination.first && source.second == destination.second) return 0;
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        int n = grid.length;
 
-        int n = grid.size();
-        int m = grid[0].size();
-        
-        vector<vector<int>> dist(n, vector<int>(m,1e9));
-        dist[source.first][source.second] = 0;
-        queue< pair<int,pair<int,int>> > q;
-        q.push({0,source});
-        
-        vector<int> delRow = {-1, 0, +1, 0};
-        vector<int> delCol = {0, -1, 0, +1};
-        
-        while(!q.empty()) {
-            int size = q.size();
-            for(int i=0; i<size; i++) {
-                auto it = q.front();
-                int r = it.second.first;
-                int c = it.second.second;
-                q.pop();
-                if(r == destination.first && c == destination.second) {
-                    return dist[r][c];
-                }
-                for(int del=0; del<4; del++) {
-                    int nRow = r + delRow[del];
-                    int nCol = c + delCol[del];
-                    if(nRow>=0 && nRow<n && nCol>=0 && nCol<m && grid[nRow][nCol]==1) {
-                        if(1 + dist[r][c] < dist[nRow][nCol]) {
-                            dist[nRow][nCol] = 1 + dist[r][c];
-                            q.push({dist[nRow][nCol],{nRow,nCol}});
-                        }
+        // If start or end is blocked
+        if (grid[0][0] == 1 || grid[n - 1][n - 1] == 1) return -1;
+
+        // BFS queue: {x, y}
+        Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[]{0, 0});
+
+        // mark visited
+        grid[0][0] = 1;
+
+        int lvl = 1;
+
+        int[] dx = {0, 1, 0, -1, 1, 1, -1, -1};
+        int[] dy = {1, 0, -1, 0, 1, -1, -1, 1};
+
+        while (!q.isEmpty()) {
+            int sz = q.size();
+
+            while (sz-- > 0) {
+                int[] cur = q.poll();
+                int x = cur[0];
+                int y = cur[1];
+
+                if (x == n - 1 && y == n - 1) return lvl;
+
+                for (int k = 0; k < 8; k++) {
+                    int nx = x + dx[k];
+                    int ny = y + dy[k];
+
+                    if (nx >= 0 && nx < n &&
+                        ny >= 0 && ny < n &&
+                        grid[nx][ny] == 0) {
+
+                        q.offer(new int[]{nx, ny});
+                        grid[nx][ny] = 1; // mark visited
                     }
                 }
             }
+            lvl++;
         }
-        
+
         return -1;
     }
-};
+}
 
-// T : O(M*N)
-// S : O(M*N)
-
+// ============================================================================
 
 // Normal BFS
 class Solution {
-  public:
-    int shortestPath(vector<vector<int>> &grid, pair<int, int> source, pair<int, int> destination) {
-        // code here
+public:
+    int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
         int n = grid.size();
-        int m = grid[0].size();
-        
-        vector<vector<int>> dist(n, vector<int>(m,0));
+        if(grid[0][0] == 1 || grid[n - 1][n - 1] == 1) return -1;
+
         queue<pair<int,int>> q;
-        q.push(source);
-        
-        vector<int> delRow = {-1, 0, +1, 0};
-        vector<int> delCol = {0, -1, 0, +1};
-        
+        q.push({0, 0});
+        grid[0][0] = 1;
+        int lvl = 1;
+
+        vector<int> dx = {0, +1, 0, -1, +1, +1, -1, -1};
+        vector<int> dy = {+1, 0, -1, 0, +1, -1, -1, +1};
+
         while(!q.empty()) {
-            int size = q.size();
-            for(int i=0; i<size; i++) {
-                int r = q.front().first;
-                int c = q.front().second;
+            int sz = q.size();
+            while(sz--) {
+                auto it = q.front();
                 q.pop();
-                if(r == destination.first && c == destination.second) {
-                    return dist[r][c];
-                }
-                for(int del=0; del<4; del++) {
-                    int nRow = r + delRow[del];
-                    int nCol = c + delCol[del];
-                    if(nRow>=0 && nRow<n && nCol>=0 && nCol<m && dist[nRow][nCol]==0 && grid[nRow][nCol]==1) {
-                        dist[nRow][nCol] = 1 + dist[r][c];
-                        q.push({nRow,nCol});
+                int x = it.first, y = it.second;
+                if(x == n - 1 && y == n - 1) return lvl;
+                for(int k = 0; k < 8; k++) {
+                    int nx = x + dx[k], ny = y + dy[k];
+                    if(nx >= 0 && nx < n && ny >= 0 && ny < n && grid[nx][ny] == 0) {
+                        q.push({nx, ny});
+                        grid[nx][ny] = 1;
                     }
                 }
             }
+            lvl++;
         }
-        
+
         return -1;
     }
 };

@@ -1,6 +1,47 @@
 // Disjoint Set | Union by Rank 
 
 class DisjointSet {
+    int[] parent;
+    int[] rank;
+
+    DisjointSet(int n) {
+        parent = new int[n + 1];
+        rank = new int[n + 1];
+        for (int i = 0; i <= n; i++) {
+            parent[i] = i;
+            rank[i] = 0;
+        }
+    }
+
+    int findPar(int node) {
+        if (node == parent[node]) {
+            return node;
+        }
+        return parent[node] = findPar(parent[node]); // path compression
+    }
+
+    void unionByRank(int u, int v) {
+        int ulp_u = findPar(u);
+        int ulp_v = findPar(v);
+
+        if (ulp_u == ulp_v) return;
+
+        if (rank[ulp_u] < rank[ulp_v]) {
+            parent[ulp_u] = ulp_v;
+        }
+        else if (rank[ulp_u] > rank[ulp_v]) {
+            parent[ulp_v] = ulp_u;
+        }
+        else {
+            parent[ulp_v] = ulp_u;
+            rank[ulp_u]++;
+        }
+    }
+}
+
+// ======================================================================
+
+class DisjointSet {
     vector<int> rank, parent;
   public:
     DisjointSet(int n) {
@@ -21,7 +62,7 @@ class DisjointSet {
     void unionByRank(int u, int v) {
         int ulp_u = findPar(u);
         int ulp_v = findPar(v);
-        if(ulp_u == ultp_v) {
+        if(ulp_u == ulp_v) {
             return;
         }
         if(rank[ulp_u] < rank[ulp_v]) {

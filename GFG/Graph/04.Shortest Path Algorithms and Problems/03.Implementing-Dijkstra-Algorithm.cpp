@@ -1,5 +1,56 @@
 // Implementing Dijkstra Algorithm
 
+class Solution {
+    public int[] dijkstra(int[][] edge, int vertices, int edges, int source) {
+
+        // adj[u] = list of {v, weight}
+        ArrayList<int[]>[] adj = new ArrayList[vertices];
+        for (int i = 0; i < vertices; i++) {
+            adj[i] = new ArrayList<>();
+        }
+
+        for (int[] e : edge) {
+            int u = e[0];
+            int v = e[1];
+            int w = e[2];
+            adj[u].add(new int[]{v, w});
+            adj[v].add(new int[]{u, w});
+        }
+
+        // min-heap: {node, distance}
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
+
+        pq.offer(new int[]{source, 0});
+
+        int[] dist = new int[vertices];
+        Arrays.fill(dist, (int) 1e9);
+        dist[source] = 0;
+
+        while (!pq.isEmpty()) {
+            int[] cur = pq.poll();
+            int u = cur[0];
+            int d = cur[1];
+
+            // optional optimization
+            if (d > dist[u]) continue;
+
+            for (int[] it : adj[u]) {
+                int v = it[0];
+                int w = it[1];
+
+                if (d + w < dist[v]) {
+                    dist[v] = d + w;
+                    pq.offer(new int[]{v, dist[v]});
+                }
+            }
+        }
+
+        return dist;
+    }
+}
+
+// ===================================================================
+
 // Using Priority Queue
 vector<int> dijkstra(vector<vector<int>> &edge, int vertices, int edges, int source)
 {

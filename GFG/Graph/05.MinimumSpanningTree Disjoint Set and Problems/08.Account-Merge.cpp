@@ -1,6 +1,88 @@
 // Account Merge
 
 class DisjointSet {
+    int[] parent, size;
+    public DisjointSet(int n) {
+        parent = new int[n];
+        size = new int[n];
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    public int findParent(int u) {
+        if (u == parent[u]) return u;
+        return parent[u] = findParent(parent[u]);
+    }
+
+    public void unionBySize(int u, int v) {
+        int pu = findParent(u);
+        int pv = findParent(v);
+
+        if (pu == pv) return;
+
+        if (size[pu] < size[pv]) {
+            size[pv] += size[pu];
+            parent[pu] = parent[pv];
+        }
+        else {
+            size[pu] += size[pv];
+            parent[pv] = parent[pu];
+        }
+    }
+}
+
+class Solution {
+    public List<List<String>> accountsMerge(List<List<String>> accounts) {
+        int n = accounts.size();
+        DisjointSet ds = new DisjointSet(n);
+
+        Map<String,Integer> mp = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 1; j < accounts.get(i).size(); j++) {
+                String mail = accounts.get(i).get(j);
+                if (!mp.containsKey(mail)) {
+                    mp.put(mail, i);
+                }
+                else {
+                    ds.unionBySize(mp.get(mail), i);
+                }
+            }
+        }
+
+        List<String>[] merged = new ArrayList[n];
+        for (int i = 0; i < n; i++) merged[i] = new ArrayList<>();
+
+        for (Map.Entry<String,Integer> s : mp.entrySet()) {
+            String mail = s.getKey();
+            int ind = s.getValue();
+            int root = ds.findParent(ind);
+            merged[root].add(mail);
+        }
+
+        List<List<String>> ans = new ArrayList<>();
+        for (List<String> m : merged) {
+            if (m.size() == 0) continue;
+
+            Collections.sort(m);
+            List<String> curr = new ArrayList<>();
+
+            int ind = mp.get(m.get(0));
+            String name = accounts.get(ind).get(0);
+
+            curr.add(name);
+            curr.addAll(m);
+            ans.add(curr);
+        }
+
+        return ans;
+    }
+}
+
+// ====================================================================
+
+class DisjointSet {
     vector<int> parent, size;
 public:
     DisjointSet(int n) {

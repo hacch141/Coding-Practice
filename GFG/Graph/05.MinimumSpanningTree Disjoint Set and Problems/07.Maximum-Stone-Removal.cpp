@@ -1,6 +1,72 @@
 // Maximum Stone Removal
 
 class DisjointSet {
+    int[] parent, size;
+    public DisjointSet(int n) {
+        parent = new int[n];
+        size = new int[n];
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    public int findParent(int u) {
+        if (u == parent[u]) return u;
+        return parent[u] = findParent(parent[u]);
+    }
+
+    public void union(int u, int v) {
+        int ultParU = findParent(u);
+        int ultParV = findParent(v);
+        if (ultParU == ultParV) {
+            return;
+        }
+        else if (size[ultParU] >= size[ultParV]) {
+            parent[ultParV] = ultParU;
+            size[ultParU] +=ultParV;
+        }
+        else {
+            parent[ultParU] = ultParV;
+            size[ultParV] +=ultParU;
+        }
+    }
+}
+
+class Solution {
+    public int removeStones(int[][] stones) {
+        int mxX = Integer.MIN_VALUE;
+        int mxY = Integer.MIN_VALUE;
+        for (int[] s : stones) {
+            mxX = Math.max(mxX, s[0]);
+            mxY = Math.max(mxY, s[1]);
+        }
+
+        Set<Integer> vis = new HashSet<>();
+        DisjointSet ds = new DisjointSet(mxX + mxY + 2);
+        for (int[] s : stones) {
+            int x = s[0], y = s[1];
+            int u = x;
+            int v = mxX + y + 1;
+            ds.union(u, v);
+            vis.add(u);
+            vis.add(v);
+        }
+
+        int components = 0;
+        for (int u : vis) {
+            if (u == ds.findParent(u)) {
+                components++;
+            }
+        }
+
+        return stones.length - components;
+    }
+}
+
+// ==================================================================
+
+class DisjointSet {
     vector<int> parent,size;
 public:
     DisjointSet(int n) {

@@ -1,5 +1,22 @@
 // Reverse Words in a String
 
+class Solution {
+    public String reverseWords(String s) {
+        String[] ss = s.trim().split("\\s+");
+        int n = ss.length;
+
+        for (int i = 0; i < n / 2; i++) {
+            String tmp = ss[i];
+            ss[i] = ss[n - 1 - i];
+            ss[n - 1 - i] = tmp;
+        }
+
+        return String.join(" ", ss);
+    }
+}
+
+// =======================================================================
+
 #include <bits/stdc++.h>
 
 string reverseString(string &str){

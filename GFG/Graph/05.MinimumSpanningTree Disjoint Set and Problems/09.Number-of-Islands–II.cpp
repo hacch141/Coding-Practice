@@ -1,6 +1,85 @@
 // Number of Islands – II
 
 class DisjointSet {
+    int[] parent;
+    int[] size;
+    DisjointSet(int n) {
+        parent = new int[n];
+        size = new int[n];
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    int findPar(int node) {
+        if (parent[node] == node) return node;
+        return parent[node] = findPar(parent[node]); // path compression
+    }
+
+    void unionBySize(int u, int v) {
+        int pu = findPar(u);
+        int pv = findPar(v);
+        if (pu == pv) return;
+        if (size[pu] > size[pv]) {
+            parent[pv] = pu;
+            size[pu] += size[pv];
+        } else {
+            parent[pu] = pv;
+            size[pv] += size[pu];
+        }
+    }
+}
+
+class Solution {
+    public List<Integer> numOfIslands(int n, int m, int[][] operators) {
+        DisjointSet ds = new DisjointSet(n * m);
+        int[][] vis = new int[n][m];
+
+        int[] delRow = {-1, 0, 1, 0};
+        int[] delCol = {0, -1, 0, 1};
+
+        int count = 0;
+        List<Integer> ans = new ArrayList<>();
+
+        for (int[] op : operators) {
+            int r = op[0];
+            int c = op[1];
+            if (vis[r][c] == 1) {
+                ans.add(count);
+                continue;
+            }
+
+            vis[r][c] = 1;
+            count++;
+
+            int node = r * m + c;
+
+            for (int d = 0; d < 4; d++) {
+                int nr = r + delRow[d];
+                int nc = c + delCol[d];
+
+                if (nr >= 0 && nr < n && nc >= 0 && nc < m && vis[nr][nc] == 1) {
+
+                    int adjNode = nr * m + nc;
+
+                    if (ds.findPar(node) != ds.findPar(adjNode)) {
+                        ds.unionBySize(node, adjNode);
+                        count--;
+                    }
+                }
+            }
+
+            ans.add(count);
+        }
+
+        return ans;
+    }
+}
+
+// =================================================================================
+
+class DisjointSet {
     vector<int> parent, size;
 public:
     DisjointSet(int n) {

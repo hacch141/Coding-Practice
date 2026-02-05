@@ -45,7 +45,6 @@ class Solution {
         int n = grid.length, m = grid[0].length;
 
         DisjointSet ds = new DisjointSet(n * m);
-        int ans = 0;
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
@@ -58,13 +57,13 @@ class Solution {
                     if (nRow >= 0 && nRow < n && nCol >= 0 && nCol < m && grid[nRow][nCol] == 1) {
                         if (ds.findParent(u) != ds.findParent(v)) {
                             ds.unionBySize(u, v);
-                            ans = Math.max(ans, ds.getComponentSize(u));
                         }
                     }
                 }
             }
         }
 
+        int ans = 0;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 if (grid[i][j] == 1) continue;
@@ -87,6 +86,10 @@ class Solution {
 
                 ans = Math.max(ans, curr);
             }
+        }
+
+        for (int i = 0; i < n * m; i++) {
+            ans = Math.max(ans, ds.getComponentSize(i));
         }
 
         return ans;

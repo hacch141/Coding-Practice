@@ -1,6 +1,27 @@
 // Remove outermost Paranthesis
 
 class Solution {
+    public String removeOuterParentheses(String s) {
+        StringBuilder sb = new StringBuilder();
+        int cntOpen = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            if (cntOpen == 0) {
+                if (sb.length() > 0) sb.deleteCharAt(sb.length() - 1);
+            }
+            else {
+                sb.append(s.charAt(i));
+            }
+            cntOpen += (s.charAt(i) == '(') ? +1 : -1;
+        }
+        if (sb.length() > 0) sb.deleteCharAt(sb.length() - 1);
+        return sb.toString();
+    }
+}
+
+// ====================================================
+
+class Solution {
 public:
     string removeOuterParentheses(string s) {
         int cnt = 0;

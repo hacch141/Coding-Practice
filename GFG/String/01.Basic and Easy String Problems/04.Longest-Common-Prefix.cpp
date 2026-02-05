@@ -1,5 +1,34 @@
 // Longest Common Prefix
 
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        StringBuilder sb = new StringBuilder();
+
+        int n = strs.length;
+        int m = Integer.MAX_VALUE;
+        for (String s : strs) {
+            m = Math.min(m, s.length());
+        }
+
+        for (int j = 0; j < m; j++) {
+            boolean same = true;
+            for (int i = 1; i < n; i++) {
+                if (strs[i].charAt(j) != strs[i - 1].charAt(j)) {
+                    same = false;
+                    break;
+                }
+            }
+            if (!same) break;
+            sb.append(strs[0].charAt(j));
+        }
+
+        return sb.toString();
+    }
+}
+// you can also sort strs and just compare first and last one :)
+
+// ======================================================================
+
 string commonPrefix(vector<string>& arr,int n){
 	//Write your code here
   	sort(arr.begin(),arr.end());

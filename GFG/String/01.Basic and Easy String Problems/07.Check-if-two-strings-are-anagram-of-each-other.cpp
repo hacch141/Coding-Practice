@@ -1,5 +1,22 @@
 // Check if two strings are anagram of each other
 
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        Map<Character,Integer> mp = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            char chs = s.charAt(i);
+            char cht = t.charAt(i);
+            mp.put(chs, mp.getOrDefault(chs, 0) + 1);
+            mp.put(cht, mp.getOrDefault(cht, 0) - 1);
+            if (mp.get(chs) == 0) mp.remove(chs);
+            if (chs != cht && mp.get(cht) == 0) mp.remove(cht);
+        }
+        return mp.size() == 0;
+    }
+}
+
+// =================================================================
+
 #include <bits/stdc++.h>
 
 bool isAnagram(string str1, string str2)

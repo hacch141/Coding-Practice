@@ -1,6 +1,34 @@
 // Longest Palindromic Substring
 
 class Solution {
+    private String expand(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        return s.substring(left + 1, right);
+    }
+
+    public String longestPalindrome(String s) {
+        if (s.length() == 0) return "";
+        String longest = "";
+        for (int i = 0; i < s.length(); i++) {
+            // Odd length palindrome
+            String odd = expand(s, i, i);
+            if (odd.length() > longest.length()) longest = odd;
+
+            // Even length palindrome
+            String even = expand(s, i, i + 1);
+            if (even.length() > longest.length()) longest = even;
+        }
+
+        return longest;
+    }
+}
+
+// ============================================================================
+
+class Solution {
 public:
     string get_pal(string s,int left,int right){
      int n = s.length();

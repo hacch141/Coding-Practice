@@ -1,6 +1,101 @@
 // Making a Large Island
 
 class DisjointSet {
+    int[] parent, size;
+    public DisjointSet(int n) {
+        parent = new int[n];
+        size = new int[n];
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    public int findParent(int u) {
+        if (u == parent[u]) return u;
+        return parent[u] = findParent(parent[u]);
+    }
+
+    public void unionBySize(int u, int v) {
+        int ulp_u = findParent(u);
+        int ulp_v = findParent(v);
+        if (ulp_u == ulp_v) return;
+
+        if (size[ulp_v] > size[ulp_u]) {
+            size[ulp_v] += size[ulp_u];
+            parent[ulp_u] = ulp_v;
+        }
+        else {
+            size[ulp_u] += size[ulp_v];
+            parent[ulp_v] = ulp_u;
+        }
+    }
+
+    public int getComponentSize(int u) {
+        int ulp_u = findParent(u);
+        return size[ulp_u];
+    }
+}
+
+class Solution {
+    int[] delRow = {-1, 0, +1, 0};
+    int[] delCol = {0, +1, 0, -1};
+
+    public int largestIsland(int[][] grid) {
+        int n = grid.length, m = grid[0].length;
+
+        DisjointSet ds = new DisjointSet(n * m);
+        int ans = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 0) continue;
+                int u = (i * m) + j;
+                for (int d = 0; d < 4; d++) {
+                    int nRow = i + delRow[d];
+                    int nCol = j + delCol[d];
+                    int v = (nRow * m) + nCol;
+                    if (nRow >= 0 && nRow < n && nCol >= 0 && nCol < m && grid[nRow][nCol] == 1) {
+                        if (ds.findParent(u) != ds.findParent(v)) {
+                            ds.unionBySize(u, v);
+                            ans = Math.max(ans, ds.getComponentSize(u));
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 1) continue;
+                int u = (i * m) + j;
+
+                Set<Integer> st = new HashSet<>();
+                for (int d = 0; d < 4; d++) {
+                    int nRow = i + delRow[d];
+                    int nCol = j + delCol[d];
+                    if (nRow >= 0 && nRow < n && nCol >= 0 && nCol < m && grid[nRow][nCol] == 1) {
+                        int v = (nRow * m) + nCol;
+                        st.add(ds.findParent(v));
+                    }
+                }
+
+                int curr = 1;
+                for (int p : st) {
+                    curr += ds.getComponentSize(p);
+                }
+
+                ans = Math.max(ans, curr);
+            }
+        }
+
+        return ans;
+    }
+}
+
+// =================================================================================
+
+class DisjointSet {
 public:
     vector<int> parent, size;
     DisjointSet(int n) {

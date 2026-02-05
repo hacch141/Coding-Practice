@@ -1,5 +1,33 @@
 // Roman Number to Integer
 
+class Solution {
+    public int romanToInt(String s) {
+        Map<String,Integer> mp = new HashMap<>();
+        mp.put("I", 1);
+        mp.put("V", 5);
+        mp.put("X", 10);
+        mp.put("L", 50);
+        mp.put("C", 100);
+        mp.put("D", 500);
+        mp.put("M", 1000);
+
+        int n = s.length();
+        int ans = mp.get(s.substring(n - 1, n));
+        for (int i = 0; i < n - 1; i++) {
+            if (mp.get(s.substring(i, i + 1)) < mp.get(s.substring(i + 1, i + 2))) {
+                ans -= mp.get(s.substring(i, i + 1));
+            }
+            else {
+                ans += mp.get(s.substring(i, i + 1));
+            }
+        }
+
+        return ans;
+    }
+}
+
+// ===================================================================================
+
 int romanToInt(string s) {
     // Write your code here
     unordered_map<char,int> mp;

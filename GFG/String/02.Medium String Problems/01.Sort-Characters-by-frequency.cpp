@@ -1,5 +1,28 @@
 // Sort Characters by frequency
 
+class Solution {
+    public String frequencySort(String s) {
+        Map<Character,Integer> mp = new HashMap<>();
+        for (char ch : s.toCharArray()) {
+            mp.put(ch, mp.getOrDefault(ch, 0) + 1);
+        }
+
+        List<Map.Entry<Character,Integer>> f = new ArrayList<>(mp.entrySet());
+        Collections.sort(f, (a, b) -> Integer.compare(b.getValue(), a.getValue()));
+
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<Character,Integer> e : f) {
+            for (int i = 0; i < e.getValue(); i++) {
+                sb.append(e.getKey());
+            }
+        }
+
+        return sb.toString();
+    }
+}
+
+// =====================================================================================
+
 string sortByFrequency(int n, string& s) {
   	// Write Your Code here
   	unordered_map<char,int> mp;

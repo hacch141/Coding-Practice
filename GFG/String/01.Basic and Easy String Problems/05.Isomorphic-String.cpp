@@ -1,5 +1,28 @@
 // Isomorphic String
 
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        Map<Character,Character> mp = new HashMap<>();
+        boolean[] used = new boolean[26];
+
+        for (int i = 0; i < s.length(); i++) {
+            char from = s.charAt(i);
+            char to = t.charAt(i);
+            if (!mp.containsKey(to) && !used[from - 'a']) {
+                mp.put(to, from);
+                used[from - 'a'] = true;
+            }
+            else if (mp.getOrDefault(to, ' ') != from) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
+// ================================================================
+
 bool areIsomorphic(string &str1, string &str2)
 {
     // Write your code here

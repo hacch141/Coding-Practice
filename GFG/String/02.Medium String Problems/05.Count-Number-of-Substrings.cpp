@@ -1,5 +1,38 @@
 // Count Number of Substrings
 
+class Solution {
+    private int getTotalSubStr(String s, int k) {
+        if (k < 0) return 0;
+        Map<Character, Integer> map = new HashMap<>();
+
+        int i = 0, j = 0, ans = 0;
+        int n = s.length();
+
+        while (j < n) {
+            map.put(s.charAt(j), map.getOrDefault(s.charAt(j), 0) + 1);
+            while (map.size() > k) {
+                char left = s.charAt(i);
+                map.put(left, map.get(left) - 1);
+                if (map.get(left) == 0) {
+                    map.remove(left);
+                }
+                i++;
+            }
+            ans += j - i + 1;
+            j++;
+        }
+
+        return ans;
+    }
+
+    public int countSubStrings(String str, int k) {
+        if (k == 0) return 0;
+        return getTotalSubStr(str, k) - getTotalSubStr(str, k - 1);
+    }
+}
+
+// =======================================================================
+
 #include <bits/stdc++.h>
 
 int getTotalSubStr(string &s, int k) {

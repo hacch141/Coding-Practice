@@ -1,6 +1,35 @@
 // Sum of Beauty of all substring
 
 class Solution {
+    public static int getBeautyNumber(int freq[]){
+        int mx = 0;
+        int mn = Integer.MAX_VALUE;
+        for (int i = 0; i < freq.length; i++) {
+            if (freq[i] != 0) {
+                mx = Math.max(mx, freq[i]);
+                mn = Math.min(mn, freq[i]);
+            }
+        }
+        return (mn == Integer.MAX_VALUE) ? 0 : (mx - mn);
+    }
+
+    public int beautySum(String s) {
+        int beautySum = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int freq[] = new int[26];
+            for (int j = i; j < s.length(); j++) {
+                freq[s.charAt(j) - 'a']++;
+                beautySum += getBeautyNumber(freq);
+            }
+        }
+
+        return beautySum;
+    }
+}
+
+// ========================================================================
+
+class Solution {
 public:
     int beautySum(string s) {
         int n = s.length();

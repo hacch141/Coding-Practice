@@ -1,5 +1,15 @@
 // Reverse Every Word in A String
 
+class Solution {
+    public String reverseWords(String s) {
+        String[] ss = s.trim().split("\\s+");
+        Collections.reverse(Arrays.asList(ss));
+        return String.join(" ", ss);
+    }
+}
+
+// ====================================================================
+
 string revWords(string str) {
     // Write your code here.
     string ans = "";

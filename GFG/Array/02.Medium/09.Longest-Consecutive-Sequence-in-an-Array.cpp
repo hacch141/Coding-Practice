@@ -1,5 +1,30 @@
 // Longest Consecutive Sequence in an Array
 
+class Solution {
+    public int longestSuccessiveElements(int[] a) {
+        Set<Integer> set = new HashSet<>();
+        for (int x : a) set.add(x);
+        int ans = 0;
+
+        for (int x : set) {
+            if (!set.contains(x - 1)) {
+                int num = x;
+                int cnt = 0;
+                while (set.contains(num)) {
+                    cnt++;
+                    num++;
+                }
+
+                ans = Math.max(ans, cnt);
+            }
+        }
+
+        return ans;
+    }
+}
+
+// =========================================================================
+
 int longestSuccessiveElements(vector<int>&a) {
     // Write your code here.
     unordered_map<int,int> mp;

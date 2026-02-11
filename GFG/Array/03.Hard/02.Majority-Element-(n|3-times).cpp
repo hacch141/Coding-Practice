@@ -1,5 +1,56 @@
 // Majority Element (n/3 times)
 
+class Solution {
+    public List<Integer> majorityElement(int[] nums) {
+
+        int n = nums.length;
+
+        int cnt1 = 0, cnt2 = 0;
+        int ele1 = Integer.MAX_VALUE;
+        int ele2 = Integer.MAX_VALUE;
+
+        // Step 1: Find potential candidates
+        for (int num : nums) {
+            if (num == ele1) {
+                cnt1++;
+            }
+            else if (num == ele2) {
+                cnt2++;
+            }
+            else if (cnt1 == 0) {
+                cnt1 = 1;
+                ele1 = num;
+            }
+            else if (cnt2 == 0) {
+                cnt2 = 1;
+                ele2 = num;
+            } 
+            else {
+                cnt1--;
+                cnt2--;
+            }
+        }
+
+        // Step 2: Verify candidates
+        int c1 = 0, c2 = 0;
+        for (int num : nums) {
+            if (num == ele1) c1++;
+            if (num == ele2) c2++;
+        }
+
+        List<Integer> ans = new ArrayList<>();
+
+        if (c1 > n / 3) ans.add(ele1);
+        if (c2 > n / 3) ans.add(ele2);
+
+        Collections.sort(ans);
+
+        return ans;
+    }
+}
+
+// =====================================================================================
+
 #include <bits/stdc++.h>
 
 vector<int> majorityElement(vector<int> v) {

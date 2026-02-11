@@ -1,5 +1,84 @@
 // 4-Sum Problem
 
+import java.util.*;
+
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+
+        int n = nums.length;
+        Arrays.sort(nums);
+
+        List<List<Integer>> ans = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) continue;
+
+            for (int j = i + 1; j < n; j++) {
+
+                if (j > i + 1 && nums[j] == nums[j - 1]) continue;
+
+                int low = j + 1;
+                int high = n - 1;
+
+                while (low < high) {
+
+                    long sum = (long) nums[i] + nums[j] + nums[low] + nums[high];
+
+                    if (sum == target) {
+                        ans.add(Arrays.asList(nums[i], nums[j], nums[low], nums[high]));
+
+                        low++;
+                        high--;
+
+                        while (low < high && nums[low] == nums[low - 1]) low++;
+                        while (low < high && nums[high] == nums[high + 1]) high--;
+                    }
+                    else if (sum < target) {
+                        low++;
+                    }
+                    else {
+                        high--;
+                    }
+                }
+            }
+        }
+
+        return ans;
+    }
+}
+
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+
+        int n = nums.length;
+        Set<List<Integer>> set = new HashSet<>();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+
+                Map<Long, Integer> map = new HashMap<>();
+
+                for (int k = j + 1; k < n; k++) {
+
+                    long sum = (long) nums[i] + nums[j] + nums[k];
+                    long rem = (long) target - sum;
+
+                    if (map.containsKey(rem)) {
+                        List<Integer> temp = Arrays.asList(nums[i], nums[j], nums[k], nums[map.get(rem)]);
+                        Collections.sort(temp);
+                        set.add(temp);
+                    }
+                    map.put((long) nums[k], k);
+                }
+            }
+        }
+
+        return new ArrayList<>(set);
+    }
+}
+
+// ==========================================================================================
+
 vector<vector<int>> fourSum(vector<int>& nums, int target) {
     // Write your code here
     int n = nums.size();

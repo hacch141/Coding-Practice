@@ -1,5 +1,34 @@
 // Sort An Array of 0s, 1s and 2s
 
+class Solution {
+    public void sortColors(int[] nums) {
+        int n = nums.length;
+        int l = 0;
+        int m = 0;
+        int h = n - 1;
+        while (m <= h) {
+            if (nums[m] == 0) {
+                int tmp = nums[m];
+                nums[m] = nums[l];
+                nums[l] = tmp;
+                l++;
+                m++;
+            }
+            else if (nums[m] == 1) {
+                m++;
+            }
+            else {
+                int tmp = nums[m];
+                nums[m] = nums[h];
+                nums[h] = tmp;
+                h--;
+            }
+        }
+    }
+}
+
+// ==========================================================
+
 #include <bits/stdc++.h> 
 void sortArray(vector<int>& arr, int n)
 {

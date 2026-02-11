@@ -1,5 +1,28 @@
 // Count subarrays with given sum
 
+class Solution {
+    public int findAllSubarraysWithGivenSum(int[] arr, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, 1);   // ⭐ Important (subarray starting from index 0)
+
+        int sum = 0;
+        int ans = 0;
+
+        for (int num : arr) {
+            sum += num;
+            if (map.containsKey(sum - k)) {
+                ans += map.get(sum - k);
+            }
+
+            map.put(sum, map.getOrDefault(sum, 0) + 1);
+        }
+
+        return ans;
+    }
+}
+
+// =====================================================================
+
 int findAllSubarraysWithGivenSum(vector < int > & arr, int k) {
     // Write Your Code Here
     unordered_map<int,int> mp;

@@ -1,5 +1,40 @@
 // Find the repeating and missing numbers
 
+class Solution {
+    public int[] findTwoElement(int[] arr) {
+        int n = arr.length;
+        int xor = 0;
+
+        for (int num : arr) xor ^= num;
+        for (int i = 1; i <= n; i++) xor ^= i;
+
+        int setBit = xor & -xor;
+        int bucket1 = 0, bucket2 = 0;
+
+        for (int num : arr) {
+            if ((num & setBit) != 0) bucket1 ^= num;
+            else bucket2 ^= num;
+        }
+
+        for (int i = 1; i <= n; i++) {
+            if ((i & setBit) != 0) bucket1 ^= i;
+            else bucket2 ^= i;
+        }
+
+        // Now bucket1 & bucket2 are M and R (order unknown)
+
+        int count = 0;
+        for (int num : arr) {
+            if (num == bucket1) count++;
+        }
+
+        if (count == 2) return new int[]{bucket1, bucket2};
+        else return new int[]{bucket2, bucket1};
+    }
+}
+
+// ==================================================================
+
 vector<int> findMissingRepeatingNumbers(vector < int > a) {
     // Write your code here
     int n = a.size();

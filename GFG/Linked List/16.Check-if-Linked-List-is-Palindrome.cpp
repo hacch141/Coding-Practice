@@ -1,5 +1,56 @@
 // Check if Linked List is Palindrome
 
+class Solution {
+
+    public Node rev(Node head) {
+
+        if (head == null || head.next == null) return head;
+
+        Node prev = null;
+        Node curr = head;
+
+        while (curr != null) {
+            Node next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+
+        return prev;
+    }
+
+    public boolean isPalindrome(Node head) {
+
+        if (head == null || head.next == null) return true;
+
+        Node slow = head;
+        Node fast = head;
+
+        // Find middle
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // Reverse second half
+        slow.next = rev(slow.next);
+
+        Node second = slow.next;
+        Node first = head;
+
+        // Compare halves
+        while (second != null) {
+            if (second.data != first.data) return false;
+            second = second.next;
+            first = first.next;
+        }
+
+        return true;
+    }
+}
+
+// ==========================================================================
+
 class Solution{
   public:
   

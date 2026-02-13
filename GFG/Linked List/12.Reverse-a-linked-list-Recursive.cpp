@@ -1,5 +1,23 @@
 // Reverse a linked list
 
+class Solution {
+    public Node reverseList(Node head) {
+
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        Node rev = reverseList(head.next);
+
+        head.next.next = head;
+        head.next = null;
+
+        return rev;
+    }
+}
+
+// =================================================
+
 class Solution
 {
     public:

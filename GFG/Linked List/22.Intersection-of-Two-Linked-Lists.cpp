@@ -1,30 +1,25 @@
 // Intersection of Two Linked Lists
 
-class Solution{
-  public:
-    Node* findIntersection(Node* head1, Node* head2)
-    {
-        // code here
-        // return the head of intersection list
-        unordered_map<int,int> mp;
-        Node* curr1 = head2;
-        while(curr1 != NULL) {
-            mp[curr1->data]++;
-            curr1 = curr1->next;
-        }
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
 
-        Node* curr2 = new Node(0);
-        Node* end = curr2;
-        while(head1 != NULL) {
-            if(mp[head1->data]>0) {
-                end->next = new Node(head1->data);
-                end = end->next;
-            }
-            head1 = head1->next;
+        ListNode l1 = headA;
+        ListNode l2 = headB;
+
+        while (l1 != l2) {
+
+            l1 = l1.next;
+            l2 = l2.next;
+
+            if (l1 == null && l2 == null) return null;
+
+            if (l1 == null) l1 = headB;
+            if (l2 == null) l2 = headA;
+
         }
-        return curr2->next;
+        return l1;
     }
 }
 
 // T : O(N+M)
-// S : O(N+M)
+// S : O(1)

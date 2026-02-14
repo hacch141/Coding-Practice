@@ -1,5 +1,50 @@
 // Insert Interval
 
+class Solution {
+
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+
+        int n = intervals.length;
+
+        // Create new array with one extra space
+        int[][] all = new int[n + 1][2];
+
+        for (int i = 0; i < n; i++) {
+            all[i] = intervals[i];
+        }
+
+        all[n] = newInterval;
+
+        // Sort by start time
+        Arrays.sort(all, (a, b) -> a[0] - b[0]);
+
+        List<int[]> ans = new ArrayList<>();
+
+        // Take first interval as current
+        int[] curr = all[0];
+
+        for (int i = 1; i < all.length; i++) {
+
+            // If overlapping → merge
+            if (curr[1] >= all[i][0]) {
+                curr[1] = Math.max(curr[1], all[i][1]);
+            } 
+            else {
+                // No overlap → push current
+                ans.add(curr);
+                curr = all[i];
+            }
+        }
+
+        // Add last interval
+        ans.add(curr);
+
+        return ans.toArray(new int[ans.size()][]);
+    }
+}
+
+// ======================================================================
+
 #include <bits/stdc++.h>
 
 vector<vector<int>> addInterval(vector<vector<int>> &intervals, int n, vector<int> &newInterval)

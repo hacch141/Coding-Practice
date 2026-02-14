@@ -1,29 +1,51 @@
-// Delete Middle of Linked List
+/// Delete Middle of Linked List
 
-Node* deleteMid(Node* head)
-{
-    // Your Code Here
-    if(!head->next) return NULL;
-    if(!head->next->next) {
-        head->next = NULL;
+class Solution {
+    public ListNode deleteMiddle(ListNode head) {
+        
+        // Edge case: single node
+        if (head == null || head.next == null) {
+            return null;
+        }
+
+        ListNode prev = null;
+        ListNode slow = head;
+        ListNode fast = head;
+
+        // Find middle node
+        while (fast != null && fast.next != null) {
+            prev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // Delete middle node
+        prev.next = slow.next;
+
         return head;
     }
-    
-    Node* dummy = new Node(-1);
-    dummy->next = head;
-    
-    Node* slow = head;
-    Node* fast = head;
-    
-    while(fast && fast->next) {
-        dummy = dummy->next;
-        slow = slow->next;
-        fast = fast->next->next;
+}
+
+// ========================================================
+
+class Solution {
+    public ListNode deleteMiddle(ListNode head) {
+        if (head.next == null) return null;
+
+        ListNode prev = null;
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while (fast != null && fast.next != null) {
+            prev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        prev.next = prev.next.next;
+
+        return head;
     }
-    
-    dummy->next = dummy->next->next;
-    
-    return head;
 }
 
 // T : O(N)

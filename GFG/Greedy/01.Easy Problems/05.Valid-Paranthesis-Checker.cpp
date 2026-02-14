@@ -1,33 +1,49 @@
 // Valid Paranthesis Checker
 
-#include <bits/stdc++.h>
+class Solution {
+    public boolean checkValidString(String s) {
 
-bool isBalanced(string S){
-    // Write your code here.
-    stack<char> st;
-    for(auto i : S) {
-        if(i=='(' || i=='{' || i=='[') {
-            st.push(i);
-        }
-        else {
-            
-            if(st.empty()) return false;
-            char prev = st.top();
-            st.pop();
+        Stack<Integer> open = new Stack<>();
+        Stack<Integer> star = new Stack<>();
 
-            if (i == ')') {
-              if (prev != '(') return false;
+        for (int i = 0; i < s.length(); i++) {
+
+            char ch = s.charAt(i);
+
+            if (ch == '(') {
+                open.push(i);
             } 
-            else if (i == '}') {
-              if (prev !='{') return false;
-            }
-            else if (i == ']') {
-              if (prev !='[') return false;
+            else if (ch == '*') {
+                star.push(i);
+            } 
+            else { // ')'
+                if (!open.isEmpty()) {
+                    open.pop();
+                } 
+                else if (!star.isEmpty()) {
+                    star.pop();
+                } 
+                else {
+                    return false;
+                }
             }
         }
-    }
 
-    return true;
+        // Match remaining '(' with '*' that appear after them
+        while (!open.isEmpty() && !star.isEmpty()) {
+
+            if (open.peek() < star.peek()) {
+                open.pop();
+                star.pop();
+            } 
+            else {
+                return false;
+            }
+        }
+
+        return open.isEmpty();
+    }
 }
+
 // T : O(N)
 // S : O(N)

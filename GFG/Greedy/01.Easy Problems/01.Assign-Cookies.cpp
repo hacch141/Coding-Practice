@@ -1,5 +1,34 @@
 // Assign Cookies
 
+class Solution {
+
+    public int assignCookie(int[] greed, int[] size) {
+
+        Arrays.sort(greed);
+        Arrays.sort(size);
+
+        int i = 0;  // pointer for greed
+        int j = 0;  // pointer for cookies
+        int ans = 0;
+
+        while (i < greed.length && j < size.length) {
+
+            if (greed[i] <= size[j]) {
+                ans++;
+                i++;
+                j++;
+            } 
+            else {
+                j++;
+            }
+        }
+
+        return ans;
+    }
+}
+
+// ======================================================================
+
 #include <bits/stdc++.h>
 
 int assignCookie(vector<int> &greed, vector<int> &size) {

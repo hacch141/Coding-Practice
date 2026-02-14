@@ -1,5 +1,42 @@
 // Fractional Knapsack Problem
 
+class Solution {
+
+    public double maximumValue(int[][] items, int n, int w) {
+
+        // items[i][0] = weight
+        // items[i][1] = value
+
+        // Sort by value/weight ratio in descending order
+        Arrays.sort(items, (a, b) -> 
+            Long.compare(
+                (long)b[1] * a[0],   // b.value * a.weight
+                (long)a[1] * b[0]    // a.value * b.weight
+            )
+        );
+
+        double ans = 0.0;
+
+        for (int i = 0; i < n; i++) {
+
+            int weight = items[i][0];
+            int value  = items[i][1];
+
+            if (weight <= w) {
+                ans += value;
+                w -= weight;
+            } else {
+                ans += (double)value * w / weight;
+                break;
+            }
+        }
+
+        return ans;
+    }
+}
+
+// ======================================================================================
+
 #include <bits/stdc++.h> 
 
 static bool compare(pair<int,int>& p1, pair<int,int>& p2) {

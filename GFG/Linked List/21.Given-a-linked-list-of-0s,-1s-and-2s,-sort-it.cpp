@@ -1,5 +1,48 @@
 // Given a linked list of 0s, 1s and 2s, sort it.
 
+class Solution {
+
+    // Function to sort a linked list of 0s, 1s and 2s.
+    static Node segregate(Node head) {
+
+        Node zeros = new Node(-1);
+        Node ones = new Node(-1);
+        Node twos = new Node(-1);
+
+        Node dummy0 = zeros;
+        Node dummy1 = ones;
+        Node dummy2 = twos;
+
+        // Divide nodes into three lists
+        while (head != null) {
+
+            if (head.data == 0) {
+                zeros.next = head;
+                zeros = zeros.next;
+            } 
+            else if (head.data == 1) {
+                ones.next = head;
+                ones = ones.next;
+            } 
+            else {
+                twos.next = head;
+                twos = twos.next;
+            }
+
+            head = head.next;
+        }
+
+        // Connect the three lists
+        ones.next = dummy2.next;
+        zeros.next = dummy1.next;
+        twos.next = null;
+
+        return dummy0.next;
+    }
+}
+
+// ==============================================================
+
 class Solution
 {
     public:

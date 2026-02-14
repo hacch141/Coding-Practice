@@ -1,32 +1,38 @@
 // Delete all occurrences of a given key in a doubly linked list
 
 class Solution {
-  public:
-    void deleteAllOccurOfX(struct Node** head_ref, int x) {
-        // Write your code here
-        Node* head = *head_ref;
-        Node* newHead = NULL;
-        while(head) {
-            Node* prevNode = head->prev;
-            Node* nextNode = head->next;
-            Node* currNode = head; 
-            if(head->data == x) {
-                if(nextNode) {
-                    nextNode->prev = prevNode;
+
+    Node deleteAllOccurOfX(Node head, int x) {
+
+        Node curr = head;
+
+        while (curr != null) {
+
+            if (curr.data == x) {
+
+                // If node to be deleted is head
+                if (curr == head) {
+                    head = curr.next;
                 }
-                if(prevNode) {
-                    prevNode->next = nextNode;
+
+                // Adjust previous pointer
+                if (curr.prev != null) {
+                    curr.prev.next = curr.next;
                 }
-                delete(currNode);
+
+                // Adjust next pointer
+                if (curr.next != null) {
+                    curr.next.prev = curr.prev;
+                }
             }
-            else {
-                if(!newHead) newHead = head;
-            }
-            head = nextNode;
+
+            curr = curr.next;
         }
-        *head_ref = newHead;
+
+        return head;
     }
-};
+}
+
 
 // T : O(N)
 // S : O(1)

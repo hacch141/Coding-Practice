@@ -1,5 +1,35 @@
 // Kth largest element in an array
 
+class Solution {
+
+    public int[] kLargest(int[] arr, int n, int k) {
+
+        // Min heap (Default)
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+        for (int i = 0; i < n; i++) {
+
+            pq.add(arr[i]);
+
+            // Maintain heap size <= k
+            if (pq.size() > k) {
+                pq.poll();
+            }
+        }
+
+        int[] result = new int[k];
+        int index = 0;
+
+        while (!pq.isEmpty()) {
+            result[index++] = pq.poll();
+        }
+
+        return result;
+    }
+}
+
+// =======================================================================
+
 #include <bits/stdc++.h>
 
 vector<int> kLargest(int arr[], int n, int k) {

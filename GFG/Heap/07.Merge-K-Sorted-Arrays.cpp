@@ -1,5 +1,53 @@
 // Merge K Sorted Arrays
 
+class Solution {
+
+    public List<Integer> mergeKSortedArrays(List<List<Integer>> kArrays) {
+
+        int k = kArrays.size();
+
+        // Min Heap based on value (a[0])
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));
+
+        // Insert first element of each array
+        for (int i = 0; i < k; i++) {
+            if (!kArrays.get(i).isEmpty()) {
+                pq.offer(new int[]{ 
+                        kArrays.get(i).get(0),  // value
+                        i,                      // array index
+                        0                       // element index
+                });
+            }
+        }
+
+        List<Integer> result = new ArrayList<>();
+
+        while (!pq.isEmpty()) {
+
+            int[] curr = pq.poll();
+            int value = curr[0];
+            int arrayIndex = curr[1];
+            int elementIndex = curr[2];
+
+            result.add(value);
+
+            int nextIndex = elementIndex + 1;
+
+            // Push next element from same array
+            if (nextIndex < kArrays.get(arrayIndex).size()) {
+                pq.offer(new int[]{
+                        kArrays.get(arrayIndex).get(nextIndex),
+                        arrayIndex,
+                        nextIndex
+                });
+            }
+        }
+
+        return result;
+    }
+}
+
+// ===================================================================================
 #include <bits/stdc++.h> 
 vector<int> mergeKSortedArrays(vector<vector<int>>&kArrays, int k)
 {

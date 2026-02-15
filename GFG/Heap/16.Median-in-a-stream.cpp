@@ -1,29 +1,29 @@
 // Median in a stream
 
-class KthLargest {
+class MedianFinder {
+    PriorityQueue<Double> pq1, pq2;
 
-    private PriorityQueue<Integer> minHeap;
-    private int k;
+    public MedianFinder() {
+        pq1 = new PriorityQueue<>((a, b) -> Double.compare(b, a));
+        pq2 = new PriorityQueue<>();
+    }
+    
+    public void addNum(int num) {
+        pq1.add((double)num);
+        pq2.add(pq1.poll());
 
-    public KthLargest(int k, int[] nums) {
-
-        this.k = k;
-        minHeap = new PriorityQueue<>();
-
-        for (int num : nums) {
-            add(num);
+        if (pq1.size() < pq2.size()) {
+            pq1.add(pq2.poll());
         }
     }
+    
+    public double findMedian() {
 
-    public int add(int val) {
-
-        minHeap.offer(val);
-
-        if (minHeap.size() > k) {
-            minHeap.poll();
+        if (pq1.size() == pq2.size()) {
+            return (pq1.peek() + pq2.peek()) /  2;
         }
 
-        return minHeap.peek();
+        return pq1.peek();
     }
 }
 

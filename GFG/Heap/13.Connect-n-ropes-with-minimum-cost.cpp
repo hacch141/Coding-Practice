@@ -1,5 +1,37 @@
 // Connect n ropes with minimum cost
 
+class Solution {
+
+    public int minCost(int[] ropes) {
+
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+
+        // Add all ropes to heap
+        for (int rope : ropes) {
+            minHeap.offer(rope);
+        }
+
+        int totalCost = 0;
+
+        while (minHeap.size() > 1) {
+
+            // Take two smallest ropes
+            int first = minHeap.poll();
+            int second = minHeap.poll();
+
+            int cost = first + second;
+            totalCost += cost;
+
+            // Add combined rope back
+            minHeap.offer(cost);
+        }
+
+        return totalCost;
+    }
+}
+
+// =====================================================================
+
 int minCost(int arr[], int n)
 {
 	int ans = 0;

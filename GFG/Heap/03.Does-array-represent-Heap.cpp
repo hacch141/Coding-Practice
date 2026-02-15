@@ -1,5 +1,34 @@
 // Does array represent Heap
 
+class Solution {
+
+    public boolean isMaxHeap(int[] arr) {
+
+        int n = arr.length;
+
+        // Only need to check non-leaf nodes
+        for (int i = 0; i <= (n / 2) - 1; i++) {
+
+            int leftChild = 2 * i + 1;
+            int rightChild = 2 * i + 2;
+
+            // Check left child
+            if (leftChild < n && arr[i] < arr[leftChild]) {
+                return false;
+            }
+
+            // Check right child
+            if (rightChild < n && arr[i] < arr[rightChild]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
+// ======================================================================
+
 class Solution{
     public:
     

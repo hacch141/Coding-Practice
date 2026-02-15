@@ -1,5 +1,35 @@
-// Merge K Sorted Arrays
+// Sort K Sorted Arrays
 
+class Solution {
+
+    public void sortKSortedArray(int[] arr, int k) {
+
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+
+        int n = arr.length;
+        int index = 0;
+
+        // 1️⃣ Insert first k+1 elements
+        for (int i = 0; i <= k && i < n; i++) {
+            minHeap.offer(arr[i]);
+        }
+
+        // 2️⃣ Process remaining elements
+        for (int i = k + 1; i < n; i++) {
+            arr[index++] = minHeap.poll();
+            minHeap.offer(arr[i]);
+        }
+
+        // 3️⃣ Empty the heap
+        while (!minHeap.isEmpty()) {
+            arr[index++] = minHeap.poll();
+        }
+    }
+}
+
+// ================================================================================
+
+// Merge K Sorted Arrays
 class Solution {
 
     public List<Integer> mergeKSortedArrays(List<List<Integer>> kArrays) {

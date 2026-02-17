@@ -1,5 +1,31 @@
 // Next Smaller Element
 
+class Solution {
+    public int[] nextSmallerElement(int[] nums) {
+
+        int n = nums.length;
+        int[] result = new int[n];
+        Arrays.fill(result, -1);
+
+        Stack<Integer> stack = new Stack<>(); // store indices
+
+        for (int i = 0; i < n; i++) {
+
+            // If current element is smaller,
+            // it is the next smaller for stack top
+            while (!stack.isEmpty() && nums[i] < nums[stack.peek()]) {
+                result[stack.pop()] = nums[i];
+            }
+
+            stack.push(i);
+        }
+
+        return result;
+    }
+}
+
+// ==========================================================================
+
 void printNSE(int arr[], int n)
 {
     stack<pair<int, int> > s;

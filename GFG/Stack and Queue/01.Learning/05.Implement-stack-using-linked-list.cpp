@@ -1,33 +1,64 @@
 // Implement stack using linked list
 
-/****************************************************************
+class Node {
+    int data;
+    Node next;
 
-    Following is the class structure of the Node class:
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
 
-        class Node
-        {
-        public:
-            int data;
-            Node *next;
-            Node()
-            {
-                this->data = 0;
-                next = NULL;
-            }
-            Node(int data)
-            {
-                this->data = data;
-                this->next = NULL;
-            }
-            Node(int data, Node* next)
-            {
-                this->data = data;
-                this->next = next;
-            }
-        };
+class Stack {
+
+    Node top;
+    int size;
+
+    Stack() {
+        top = null;
+        size = 0;
+    }
+
+    // Push
+    void push(int x) {
+        Node newNode = new Node(x);
+        newNode.next = top;
+        top = newNode;
+        size++;
+    }
+
+    // Pop
+    int pop() {
+        if (isEmpty()) {
+            return -1; // underflow
+        }
+
+        int value = top.data;
+        top = top.next;
+        size--;
+        return value;
+    }
+
+    // Peek
+    int peek() {
+        if (isEmpty()) return -1;
+        return top.data;
+    }
+
+    // Size
+    int size() {
+        return size;
+    }
+
+    // Is Empty
+    boolean isEmpty() {
+        return size == 0;
+    }
+}
 
 
-*****************************************************************/
+// =========================================================================
 
 class Stack
 {

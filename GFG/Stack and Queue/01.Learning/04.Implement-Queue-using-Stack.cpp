@@ -1,5 +1,92 @@
 // Implement Queue using Stack
 
+// using 1 Stack
+class MyQueue {
+
+    Stack<Integer> stack = new Stack<>();
+
+    // Enqueue element
+    public void push(int x) {
+        if (stack.isEmpty()) {
+            stack.push(x);
+            return;
+        }
+
+        int top = stack.pop();
+        push(x);              // recursive call
+        stack.push(top);      // push back old element
+    }
+
+    // Dequeue element
+    public int pop() {
+        if (stack.isEmpty()) return -1;
+        return stack.pop();
+    }
+
+    // Front element
+    public int peek() {
+        if (stack.isEmpty()) return -1;
+        return stack.peek();
+    }
+
+    // Check if empty
+    public boolean empty() {
+        return stack.isEmpty();
+    }
+}
+
+// using 2 Stacks
+import java.util.*;
+
+class MyQueue {
+
+    Stack<Integer> inStack;
+    Stack<Integer> outStack;
+
+    public MyQueue() {
+        inStack = new Stack<>();
+        outStack = new Stack<>();
+    }
+
+    // Enqueue
+    public void push(int x) {
+        inStack.push(x);
+    }
+
+    // Dequeue
+    public int pop() {
+        if (empty()) return -1;
+
+        if (outStack.isEmpty()) {
+            while (!inStack.isEmpty()) {
+                outStack.push(inStack.pop());
+            }
+        }
+
+        return outStack.pop();
+    }
+
+    // Front element
+    public int peek() {
+        if (empty()) return -1;
+
+        if (outStack.isEmpty()) {
+            while (!inStack.isEmpty()) {
+                outStack.push(inStack.pop());
+            }
+        }
+
+        return outStack.peek();
+    }
+
+    // Check if empty
+    public boolean empty() {
+        return inStack.isEmpty() && outStack.isEmpty();
+    }
+}
+
+// ==========================================================================
+
 // Queue Using Only One Stack
 class Queue {
     // Define the data members(if any) here.
@@ -53,57 +140,7 @@ class Queue {
     }
 };
 
-
-// Usign Two Stacks
-#include <bits/stdc++.h>
-
-class Queue {
-   public:
-    stack<int> st1, st2;
-
-    Queue() {
-        // Initialize your data structure here.
-    }
-
-    void enQueue(int val) {
-        // Implement the enqueue() function.
-        while (!st1.empty()) {
-            st2.push(st1.top());
-            st1.pop();
-        }
-        st1.push(val);
-        while (!st2.empty()) {
-            st1.push(st2.top());
-            st2.pop();
-        }
-    }
-
-    int deQueue() {
-        // Implement the dequeue() function.
-        if (st1.empty()) {
-            return -1; // Queue is empty.
-        }
-        int frontValue = st1.top();
-        st1.pop();
-        return frontValue;
-    }
-
-    int peek() {
-        // Implement the peek() function here.
-        if (st1.empty()) {
-            return -1; // Queue is empty.
-        }
-        return st1.top();
-    }
-
-    bool isEmpty() {
-        // Implement the isEmpty() function here.
-        return st1.empty();
-    }
-};
-
-
-// Optimised
+// using 2 Stacks Optimised
 class MyQueue {
   public:
     stack < int > input, output;

@@ -1,5 +1,76 @@
 // Implement queue using Linkedlist
 
+class Node {
+    int data;
+    Node next;
+
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+class Queue {
+
+    Node front, rear;
+    int size;
+
+    Queue() {
+        front = null;
+        rear = null;
+        size = 0;
+    }
+
+    // Enqueue
+    void push(int x) {
+        Node newNode = new Node(x);
+
+        if (rear == null) {   // queue empty
+            front = rear = newNode;
+        } else {
+            rear.next = newNode;
+            rear = newNode;
+        }
+
+        size++;
+    }
+
+    // Dequeue
+    int pop() {
+        if (isEmpty()) {
+            return -1;  // underflow
+        }
+
+        int value = front.data;
+        front = front.next;
+
+        if (front == null) {  // queue becomes empty
+            rear = null;
+        }
+
+        size--;
+        return value;
+    }
+
+    // Peek (Front element)
+    int peek() {
+        if (isEmpty()) return -1;
+        return front.data;
+    }
+
+    // Size
+    int size() {
+        return size;
+    }
+
+    // Check if empty
+    boolean isEmpty() {
+        return size == 0;
+    }
+}
+
+// ============================================================================
+
 class QueueNode
 {
  public: 

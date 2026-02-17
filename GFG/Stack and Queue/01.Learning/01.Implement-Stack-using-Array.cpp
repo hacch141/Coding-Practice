@@ -1,5 +1,58 @@
 // Implement Stack using Array
 
+class Stack {
+
+    int[] arr;
+    int size;
+    int top;
+
+    // Constructor
+    Stack(int capacity) {
+        top = -1;
+        size = capacity;
+        arr = new int[size];
+    }
+
+    // Push operation
+    void push(int num) {
+        if (top + 1 < size) {
+            top++;
+            arr[top] = num;
+        }
+        // else: stack overflow (can throw exception if needed)
+    }
+
+    // Pop operation
+    int pop() {
+        if (top >= 0) {
+            int value = arr[top];
+            top--;
+            return value;
+        }
+        return -1; // stack underflow
+    }
+
+    // Peek (top element)
+    int top() {
+        if (top >= 0) {
+            return arr[top];
+        }
+        return -1;
+    }
+
+    // Check if empty
+    boolean isEmpty() {
+        return top == -1;
+    }
+
+    // Check if full
+    boolean isFull() {
+        return top == size - 1;
+    }
+}
+
+// =========================================================================
+
 // Stack class.
 class Stack {
     

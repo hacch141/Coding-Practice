@@ -1,5 +1,135 @@
 // Implement Stack using single Queue
 
+// using 1 Queue
+class MyStack {
+
+    Queue<Integer> q;
+
+    public MyStack() {
+        q = new LinkedList<>();
+    }
+
+    // Push element onto stack
+    public void push(int x) {
+        q.add(x);
+
+        // Rotate previous elements
+        int size = q.size();
+        for (int i = 0; i < size - 1; i++) {
+            q.add(q.remove());
+        }
+    }
+
+    // Removes top element
+    public int pop() {
+        if (q.isEmpty()) return -1;
+        return q.remove();
+    }
+
+    // Get top element
+    public int top() {
+        if (q.isEmpty()) return -1;
+        return q.peek();
+    }
+
+    // Check if empty
+    public boolean empty() {
+        return q.isEmpty();
+    }
+}
+
+// usgin 2 Queue (push costly)
+class MyStack {
+
+    Queue<Integer> q1 = new LinkedList<>();
+    Queue<Integer> q2 = new LinkedList<>();
+
+    // Push element
+    public void push(int x) {
+
+        // Step 1: Push into q2
+        q2.add(x);
+
+        // Step 2: Move all elements from q1 to q2
+        while (!q1.isEmpty()) {
+            q2.add(q1.remove());
+        }
+
+        // Step 3: Swap q1 and q2
+        Queue<Integer> temp = q1;
+        q1 = q2;
+        q2 = temp;
+    }
+
+    // Pop element
+    public int pop() {
+        if (q1.isEmpty()) return -1;
+        return q1.remove();
+    }
+
+    // Top element
+    public int top() {
+        if (q1.isEmpty()) return -1;
+        return q1.peek();
+    }
+
+    // Check if empty
+    public boolean empty() {
+        return q1.isEmpty();
+    }
+}
+
+// usgin 2 Queue (pop, top costly)
+class MyStack {
+
+    Queue<Integer> q1 = new LinkedList<>();
+    Queue<Integer> q2 = new LinkedList<>();
+
+    public void push(int x) {
+        q1.add(x);
+    }
+
+    public int pop() {
+        if (q1.isEmpty()) return -1;
+
+        while (q1.size() > 1) {
+            q2.add(q1.remove());
+        }
+
+        int top = q1.remove();
+
+        // Swap queues
+        Queue<Integer> temp = q1;
+        q1 = q2;
+        q2 = temp;
+
+        return top;
+    }
+
+    public int top() {
+        if (q1.isEmpty()) return -1;
+
+        while (q1.size() > 1) {
+            q2.add(q1.remove());
+        }
+
+        int top = q1.peek();
+        q2.add(q1.remove());
+
+        // Swap
+        Queue<Integer> temp = q1;
+        q1 = q2;
+        q2 = temp;
+
+        return top;
+    }
+
+    public boolean empty() {
+        return q1.isEmpty();
+    }
+}
+
+// =======================================================================
 
 // Using Single Queueu
 #include <bits/stdc++.h>

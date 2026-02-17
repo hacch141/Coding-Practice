@@ -1,11 +1,38 @@
 // Next Greater Element
 
-/*
-    Time Complexity: O(n)
-    Space Complexity: O(n)
+class Solution {
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
 
-    Where 'n' is the number of elements in the array.
-*/
+        Stack<Integer> stack = new Stack<>();
+        Map<Integer, Integer> map = new HashMap<>();
+
+        // Process nums2
+        for (int num : nums2) {
+
+            while (!stack.isEmpty() && stack.peek() < num) {
+                map.put(stack.pop(), num);
+            }
+
+            stack.push(num);
+        }
+
+        // Elements left in stack have no greater element
+        while (!stack.isEmpty()) {
+            map.put(stack.pop(), -1);
+        }
+
+        // Build answer for nums1
+        int[] result = new int[nums1.length];
+
+        for (int i = 0; i < nums1.length; i++) {
+            result[i] = map.get(nums1[i]);
+        }
+
+        return result;
+    }
+}
+
+// ================================================================
 
 #include <stack>
 
@@ -47,43 +74,3 @@ vector<int> nextGreaterElement(vector<int>& arr, int n)
     return ans;
 }
 
-
-
-
-/*
-    Time Complexity - O(n ^ 2)
-    Space Complexity - O(1)
-
-    Where 'n' is the number of elements in the array.
-*/
-
-vector<int> nextGreaterElement(vector<int>& arr, int n)
-{
-    // Create a vetor to store next Greater elements
-    vector<int> ans(n);
-
-    // Initialize every index with -1
-    for (int i = 0; i < n; i++)
-    {
-        ans[i] = -1;
-    }
-
-    // Traverse in the array
-    for (int i = 0; i < n; i++)
-    {
-        // Traverse from next index to end
-        for (int j = i + 1; j < n; j++)
-        {
-            //As soon as we find a greater element
-            //We update the answer and break
-            if (arr[j] > arr[i])
-            {
-                ans[i] = arr[j];
-                break;
-            }
-        }
-    }
-
-    // return final answer vector
-    return ans;
-}

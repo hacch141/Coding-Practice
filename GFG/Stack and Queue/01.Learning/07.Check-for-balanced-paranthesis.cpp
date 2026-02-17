@@ -1,5 +1,40 @@
 // Check for balanced paranthesis
 
+class Solution {
+
+    public boolean isValidParenthesis(String s) {
+
+        Stack<Character> st = new Stack<>();
+
+        for (char ch : s.toCharArray()) {
+
+            // Opening brackets
+            if (ch == '(' || ch == '{' || ch == '[') {
+                st.push(ch);
+            } 
+            else {
+
+                if (st.isEmpty()) {
+                    return false;
+                }
+
+                char top = st.peek();
+
+                if (ch == ')' && top != '(') return false;
+                if (ch == '}' && top != '{') return false;
+                if (ch == ']' && top != '[') return false;
+
+                st.pop();
+            }
+        }
+
+        // Important: stack must be empty
+        return st.isEmpty();
+    }
+}
+
+// =========================================================================
+
 bool isValidParenthesis(string s)
 {
     // Write your code here.

@@ -1,5 +1,46 @@
 // Asteroid Collision
 
+class Solution {
+    public int[] asteroidCollision(int[] asteroids) {
+
+        Stack<Integer> stack = new Stack<>();
+
+        for (int asteroid : asteroids) {
+
+            boolean destroyed = false;
+
+            while (!stack.isEmpty() && stack.peek() > 0 && asteroid < 0) {
+
+                if (Math.abs(stack.peek()) < Math.abs(asteroid)) {
+                    stack.pop(); // stack asteroid explodes
+                }
+                else if (Math.abs(stack.peek()) == Math.abs(asteroid)) {
+                    stack.pop(); // both explode
+                    destroyed = true;
+                    break;
+                }
+                else {
+                    destroyed = true; // current explodes
+                    break;
+                }
+            }
+
+            if (!destroyed) {
+                stack.push(asteroid);
+            }
+        }
+
+        // Convert stack to array
+        int[] result = new int[stack.size()];
+        for (int i = stack.size() - 1; i >= 0; i--) {
+            result[i] = stack.pop();
+        }
+
+        return result;
+    }
+}
+
+// ==========================================================================================
 
 // Leetcode
 class Solution {

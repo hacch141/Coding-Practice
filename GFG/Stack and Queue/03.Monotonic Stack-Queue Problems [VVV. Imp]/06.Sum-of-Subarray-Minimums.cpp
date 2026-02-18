@@ -1,5 +1,58 @@
 // Sum of Subarray Minimums
 
+class Solution {
+
+    public int sumSubarrayMins(int[] arr) {
+
+        int n = arr.length;
+
+        Stack<Integer> preST = new Stack<>();
+        Stack<Integer> nextST = new Stack<>();
+
+        int[] preSmaller = new int[n];
+        int[] nextSmaller = new int[n];
+
+        // Default distances (same logic as your C++ code)
+        for (int i = 0; i < n; i++) {
+            nextSmaller[i] = n - i - 1;
+            preSmaller[i] = i;
+        }
+
+        // Next Smaller (strictly smaller)
+        for (int i = 0; i < n; i++) {
+
+            while (!nextST.isEmpty() && arr[i] < arr[nextST.peek()]) {
+                int idx = nextST.pop();
+                nextSmaller[idx] = i - idx - 1;
+            }
+
+            nextST.push(i);
+        }
+
+        // Previous Smaller (less or equal)
+        for (int i = n - 1; i >= 0; i--) {
+
+            while (!preST.isEmpty() && arr[i] <= arr[preST.peek()]) {
+                int idx = preST.pop();
+                preSmaller[idx] = idx - i - 1;
+            }
+
+            preST.push(i);
+        }
+
+        long ans = 0;
+        int mod = 1_000_000_007;
+
+        for (int i = 0; i < n; i++) {
+            long contribution = (long) arr[i] * (preSmaller[i] + 1) * (nextSmaller[i] + 1);
+            ans = (ans + contribution) % mod;
+        }
+
+        return (int) ans;
+    }
+}
+
+// =================================================================================
 
 // Fraz
 #include <bits/stdc++.h>

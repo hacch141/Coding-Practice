@@ -1,4 +1,5 @@
 // Infix To Postfix
+// A+(B*C-(D/E^F)*G)*H -> ABC*DEF^/G*-H*+
 
 class Solution {
     public static String infixToPostfix(String exp) {

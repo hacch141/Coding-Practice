@@ -1,4 +1,34 @@
 // Prefix to Postfix Conversion
+// *-A/BC-/AKL -> ABC/-AK/L-*
+
+class Solution {
+    public static String prefixToPostfix(String exp) {
+
+        Stack<String> stack = new Stack<>();
+
+        for (int i = exp.length() - 1; i >= 0; i--) {
+
+            char ch = exp.charAt(i);
+
+            // operand
+            if (Character.isLetterOrDigit(ch)) {
+                stack.push(ch + "");
+            }
+
+            // operator
+            else {
+                String op1 = stack.pop();
+                String op2 = stack.pop();
+
+                stack.push(op1 + op2 + ch);
+            }
+        }
+
+        return stack.pop();
+    }
+}
+
+// =============================================================================
 
 #include <bits/stdc++.h>
 

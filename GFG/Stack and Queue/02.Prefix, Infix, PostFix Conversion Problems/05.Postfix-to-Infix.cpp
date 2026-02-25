@@ -1,4 +1,37 @@
 // Postfix to Infix
+// ABC/-AK/L-* -> ((A-(B/C))*((A/K)-L))
+
+class Solution {
+
+    public static String postfixToInfix(String exp) {
+
+        Stack<String> stack = new Stack<>();
+
+        // scan left to right
+        for (int i = 0; i < exp.length(); i++) {
+
+            char ch = exp.charAt(i);
+
+            // operand
+            if (Character.isLetterOrDigit(ch)) {
+                stack.push(ch + "");
+            }
+
+            // operator
+            else {
+                String op2 = stack.pop();
+                String op1 = stack.pop();
+
+                String temp = "(" + op1 + ch + op2 + ")";
+                stack.push(temp);
+            }
+        }
+
+        return stack.pop();
+    }
+}
+
+// ========================================================================
 
 #include <bits/stdc++.h>
 

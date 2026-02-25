@@ -1,4 +1,36 @@
 // Prefix to Infix Conversion
+// +*-AB/CD^-EFG -> (((A-B)*(C/D))+((E-F)^G))
+
+class Solution {
+    public static String prefixToInfix(String exp) {
+
+        Stack<String> stack = new Stack<>();
+
+        // scan right to left
+        for (int i = exp.length() - 1; i >= 0; i--) {
+
+            char ch = exp.charAt(i);
+
+            // if operand
+            if (Character.isLetterOrDigit(ch)) {
+                stack.push(ch + "");
+            }
+
+            // if operator
+            else {
+                String op1 = stack.pop();
+                String op2 = stack.pop();
+
+                String temp = "(" + op1 + ch + op2 + ")";
+                stack.push(temp);
+            }
+        }
+
+        return stack.pop();
+    }
+}
+
+// =====================================================================
 
 #include <bits/stdc++.h>
 
@@ -15,7 +47,7 @@ string prefixToInfixConversion(string &s){
     		if(isOperator(s[i])) {
       		    string a = st.top();
       		    st.pop();
-      	            string b = st.top();
+      	        string b = st.top();
       		    st.pop();
       		    st.push('(' + a + s[i] + b + ')');
     		}

@@ -1,5 +1,45 @@
 // Largest rectangle in a histogram
 
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        int n = heights.length;
+        int[] next = new int[n];
+        int[] prev = new int[n];
+
+        Stack<Integer> st = new Stack<>();
+        Arrays.fill(next, n);   // no next smaller → right boundary = n
+        Arrays.fill(prev, -1);  // no prev smaller → left boundary = -1
+
+        // find next smaller index
+        for (int i = 0; i < n; i++) {
+            while (!st.isEmpty() && heights[i] < heights[st.peek()]) {
+                next[st.pop()] = i;
+            }
+            st.push(i);
+        }
+        st.clear();
+
+        // find previous smaller index
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.isEmpty() && heights[i] < heights[st.peek()]) {
+                prev[st.pop()] = i;
+            }
+            st.push(i);
+        }
+
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            int width = next[i] - prev[i] - 1;
+            int area = heights[i] * width;
+            ans = Math.max(ans, area);
+        }
+
+        return ans;
+    }
+}
+
+// ===================================================================================
+
  #include <bits/stdc++.h>
  
  int largestRectangle(vector < int > & heights) {

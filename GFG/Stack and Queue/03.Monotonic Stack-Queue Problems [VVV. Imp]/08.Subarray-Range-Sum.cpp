@@ -1,5 +1,92 @@
 // Subarray Range Sum
 
+class Solution {
+    private long getSumMin(int[] arr, int n) {
+        Stack<Integer> st = new Stack<>();
+
+        int[] pre = new int[n];
+        int[] next = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            pre[i] = i;
+            next[i] = n - i - 1;
+        }
+
+        // Next Smaller (strictly smaller)
+        for (int i = 0; i < n; i++) {
+            while (!st.isEmpty() && arr[i] < arr[st.peek()]) {
+                int idx = st.pop();
+                next[idx] = i - idx - 1;
+            }
+            st.push(i);
+        }
+        st.clear();
+
+        // Previous Smaller (less or equal)
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.isEmpty() && arr[i] <= arr[st.peek()]) {
+                int idx = st.pop();
+                pre[idx] = idx - i - 1;
+            }
+            st.push(i);
+        }
+        st.clear();
+
+        long sum = 0;
+        for (int i = 0; i < n; i++) {
+            sum += (long) arr[i] * (pre[i] + 1) * (next[i] + 1);
+        }
+
+        return sum;
+    }
+
+    private long getSumMax(int[] arr, int n) {
+        Stack<Integer> st = new Stack<>();
+
+        int[] pre = new int[n];
+        int[] next = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            pre[i] = i;
+            next[i] = n - i - 1;
+        }
+
+        // Next Greater (strictly greater)
+        for (int i = 0; i < n; i++) {
+            while (!st.isEmpty() && arr[i] > arr[st.peek()]) {
+                int idx = st.pop();
+                next[idx] = i - idx - 1;
+            }
+            st.push(i);
+        }
+        st.clear();
+
+        // Previous Greater (greater or equal)
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.isEmpty() && arr[i] >= arr[st.peek()]) {
+                int idx = st.pop();
+                pre[idx] = idx - i - 1;
+            }
+            st.push(i);
+        }
+        st.clear();
+
+        long sum = 0;
+        for (int i = 0; i < n; i++) {
+            sum += (long) arr[i] * (pre[i] + 1) * (next[i] + 1);
+        }
+
+        return sum;
+    }
+
+    public long subArrayRanges(int[] arr) {
+        int n = arr.length;
+        return getSumMax(arr, n) - getSumMin(arr, n);
+    }
+}
+
+// ==================================================================================================
+
 int rangeSum(vector<int>&nums){
     // Write your code here.
     int n = nums.size(); 

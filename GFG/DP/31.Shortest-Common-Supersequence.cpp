@@ -1,74 +1,52 @@
 // Shortest Common Supersequence
 
-class Solution
-{
-    public:
-    //Function to find length of shortest common supersequence of two strings.
-    int shortestCommonSupersequence(string X, string Y, int m, int n)
-    {
-        //code here
-        vector<vector<int>> dp(m+1, vector<int>(n+1,0));
-        for(int i=0; i<m; i++) dp[i][0] = 0;
-        for(int j=0; j<n; j++) dp[0][j] = 0;
-        
-        for(int i=1; i<=m; i++) {
-            for(int j=1; j<=n; j++) {
-                if(X[i-1]==Y[j-1]) {
-                    dp[i][j] = 1 + dp[i-1][j-1];
+class Solution {
+    public String shortestCommonSupersequence(String s1, String s2) {
+        int n1 = s1.length(), n2 = s2.length();
+
+        int[][] dp = new int[n1][n2];
+        for (int i = 0; i < n1; i++) {
+            for (int j = 0; j < n2; j++) {
+                if (s1.charAt(i) == s2.charAt(j)) {
+                    if (i == 0 || j == 0) dp[i][j] = 1;
+                    else dp[i][j] = 1 + dp[i - 1][j - 1];
                 }
                 else {
-                    dp[i][j] = max(dp[i-1][j],dp[i][j-1]);
+                    if (i > 0) dp[i][j] = Math.max(dp[i][j], dp[i - 1][j]);
+                    if (j > 0) dp[i][j] = Math.max(dp[i][j], dp[i][j - 1]);
                 }
             }
         }
-        return m+n-dp[m][n];
-    }
-};
 
-
-// How to obtain string
-class Solution
-{
-    public:
-    //Function to find length of shortest common supersequence of two strings.
-    int shortestCommonSupersequence(string X, string Y, int m, int n)
-    {
-        //code here
-        vector<vector<int>> dp(m+1, vector<int> (n+1,0));
-        
-        for(int i=1; i<=m; i++) {
-            for(int j=1; j<=n; j++) {
-                if(X[i-1] == Y[j-1]) {
-                    dp[i][j] = 1 + dp[i-1][j-1];
-                }
-                else {
-                    dp[i][j] = max(dp[i-1][j],dp[i][j-1]);
-                }
+        StringBuilder sb = new StringBuilder();
+        int p1 = n1 - 1, p2 = n2 - 1;
+        while (p1 >= 0 && p2 >= 0) {
+            if (s1.charAt(p1) == s2.charAt(p2)) {
+                sb.append(s1.charAt(p1));
+                p1--;
+                p2--;
             }
-        }
-        
-        string ans = "";
-        int i = m;
-        int j = n;
-        
-        while(i>0 && j>0) {
-            if(X[i-1] == Y[j-1]) {
-                ans += X[i-1];
-                i--;
-                j--;
+            else if (p1 > 0 && dp[p1][p2] == dp[p1 - 1][p2]) {
+                sb.append(s1.charAt(p1));
+                p1--;
             }
-            else if(dp[i-1][j] > dp[i][j-1]) {
-                ans += X[i-1];
-                i--;
+            else if (p2 > 0 && dp[p1][p2] == dp[p1][p2 - 1]) {
+                sb.append(s2.charAt(p2));
+                p2--;
             }
             else {
-                ans += Y[j-1];
-                j--;
+                break;
             }
         }
-        while(i>0) ans += X[--i];
-        while(j>0) ans += Y[--j];
-        reverse(ans.begin(),ans.end();
-        return ans.length();
+        while (p1 >= 0) {
+            sb.append(s1.charAt(p1));
+            p1--;
+        }
+        while (p2 >= 0) {
+            sb.append(s2.charAt(p2));
+            p2--;
+        }
+
+        return sb.reverse().toString();
     }
-};
+}

@@ -1,99 +1,28 @@
 // Knapsack with Duplicate Items
 
-// Recursion
-class Solution{
-public:
-
-    int solve(int idx, int W, int val[], int wt[], vector<vector<int>>& dp) {
-        if(idx==0) {
-            return (int)(W/wt[0])*val[0];
+class Solution {
+    int[][] dp;
+    
+    public int solve(int ind, int n, int[] val, int[] wt, int capacity) {
+        if (ind == n) return 0;
+        
+        if (dp[ind][capacity] != -1) return dp[ind][capacity];
+        
+        int nottake = solve(ind + 1, n, val, wt, capacity);
+        int take = Integer.MIN_VALUE;
+        if (wt[ind] <= capacity) {
+            take = val[ind] + solve(ind, n, val, wt, capacity - wt[ind]);
         }
-        if(dp[idx][W] != -1) return dp[idx][W];
-        int nottake = 0 + solve(idx-1,W,val,wt,dp);
-        int take = INT_MIN; 
-        if(wt[idx] <= W) take = val[idx] + solve(idx,W-wt[idx],val,wt,dp);
-        return dp[idx][W] = max(take,nottake);
+        return dp[ind][capacity] = Math.max(take, nottake);
     }
-
-    int knapSack(int N, int W, int val[], int wt[])
-    {
+    
+    public int knapSack(int val[], int wt[], int capacity) {
         // code here
-        vector<vector<int>> dp(N, vector<int>(W+1,-1));
-        return solve(N-1,W,val,wt,dp);
+        int n = val.length;
+
+        dp = new int[n][capacity + 1];
+        for (int i = 0; i < n; i++) Arrays.fill(dp[i], -1);
+
+        return solve(0, n, val, wt, capacity);
     }
-};
-
-
-
-// Tabulation
-class Solution{
-public:
-
-    int knapSack(int N, int W, int val[], int wt[])
-    {
-        // code here
-        vector<vector<int>> dp(N, vector<int>(W+1,0));
-        for(int w=0; w<=W; w++) {
-            dp[0][w] = (w/wt[0])*val[0];
-        }
-        for(int idx=1; idx<N; idx++) {
-            for(int w=0; w<=W; w++) {
-                int nottake = 0 + dp[idx-1][w];
-                int take = INT_MIN;
-                if(wt[idx] <= w)take = val[idx] + dp[idx][w-wt[idx]];
-                dp[idx][w] = max(take,nottake);
-            }
-        }
-        return dp[N-1][W];
-    }
-};
-
-
-
-// Space Optimization
-class Solution{
-public:
-
-    int knapSack(int N, int W, int val[], int wt[])
-    {
-        // code here
-        vector<int> curr(W+1,0), prev(W+1,0);
-        for(int w=0; w<=W; w++) {
-            prev[w] = (w/wt[0])*val[0];
-        }
-        for(int idx=1; idx<N; idx++) {
-            for(int w=0; w<=W; w++) {
-                int nottake = 0 + prev[w];
-                int take = INT_MIN;
-                if(wt[idx] <= w)take = val[idx] + curr[w-wt[idx]];
-                curr[w] = max(take,nottake);
-            }
-            prev = curr;
-        }
-        return prev[W];
-    }
-};
-
-
-// 1D Array
-class Solution{
-public:
-
-    int knapSack(int N, int W, int val[], int wt[])
-    {
-        // code here
-        vector<int> curr(W+1,0);
-        for(int w=0; w<=W; w++) {
-            curr[w] = (w/wt[0])*val[0];
-        }
-        for(int idx=1; idx<N; idx++) {
-            for(int w=0; w<=W; w++) {
-                int nottake = 0 + curr[w];
-                int take = INT_MIN;
-                if(wt[idx] <= w)take = val[idx] + curr[w-wt[idx]];
-                curr[w] = max(take,nottake);
-            }
-        }
-        return curr[W];
-    }
-};
+}
